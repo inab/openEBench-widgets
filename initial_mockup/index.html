@@ -19,7 +19,7 @@
         stroke: #fff;
       }
 
-      .toolTip {
+      .tooltip {
         position: absolute;
         display: none;
         width: auto;
@@ -112,6 +112,7 @@
           .attr("d", arc)
           .style("fill", function(d,i) {return (!d.data.metric.startsWith("empty")) ? color[i] : "none"; })
           .style("stroke", function(d) {return (d.data.metric.startsWith("empty")) ? "black" : "black"})
+          .style('stroke-opacity', 0.4)
           .on("mousemove", function(d){
             if (!d.data.metric.startsWith("empty")) {
               d3.select(this.parentNode.parentNode.parentNode).selectAll("path").style("opacity", 0.3);
@@ -184,6 +185,7 @@
             .attr("d", outArc)
             .style("fill", function(d,i) {return (!d.data.metric.startsWith("empty")) ? color[i] : "none"; })
             .attr("stroke", function(d) {return (d.data.metric.startsWith("empty")) ? "black" : "black"})
+            .style('stroke-opacity', 0.4)
             .on("mousemove", function(d){
               if (!d.data.metric.startsWith("empty")) {
               d3.select(this.parentNode.parentNode.parentNode).selectAll("path").style("opacity", 0.3);
@@ -254,6 +256,7 @@
               .attr("d", outoutArc)
               .style("fill", function(d,i) {return (!d.data.metric.startsWith("empty")) ? color[i] : "none"; })
               .attr("stroke", function(d) {return (d.data.metric.startsWith("empty")) ? "black" : "black"})
+              .style('stroke-opacity', 0.4)
               .on("mousemove", function(d){
                 if (!d.data.metric.startsWith("empty")) {
                   d3.select(this.parentNode.parentNode.parentNode).selectAll("path").style("opacity", 0.3);
@@ -325,6 +328,7 @@
                 .attr("d", outoutoutArc)
                 .style("fill", function(d,i) {return (!d.data.metric.startsWith("empty")) ? color[i] : "none"; })
                 .attr("stroke", function(d) {return (d.data.metric.startsWith("empty")) ? "black" : "black"})
+                .style('stroke-opacity', 0.4)
                 .on("mousemove", function(d){
                   if (!d.data.metric.startsWith("empty")) {
                   d3.select(this.parentNode.parentNode.parentNode).selectAll("path").style("opacity", 0.3);
@@ -396,6 +400,7 @@
                   .attr("d", outoutoutoutArc)
                   .style("fill", function(d,i) {return (!d.data.metric.startsWith("empty")) ? color[i] : "none"; })
                   .attr("stroke", function(d) {return (d.data.metric.startsWith("empty")) ? "black" : "black"})
+                  .style('stroke-opacity', 0.4)
                   .on("mousemove", function(d){
                     if (!d.data.metric.startsWith("empty")) {
                       d3.select(this.parentNode.parentNode.parentNode).selectAll("path").style("opacity", 0.3);
