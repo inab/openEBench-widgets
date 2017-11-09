@@ -1,0 +1,110 @@
+{
+  "name": "widget",
+  "description": "OpenEbench Widget",
+  "children": [
+    {
+      "name": "Documentation",
+      "description": "Help, Tutorial, Readme, Publication, Repository",
+      "children": [
+        {
+          "name": "Help",
+          "description": "Whether there is a general help about how to use the tool",
+          "size": 1
+        },
+        {
+          "name": "Tutorial",
+          "description": "Whether there is a tutorial associated",
+          "size": 1
+        },
+        {
+          "name": "Readme",
+          "description": "Whether there is a readme file distributed along the code",
+          "size": 1
+        },
+        {
+          "name": "Publication",
+          "description": "Whether the resource has an associated publication",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "name": "Buildability",
+      "description": "Instructions, Dependencies, Automated, Type",
+      "children": [
+        {
+          "name": "Instructions",
+          "description": "Whether instructions for building the software are provided.",
+          "size": 1
+        },
+        {
+          "name": "Dependencies",
+          "description": "Whether the list of all third-party dependencies is provided",
+          "size": 1
+        },
+        {
+          "name": "empty_Automated",
+          "description": "Whether an automated build system used",
+          "size": 1
+        },
+        {
+          "name": "empty_Type",
+          "description": "Type of the automated build system used (make, maven, ant, etc)",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "name": "Copyright",
+      "description": "Copyright Statement, Credits, Consistency, Copyright Headers",
+      "children": [
+        {
+          "name": "empty_Copyright Statement",
+          "description": "Web site states copyright",
+          "size": 1
+        },
+        {
+          "name": "empty_Credits",
+          "description": "Web site states who developed/develops the software, funders etc",
+          "size": 1
+        },
+        {
+          "name": "empty_Consistency",
+          "description": "All sites state exactly the same copyright, licencing and authorship",
+          "size": 1
+        },
+        {
+          "name": "empty_Copyright Headers",
+          "description": "Each source code file has a copyright statement",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "name": "Licensing",
+      "description": "Project License, License Statement, Sourcode License, License Headers",
+      "children": [
+        {
+          "name": "Project License",
+          "description": "Project has a license",
+          "size": 1
+        },
+        {
+          "name": "License Statement",
+          "description": "Web site states license.",
+          "size": 1
+        },
+        {
+          "name": "Sourcecode License",
+          "description": "Code distribution includes a license file.",
+          "size": 1
+        },
+        {
+          "name": "empty_License Headers",
+          "description": "Each source code file has a license header",
+          "size": 1
+        }
+      ]
+    }
+  ]
+}

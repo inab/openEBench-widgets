@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+  <body>
+    <style>
+
+      .tooltip {
+        position: absolute;
+        display: none;
+        width: auto;
+        height: auto;
+        background: none repeat scroll 0 0 white;
+        border: 0 none;
+        border-radius: 8px 8px 8px 8px;
+        box-shadow: -3px 3px 15px #888888;
+        color: black;
+        font: 12px sans-serif;
+        padding: 5px;
+        text-align: center;
+      }
+    </style>
+    <div>
+      <svg class="chart"></svg>
+    </div>
+    <script>
+      var width_svg = 75,
+      height_svg = 75
+      var grid_layout = new Array();
+      var xpos = 1; //starting xpos and ypos at 1 so the stroke will show when we make the grid below
+      var ypos = 1;
+      var width = 18.5; // width_svg -1
+      var height = 18.5;
+      var square_size = 4;
+      var colors = ["#007c00", "#009500", "#00ae00", "#00c800"]
+      colors = colors.concat(["#a72bd9", "#ba44de", "#cb5ae3", "#dd6ee9"])
+      colors = colors.concat(["#ff5e00", "#ff7300", "#ff8400", "#ff9600"])
+      colors = colors.concat(["#00a2a2", "#00b7b7", "#00cfcf", "#00e6e6"])
+      colors = colors.concat(["#a10002", "#b80002", "#cf0002", "#e60001"])
+
+      var tooltip_div = d3.select("body").append("div").attr("class", "tooltip");
+
+			d3.json("data/data.json", function(error, data) {
+  			if (error) throw error;
+				console.log(data)
+      // iterate for rows
+			color_number = 0;
+      for (var row = 0; row < square_size; row++) {
+        grid_layout.push(new Array());
+        // iterate for cells/columns inside rows
+        for (var column = 0; column < square_size; column++) {
+          grid_layout[row].push({
+            x: xpos,
+            y: ypos,
+            width: width,
+            height: height,
+						metric: data.children[row].name,
+						name: data.children[row].children[column].name,
+						description: data.children[row].children[column].description,
+						color: colors[color_number]
+          })
+        // increment the x position. I.e. move it over by 50 (width variable)
+          xpos += width;
+					color_number += 1
+        }
+        // reset the x position after a row is complete
+        xpos = 1;
+        // increment the y position for the next row. Move it down 50 (height variable)
+        ypos += height;
+      }
+
+      var grid = d3.selectAll("svg")
+        .attr("width", width_svg)
+        .attr("height", height_svg)
+        .append("g")
+
+      var row = grid.selectAll(".row")
+        .data(grid_layout)
+        .enter().append("g")
+        .attr("class", "row");
+
+      var column = row.selectAll(".square")
+        .data(function(d) { return d; })
+        .enter().append("rect")
+        .attr("class","square")
+        .attr("x", function(d) { return d.x; })
+        .attr("y", function(d) { return d.y; })
+        .attr("width", function(d) { return d.width; })
+        .attr("height", function(d) { return d.height; })
+    		.style("fill", function(d,i) {return !d.name.startsWith("empty") ? d.color : "none"; })
+        .style("stroke", "#222")
+        .style("stroke-opacity", 0.4)
+        .on("mousemove", function(d){
+            if (!d.name.startsWith("empty")) {
+						d3.select(this.parentNode.parentNode.parentNode).selectAll("rect").style("opacity", 0.4);
+            d3.select(this).style("opacity", 1)
+            tooltip_div.style("left", d3.event.pageX+10+"px");
+            tooltip_div.style("top", d3.event.pageY-25+"px");
+            tooltip_div.style("display", "inline-block");
+            tooltip_div.html("<b>"+ (d.metric) +">"+(d.name)+"</b><br>"+(d.description));
+						}
+        })
+        .on("mouseout", function(d){
+          tooltip_div.style("display", "none");
+          d3.selectAll("rect")
+            .style("opacity", 1);
+        });
+
+			})
+    </script>
+
+  </body>
+</html>
