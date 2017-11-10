@@ -1,0 +1,7 @@
+metric,description
+Readme,Whether there is a readme file distributed along the code.
+empty_automated,Whether an automated build system used.
+empty_consistency,Project has a license
+sourcecode_license,Code distribution includes a license file.
+empty_binary_distribution_freeness,Binary distributions are freely available.
+empty_issue_tracker,Whether the tool has a publicly accessible issue tracker.
