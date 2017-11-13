@@ -1,0 +1,7 @@
+metric,description,ticks
+Documentation,Help Tutorial Readme Publication,4
+Buildability,instructions dependencies automated type compiler,3
+empty_copyright,copyright_statement credits consistency copyright_headers,0
+Licensing,project_license license_statement sourcecode_license license_headers,2
+Accesibility,Binary_distribution Source_code Binary_distribution_freeness Binaries_download_registration Sourcecode_freeness,0
+Changeability,Contributions_policy Govenance Issue_tracker Resolve_time,1

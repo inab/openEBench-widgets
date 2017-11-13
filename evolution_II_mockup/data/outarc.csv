@@ -1,0 +1,7 @@
+metric,description
+Help,Whether there is a general help about how to use the tool
+Instructions,Whether instructions for building the software are provided.
+empty_consistency,All site states who developed/develops the software funders etc.
+Project_license,All sites state exactly the same copyright licencing and authorship.
+empty_binary_distribution,Whether binary distributions are available.
+Contributions_policy,Whether the project has defined a contributions policy.
