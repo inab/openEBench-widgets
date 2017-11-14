@@ -1,7 +1,0 @@
-metric,description
-Publication,Whether the resource has an associated publication.
-empty_type,Type of the automated build system used (make  maven  ant  etc).
-empty_copyright_headers,Each source code file has a copyright statement.
-empty_license_headers,Each source code file has a license header.
-empty_binary_download_registration,Binary distributions are available without the need for any registration.
-empty_resolve_time,How long are issues open.

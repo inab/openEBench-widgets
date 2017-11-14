@@ -1,0 +1,29 @@
+{
+ "uptime": [
+  {
+    "date": "1-May-12",
+    "state": 1
+  },
+  {
+    "date": "9-Apr-12",
+    "state": 1
+  },
+  {
+    "date": "7-Apr-12",
+    "state": 0
+  },
+  {
+    "date": "2-Apr-12",
+    "state": 1
+  },
+  {
+    "date": "6-Mar-12",
+    "state": 0
+  },
+  {
+    "date": "3-Mar-12",
+    "state": 1
+  }
+ ]
+}
+

@@ -104,8 +104,9 @@
       .append('g')
       .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-    d3.csv('data/arc.csv', type, function(error, data) {
+    d3.json('data/arc.json', function(error, data) {
       if (error) throw error;
+      data = data.metrics
 
       var color = ['#006400', '#00008b', '#8b0000', '#9400d3', '#ff4500', '#008b8b'];
       // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
@@ -163,7 +164,6 @@
       g_arc.append('text')
         //.attr("dy", ".35em")
         .attr('transform', function(d, i) {
-          //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
           if (d.endAngle == Math.PI) {
             return 'translate(' + arc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
           } else if (d.startAngle == Math.PI) {
@@ -203,8 +203,9 @@
             .style('opacity', 1);
         });
 
-      d3.csv('data/outarc.csv', type, function(error, outdata) {
+      d3.json('data/outarc.json', function(error, outdata) {
         if (error) throw error;
+        outdata = outdata.metrics
         var color = ['#007c00', '#25259e', '#a10002', '#a72bd9', '#ff5e00', '#00a2a2'];
         // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
         // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
@@ -251,7 +252,6 @@
         g_outArc.append('text')
           //.style("font-size", "10px")
           .attr('transform', function(d, i) {
-            //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
             if (d.endAngle == Math.PI) {
               return 'translate(' + outArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
             } else if (d.startAngle == Math.PI) {
@@ -281,8 +281,11 @@
             d3.selectAll('path')
               .style('opacity', 1);
           });
-        d3.csv('data/outoutarc.csv', type, function(error, outoutdata) {
+
+        d3.json('data/outoutarc.json', function(error, outoutdata) {
           if (error) throw error;
+          outoutdata = outoutdata.metrics
+
           var color = ['#009500', '#3941b1', '#b80002', '#ba44de', '#ff7300', '#00b7b7'];
           // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
           // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
@@ -329,7 +332,6 @@
           g_outoutArc.append('text')
             //.style("font-size", "10px")
             .attr('transform', function(d, i) {
-              //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
               if (d.endAngle == Math.PI) {
                 return 'translate(' + outoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
               } else if (d.startAngle == Math.PI) {
@@ -360,8 +362,10 @@
                 .style('opacity', 1);
             });
 
-          d3.csv('data/outoutoutarc.csv', type, function(error, outoutoutdata) {
+          d3.json('data/outoutoutarc.json', function(error, outoutoutdata) {
             if (error) throw error;
+            outoutoutdata = outoutoutdata.metrics
+
             var color = ['#00ae00', '#4a5cc5', '#cf0002', '#cb5ae3', '#ff8400', '#00cfcf'];
             // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
             // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
@@ -408,7 +412,6 @@
             g_outoutoutArc.append('text')
               //.style("font-size", "10px")
               .attr('transform', function(d, i) {
-                //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
                 if (d.endAngle == Math.PI) {
                   return 'translate(' + outoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
                 } else if (d.startAngle == Math.PI) {
@@ -439,8 +442,10 @@
                   .style('opacity', 1);
               });
 
-            d3.csv('data/outoutoutoutarc.csv', type, function(error, outoutoutoutdata) {
+            d3.json('data/outoutoutoutarc.json', function(error, outoutoutoutdata) {
               if (error) throw error;
+              outoutoutoutdata = outoutoutoutdata.metrics
+
               var color = ['#00c800', '#5879d9', '#e60001', '#dd6ee9', '#ff9600', '#00e6e6'];
               // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
               // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
@@ -487,7 +492,6 @@
               g_outoutoutoutArc.append('text')
                 //.style("font-size", "10px")
                 .attr('transform', function(d, i) {
-                  //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
                   if (d.endAngle == Math.PI) {
                     return 'translate(' + outoutoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
                   } else if (d.startAngle == Math.PI) {
@@ -559,7 +563,6 @@
         // .attr("y", -1250)
         .attr('width', function() {
           icon_index++;
-          //console.log(icon_index, "width")
           return (icon_index % 2 != 0 ? 40 : 30);
         })
         .attr('height', '100%')
@@ -568,18 +571,15 @@
           return icon_index % 2 != 0 ? 'online' : 'offline';
         })
         .attr('xlink:href', function(d, i) {
-          //console.log(icon_index, "xlink")
           icon = icons[icon_index % 2];
           icon_index++;
           return icon;
         })
         .attr('x', function() {
-          //console.log(icon_index, "x")
           icon_index++;
           return (icon_index % 2 != 0 ? -width / 2 + width / 2.35 : -width / 2 + width / 2.35);
         })
         .attr('y', function() {
-          //console.log(icon_index, "y")
           icon_index++;
           return (icon_index % 2 != 0 ? -height / 2 - 5 : -height / 2);
         })
@@ -627,7 +627,9 @@
             // Adds the svg canvas
 
             // Get the data
-            d3.csv("data/uptime.csv", function(error, data) {
+            d3.json("data/uptime.json", function(error, data) {
+              if (error) throw error;
+              data = data.uptime
               data.forEach(function(d) {
                 d.date = parseDate(d.date);
                 d.state = +d.state;

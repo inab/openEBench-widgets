@@ -1,7 +1,0 @@
-metric,description
-Tutorial,Whether there is a general help about how to use the tool.
-Dependencies,Whether the list of all third-party dependencies is provided.
-empty_consistency,Project has a license
-License_statement,Web site states license.
-empty_sourcecode,Source distributions are avaible.
-empty_govenance,Whether the project has defined a governance model.
