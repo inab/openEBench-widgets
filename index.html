@@ -29,50 +29,20 @@
     }
   </style>
   <h2>Mockups</h2>
-  <h3>Initial mockup</h3>
-  <div>
-    <iframe src="initial_mockup/index.html" width="470" height="420">
-      <p>Your browser does not support iframes.</p>
-    </iframe>
-  </div>
-  <h3>Evolution I</h3>
-  <div>
-    <iframe src="evolution_I_mockup/index.html" width="740" height="320">
-      <p>Your browser does not support iframes.</p>
-    </iframe>
-  </div>
-  <h3>Evolution II (200x200)</h3>
-  <div>
-    <iframe src="evolution_II_mockup/index.html" width="670" height="250">
-      <p>Your browser does not support iframes.</p>
-    </iframe>
-  </div>
-  <h3>Evolution II (100x100)</h3>
-  <div>
-    <iframe src="evolution_II_mockup_100x100/index.html" width="470" height="190">
-      <p>Your browser does not support iframes.</p>
-    </iframe>
-  </div>
-  <h3>Evolution II (75x75)</h3>
-  <div>
-    <iframe src="evolution_II_mockup_75x75/index.html" width="430" height="190">
-      <p>Your browser does not support iframes.</p>
-    </iframe>
-  </div>
+  <h3>Initial mockup (400x400)</h3>
+    <div id="initial_mockup"></div>
+  <h3>Evolution I (300x300)</h3>
+    <div id="evolution_I_mockup"></div>
+  <h3>Evolution II (200x200), (100x100), (75x75)</h3>
+    <div id="evolution_II_mockup" style="display: inline"></div>
+    <div id="evolution_II_mockup_100" style="display: inline"></div>
+    <div id="evolution_II_mockup_75" style="display: inline"></div>
   <div style="margin: 100px;"></div>
   <h2>Alternative mockups</h2>
   <h3>Bilevel mockup</h3>
-  <div>
-    <iframe src="bilevel_mockup/index.html" width="440" height="170">
-      <p>Your browser does not support iframes.</p>
-    </iframe>
-  </div>
+  <div id="bilevel_mockup"></div>
   <h3> Square mockup </h3>
-  <div>
-    <iframe src="square_mockup/index.html" width="300" height="110">
-      <p>Your browser does not support iframes.</p>
-    </iframe>
-  </div>
+  <div id="square_mockup"></div>
   <div style="margin: 50px;"></div>
   <hr>
    <footer>
@@ -80,6 +50,15 @@
     <img alt="EU flag" src="eu_flag.jpg"> ELIXIR is partly funded by the European Commission within the Research Infraestructure programme of Horizon 2020.<br> ELIXIR Excelerate is funded by the European Comission, contract no. 676559
   </footer>
 
+  <script>
+     document.getElementById("initial_mockup").innerHTML = '<object type="type/html" width="470" height="450" data="initial_mockup/index.html" ></object>';
+     document.getElementById("evolution_I_mockup").innerHTML = '<object type="type/html" width="740" height="320" data="evolution_I_mockup/index.html" ></object>';
+     document.getElementById("evolution_II_mockup").innerHTML = '<object type="type/html" width="550" height="250" data="evolution_II_mockup/index.html" ></object>';
+     document.getElementById("evolution_II_mockup_100").innerHTML = '<object type="type/html" width="350" height="190" data="evolution_II_mockup_100x100/index.html" ></object>';
+     document.getElementById("evolution_II_mockup_75").innerHTML = '<object type="type/html" width="360" height="190" data="evolution_II_mockup_75x75/index.html" ></object>';
+     document.getElementById("bilevel_mockup").innerHTML = '<object type="type/html" width="440" height="170" data="bilevel_mockup/index.html" ></object>';
+     document.getElementById("square_mockup").innerHTML = '<object type="type/html" width="300" height="110" data="square_mockup/index.html" ></object>';
+  </script>
 </body>
 
 </html>
