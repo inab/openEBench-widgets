@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Index</title>
+  <script src="../lib/d3.v4.min.js"></script>
+</head>
+
+<body>
+  <style>
+    body {
+      background-color: white;
+    }
+
+    .widget text {
+      font: 6px sans-serif;
+      text-anchor: middle;
+      fill: none;
+    }
+
+    .tooltip {
+      position: absolute;
+      display: none;
+      width: auto;
+      height: auto;
+      background: none repeat scroll 0 0 white;
+      border: 3px solid black;
+      padding: 10px;
+      border-radius: 8px 8px 8px 8px;
+      box-shadow: -3px 3px 15px #888888;
+      color: black;
+      font: 12px sans-serif;
+    }
+
+    #uptime path {
+      stroke: steelblue;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    #uptime .axis path,
+    #uptime .axis line {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+  </style>
+  <div>
+    <svg class="widget"></svg>
+    <svg class="widget"></svg>
+  </div>
+  <script>
+    var icon_index = 0;
+    var icons = ['plugIn_green.png', 'plugOut_red.png'].map(function(icon) {
+      return 'icons/' + icon;
+    });
+
+    var width = 100;
+    var height = 100;
+    var radius = Math.min(width, height) / 5 - 1;
+    var big_radius = radius + 7;
+    var big_big_radius = big_radius + 7;
+    var big_big_big_radius = big_big_radius + 7;
+    var big_big_big_big_radius = big_big_big_radius + 7;
+
+    var draw_uptime_one_time = 0;
+
+    var arc = d3.arc()
+      .outerRadius(radius)
+      .innerRadius(radius - 7);
+
+    var outArc = d3.arc()
+      .innerRadius(radius)
+      .outerRadius(big_radius);
+
+    var outoutArc = d3.arc()
+      .innerRadius(big_radius)
+      .outerRadius(big_big_radius);
+
+    var outoutoutArc = d3.arc()
+      .innerRadius(big_big_radius)
+      .outerRadius(big_big_big_radius);
+
+    var outoutoutoutArc = d3.arc()
+      .innerRadius(big_big_big_radius)
+      .outerRadius(big_big_big_big_radius);
+
+    var pie = d3.pie()
+      .sort(null)
+      .value(function(d) {
+        return 1;
+      });
+    <!--.value(function(d) { return d.description; });-->
+
+    var tooltip_div = d3.select('body').append('div').attr('class', 'tooltip');
+
+    //var svg = d3.select("body").append("svg")
+    var svg = d3.selectAll('svg.widget')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+    d3.json('data/arc.json', function(error, data) {
+      if (error) throw error;
+      data = data.metrics
+
+      var color = ['#006400', '#00008b', '#8b0000', '#9400d3', '#ff4500', '#008b8b'];
+      // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+      // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+      // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+      // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+      // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+      // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+      // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+      // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+      // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+      // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+      // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+      // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+
+      var g_arc = svg.selectAll('.arc')
+        .data(pie(data))
+        .enter().append('g')
+        .attr('class', 'arc');
+
+      g_arc.append('path')
+        .attr('d', arc)
+        .style('fill', function(d, i) {
+          return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+        })
+        .style('stroke', function(d) {
+          return 'none'
+          return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+        })
+        .style('stroke-opacity', 0.4)
+        .on('mousemove', function(d) {
+          if (!d.data.metric.startsWith('empty')) {
+            d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+            d3.select(this).style('opacity', 1);
+            tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+            tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+            tooltip_div.style('display', 'inline-block');
+
+            description_counter = 0
+            description_text = "";
+            for (let description of d.data.description.split(' ')) {
+              description = description.replace(/_/g, ' ')
+              icon = (description_counter < d.data.ticks) ? 'online' : 'offline'
+              description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+              description_counter++
+            }
+            tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (d.data.metric.replace(/_/,' ')) + '</b></div><div>' + description_text + '</div>');
+          }
+        })
+        .on('mouseout', function(d) {
+          tooltip_div.style('display', 'none');
+          d3.selectAll('path')
+            .style('opacity', 1);
+        });
+
+      g_arc.append('text')
+        //.attr("dy", ".35em")
+        .attr('transform', function(d, i) {
+          if (d.endAngle == Math.PI) {
+            return 'translate(' + arc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+          } else if (d.startAngle == Math.PI) {
+
+            return 'translate(' + arc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+          } else {
+
+            return 'translate(' + arc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+          }
+        })
+        //.attr("dx", function(d) { return (d.endAngle > 180 ? 10 : 0); })
+        .text(function(d) {
+          return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+        })
+        .on('mousemove', function(d) {
+          if (!d.data.metric.startsWith('empty')) {
+            d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+            d3.select(this).style('opacity', 1);
+            tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+            tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+            tooltip_div.style('display', 'inline-block');
+
+            description_counter = 0
+            description_text = ""
+            for (let description of d.data.description.split(' ')) {
+              description = description.replace(/_/g, ' ')
+              icon = (description_counter < d.data.ticks) ? 'online' : 'offline'
+              description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+              description_counter++
+            }
+            tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (d.data.metric.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
+          }
+        })
+        .on('mouseout', function(d) {
+          tooltip_div.style('display', 'none');
+          d3.selectAll('path')
+            .style('opacity', 1);
+        });
+
+      d3.json('data/outarc.json', function(error, outdata) {
+        if (error) throw error;
+        outdata = outdata.metrics
+        var color = ['#007c00', '#25259e', '#a10002', '#a72bd9', '#ff5e00', '#00a2a2'];
+        // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+        // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+        // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+        // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+        // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+        // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+        // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+        // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+        // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+        // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+        // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+        // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+        var g_outArc = svg.selectAll('.outArc')
+          .data(pie(outdata))
+          .enter().append('g')
+          .attr('class', 'outArc');
+
+        g_outArc.append('path')
+          .attr('d', outArc)
+          .style('fill', function(d, i) {
+            return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+          })
+          .attr('stroke', function(d) {
+            return 'none'
+            return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+          })
+          .style('stroke-opacity', 0.4)
+          .on('mousemove', function(d) {
+            if (!d.data.metric.startsWith('empty')) {
+              d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+              d3.select(this).style('opacity', 1);
+              tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+              tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+              tooltip_div.style('display', 'inline-block');
+            }
+          })
+          .on('mouseout', function(d) {
+            tooltip_div.style('display', 'none');
+            d3.selectAll('path')
+              .style('opacity', 1);
+          });
+
+        g_outArc.append('text')
+          //.style("font-size", "10px")
+          .attr('transform', function(d, i) {
+            if (d.endAngle == Math.PI) {
+              return 'translate(' + outArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+            } else if (d.startAngle == Math.PI) {
+
+              return 'translate(' + outArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+            } else {
+
+              return 'translate(' + outArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+            }
+          })
+          //.attr("dx", function(d) { return (d.angle > 180 ? 10 : 0); })
+          .text(function(d) {
+            return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+          })
+          .on('mousemove', function(d) {
+            if (!d.data.metric.startsWith('empty')) {
+              d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+              d3.select(this.previousSibling).style('opacity', 1);
+              tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+              tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+              tooltip_div.style('display', 'inline-block');
+            }
+          })
+          .on('mouseout', function(d) {
+            tooltip_div.style('display', 'none');
+            d3.selectAll('path')
+              .style('opacity', 1);
+          });
+
+        d3.json('data/outoutarc.json', function(error, outoutdata) {
+          if (error) throw error;
+          outoutdata = outoutdata.metrics
+
+          var color = ['#009500', '#3941b1', '#b80002', '#ba44de', '#ff7300', '#00b7b7'];
+          // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+          // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+          // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+          // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+          // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+          // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+          // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+          // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+          // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+          // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+          // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+          // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+          var g_outoutArc = svg.selectAll('.outoutArc')
+            .data(pie(outoutdata))
+            .enter().append('g')
+            .attr('class', 'outoutArc');
+
+          g_outoutArc.append('path')
+            .attr('d', outoutArc)
+            .style('fill', function(d, i) {
+              return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+            })
+            .attr('stroke', function(d) {
+            return 'none'
+              return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+            })
+            .style('stroke-opacity', 0.4)
+            .on('mousemove', function(d) {
+              if (!d.data.metric.startsWith('empty')) {
+                d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                d3.select(this).style('opacity', 1);
+                tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                tooltip_div.style('display', 'inline-block');
+              }
+            })
+            .on('mouseout', function(d) {
+              tooltip_div.style('display', 'none');
+              d3.selectAll('path')
+                .style('opacity', 1);
+            });
+
+          g_outoutArc.append('text')
+            //.style("font-size", "10px")
+            .attr('transform', function(d, i) {
+              if (d.endAngle == Math.PI) {
+                return 'translate(' + outoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+              } else if (d.startAngle == Math.PI) {
+
+                return 'translate(' + outoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+              } else {
+
+                return 'translate(' + outoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+              }
+            })
+            //.attr("dx", function(d) { return (d.angle > 180 ? 10 : 0); })
+            .text(function(d) {
+              return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+            })
+            .on('mousemove', function(d) {
+              if (!d.data.metric.startsWith('empty')) {
+                d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                d3.select(this.previousSibling).style('opacity', 1);
+                tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                tooltip_div.style('display', 'inline-block');
+              }
+            })
+            .on('mouseout', function(d) {
+              tooltip_div.style('display', 'none');
+              d3.selectAll('path')
+                .style('opacity', 1);
+            });
+
+          d3.json('data/outoutoutarc.json', function(error, outoutoutdata) {
+            if (error) throw error;
+            outoutoutdata = outoutoutdata.metrics
+
+            var color = ['#00ae00', '#4a5cc5', '#cf0002', '#cb5ae3', '#ff8400', '#00cfcf'];
+            // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+            // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+            // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+            // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+            // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+            // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+            // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+            // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+            // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+            // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+            // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+            // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+            var g_outoutoutArc = svg.selectAll('.outoutoutArc')
+              .data(pie(outoutoutdata))
+              .enter().append('g')
+              .attr('class', 'outoutoutArc');
+
+            g_outoutoutArc.append('path')
+              .attr('d', outoutoutArc)
+              .style('fill', function(d, i) {
+                return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+              })
+              .attr('stroke', function(d) {
+            return 'none'
+                return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+              })
+              .style('stroke-opacity', 0.4)
+              .on('mousemove', function(d) {
+                if (!d.data.metric.startsWith('empty')) {
+                  d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                  d3.select(this).style('opacity', 1);
+                  tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                  tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                  tooltip_div.style('display', 'inline-block');
+                }
+              })
+              .on('mouseout', function(d) {
+                tooltip_div.style('display', 'none');
+                d3.selectAll('path')
+                  .style('opacity', 1);
+              });
+
+            g_outoutoutArc.append('text')
+              //.style("font-size", "10px")
+              .attr('transform', function(d, i) {
+                if (d.endAngle == Math.PI) {
+                  return 'translate(' + outoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+                } else if (d.startAngle == Math.PI) {
+
+                  return 'translate(' + outoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+                } else {
+
+                  return 'translate(' + outoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+                }
+              })
+              //.attr("dx", function(d) { return (d.angle > 180 ? 10 : 0); })
+              .text(function(d) {
+                return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+              })
+              .on('mousemove', function(d) {
+                if (!d.data.metric.startsWith('empty')) {
+                  d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                  d3.select(this.previousSibling).style('opacity', 1);
+                  tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                  tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                  tooltip_div.style('display', 'inline-block');
+                }
+              })
+              .on('mouseout', function(d) {
+                tooltip_div.style('display', 'none');
+                d3.selectAll('path')
+                  .style('opacity', 1);
+              });
+
+            d3.json('data/outoutoutoutarc.json', function(error, outoutoutoutdata) {
+              if (error) throw error;
+              outoutoutoutdata = outoutoutoutdata.metrics
+
+              var color = ['#00c800', '#5879d9', '#e60001', '#dd6ee9', '#ff9600', '#00e6e6'];
+              // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+              // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+              // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+              // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+              // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+              // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+              // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+              // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+              // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+              // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+              // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+              // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+              var g_outoutoutoutArc = svg.selectAll('.outoutoutoutArc')
+                .data(pie(outoutoutoutdata))
+                .enter().append('g')
+                .attr('class', 'outoutoutoutArc');
+
+              g_outoutoutoutArc.append('path')
+                .attr('d', outoutoutoutArc)
+                .style('fill', function(d, i) {
+                  return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+                })
+                .attr('stroke', function(d) {
+            return 'none'
+                  return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+                })
+                .style('stroke-opacity', 0.4)
+                .on('mousemove', function(d) {
+                  if (!d.data.metric.startsWith('empty')) {
+                    d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                    d3.select(this).style('opacity', 1);
+                    tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                    tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                    tooltip_div.style('display', 'inline-block');
+                  }
+                })
+                .on('mouseout', function(d) {
+                  tooltip_div.style('display', 'none');
+                  d3.selectAll('path')
+                    .style('opacity', 1);
+                });
+
+              g_outoutoutoutArc.append('text')
+                //.style("font-size", "10px")
+                .attr('transform', function(d, i) {
+                  if (d.endAngle == Math.PI) {
+                    return 'translate(' + outoutoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+                  } else if (d.startAngle == Math.PI) {
+
+                    return 'translate(' + outoutoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+                  } else {
+
+                    return 'translate(' + outoutoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+                  }
+                })
+                //.attr("dx", function(d) { return (d.angle > 180 ? 10 : 0); })
+                .text(function(d) {
+                  return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+                })
+                .on('mousemove', function(d) {
+                  if (!d.data.metric.startsWith('empty')) {
+                    d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                    d3.select(this.previousSibling).style('opacity', 1);
+                    tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                    tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                    tooltip_div.style('display', 'inline-block');
+                  }
+                })
+                .on('mouseout', function(d) {
+                  tooltip_div.style('display', 'none');
+                  d3.selectAll('path')
+                    .style('opacity', 1);
+                });
+            });
+          });
+        });
+
+      });
+      //var outerouterPath = svg.selectAll(".outoutlineArc")
+      //  .data(pie(data))
+      //  .enter().append("path")
+      //  .attr("fill", "none")
+      //  .attr("stroke", "black")
+      //  .attr("class", "outoutlineArc")
+      //  .attr("d", outoutlineArc);
+
+      //var outerouterouterPath = svg.selectAll(".outoutoutlineArc")
+      //  .data(pie(data))
+      //  .enter().append("path")
+      //  .attr("fill", "none")
+      //  .attr("stroke", "black")
+      //  .attr("class", "outoutoutlineArc")
+      //  .attr("d", outoutoutlineArc);
+
+      //var outerouterouterouterPath = svg.selectAll(".outoutoutoutlineArc")
+      //  .data(pie(data))
+      //  .enter().append("path")
+      //  .attr("fill", "none")
+      //  .attr("stroke", "black")
+      //  .attr("class", "outoutoutoutlineArc")
+      //  .attr("d", outoutoutoutlineArc);
+
+
+      // g.append("text")
+      //.attr("text-anchor", "middle")
+      //.style('font-size', '15em')
+      //.attr('y', 70)
+      //.text('42') ;
+      svg.append('image')
+        //.attr("xlink:href", "https://github.com/favicon.ico")
+        //.attr("xlink:href", "plugOut_red.png")
+        // .attr("x", -100)
+        // .attr("y", -1250)
+        .attr('width', function() {
+          icon_index++;
+          return (icon_index % 2 != 0 ? 20 : 15);
+        })
+        .attr('height', '100%')
+        .attr('state', function(d, i) {
+          icon_index++;
+          return icon_index % 2 != 0 ? 'online' : 'offline';
+        })
+        .attr('xlink:href', function(d, i) {
+          icon = icons[icon_index % 2];
+          icon_index++;
+          return icon;
+        })
+        .attr('x', function() {
+          icon_index++;
+          return (icon_index % 2 != 0 ? -width / 2 + width / 2.35 : -width / 2 + width / 2.35);
+        })
+        .attr('y', function() {
+          icon_index++;
+          return (icon_index % 2 != 0 ? -height / 2 - 2 : -height / 2 );
+        })
+        .on('mousemove', function(d) {
+          draw_uptime_one_time++;
+          console.log('show_uptime')
+          if (draw_uptime_one_time == 1) {
+            console.log('draw_uptime')
+            console.log(d3.event.pageX)
+            console.log(d3.event.pageY)
+            tooltip_div.style('left', d3.event.pageX + 0 + 'px');
+            tooltip_div.style('top', d3.event.pageY - 30 + 'px');
+            tooltip_div.style('display', 'inline-block');
+            tooltip_div.html('<b>' + this.getAttribute("state") + '</b><br>');
+
+            //http://bl.ocks.org/d3noob/38744a17f9c0141bcd04
+            //https://bl.ocks.org/d3noob/3c040800ff6457717cca586ae9547dbf
+            //https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e
+            var margin = {
+                top: 15,
+                right: 15,
+                bottom: 45,
+                left: 45
+              },
+              width_uptime = 250 - margin.left - margin.right,
+              height_uptime = 100 - margin.top - margin.bottom;
+
+            // Parse the date / time
+            var parseDate = d3.timeParse("%d-%b-%y");
+
+            // Set the ranges
+            var x = d3.scaleTime().range([0, width_uptime]);
+            var y = d3.scaleLinear().range([height_uptime, 0]);
+
+            // Define the axes
+            var xAxis = d3.axisBottom(x);
+
+            var yAxis = d3.axisLeft(y).ticks(1).tickFormat(function (d) {return d == 1 ? 'online' : 'offline'});
+
+            // Define the line
+            var valueline = d3.line()
+              .x(function(d) {
+                return x(d.date);
+              })
+              .y(function(d) {
+                return y(d.state);
+              });
+
+            // Adds the svg canvas
+
+            // Get the data
+            d3.json("data/uptime.json", function(error, data) {
+              if (error) throw error;
+              data = data.uptime
+              data.forEach(function(d) {
+                d.date = parseDate(d.date);
+                d.state = +d.state;
+              });
+
+              // Scale the range of the data
+              x.domain(d3.extent(data, function(d) {
+                return d.date;
+              }));
+              y.domain([0, d3.max(data, function(d) {
+                return d.state;
+              })]);
+
+              // Add the valueline path.
+              svg_uptime = tooltip_div.append('svg')
+                .attr('id', 'uptime')
+                .attr('width', width_uptime + margin.left + margin.right)
+                .attr('height', height_uptime + margin.top + margin.bottom)
+                .append('g')
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+              svg_uptime.append("path")
+                .attr("class", "line")
+                .attr("d", valueline(data))
+
+              // Add the scatterplot
+              svg_uptime.selectAll("dot")
+                .data(data)
+                .enter().append("circle")
+                .attr("r", 3.5)
+                .attr("cx", function(d) {
+                  return x(d.date);
+                })
+                .attr("cy", function(d) {
+                  return y(d.state);
+                })
+
+              // Add the X Axis
+              svg_uptime.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height_uptime + ")")
+                .call(xAxis)
+                .selectAll("text")
+                        .style("text-anchor", "end")
+                        .attr("dx", "-.8em")
+                        .attr("dy", ".15em")
+                        .attr("transform", "rotate(-65)");
+
+              // Add the Y Axis
+              svg_uptime.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
+
+            });
+          }
+        })
+        .on('mouseout', function(d) {
+          draw_uptime_one_time = 0;
+          tooltip_div.style('display', 'none');
+          //d3.selectAll('path')
+          //  .style('opacity', 1);
+        });
+    });
+
+
+    function type(d) {
+      <!--d.description = +d.description;-->
+      return d;
+    }
+  </script>
+
+</body>
+
+</html>
