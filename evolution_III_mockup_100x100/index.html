@@ -61,16 +61,17 @@
     var width = 100;
     var height = 100;
     var radius = Math.min(width, height) / 5 - 1;
-    var big_radius = radius + 7;
-    var big_big_radius = big_radius + 7;
-    var big_big_big_radius = big_big_radius + 7;
-    var big_big_big_big_radius = big_big_big_radius + 7;
+    const RADIUS_DIFFERENCE = 7
+    var big_radius = radius + RADIUS_DIFFERENCE;
+    var big_big_radius = big_radius + RADIUS_DIFFERENCE;
+    var big_big_big_radius = big_big_radius + RADIUS_DIFFERENCE;
+    var big_big_big_big_radius = big_big_big_radius + RADIUS_DIFFERENCE;
 
     var draw_uptime_one_time = 0;
 
     var arc = d3.arc()
       .outerRadius(radius)
-      .innerRadius(radius - 7);
+      .innerRadius(radius - RADIUS_DIFFERENCE);
 
     var outArc = d3.arc()
       .innerRadius(radius)
@@ -92,8 +93,8 @@
       .sort(null)
       .value(function(d) {
         return 1;
-      });
-    <!--.value(function(d) { return d.description; });-->
+      })
+      .padAngle(.015);
 
     var tooltip_div = d3.select('body').append('div').attr('class', 'tooltip');
     data_summary = {}
@@ -104,6 +105,35 @@
       .attr('height', height)
       .append('g')
       .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+    var external_circle = svg.selectAll('.circle')
+      .data([{
+        "x_axis": 0,
+        "y_axis": 0,
+        "radius": radius - RADIUS_DIFFERENCE - .5
+      }, {
+        "x_axis": 0,
+        "y_axis": 0,
+        "radius": big_big_big_big_radius
+      }])
+      .enter().append('circle')
+      .attr('class', 'circle')
+      .attr("cx", function(d) {
+        return d.x_axis;
+      })
+      .attr("cy", function(d) {
+        return d.y_axis;
+      })
+      .attr("r", function(d) {
+        return d.radius;
+      })
+      .style('fill', 'none')
+      .style("stroke", 'black')
+      .style("stroke-opacity", 0.5)
+      .style("display", "inline-block")
+
+    var radius_lines_number = 0
+
 
     d3.json('../data/evolution_Ixx_mockup/arc.json', function(error, data) {
       if (error) throw error;
@@ -133,16 +163,43 @@
       var g_arc = svg.selectAll('.arc')
         .data(pie(data))
         .enter().append('g')
-        .attr('class', 'arc');
+        .attr('class', 'arc')
+        .each(function(d) {
+          if (radius_lines_number < 6) {
+            radius_lines_number++;
+            var radius_lines = svg.selectAll('.radius').data([{
+                'x1': (-radius + RADIUS_DIFFERENCE) * Math.cos(d.startAngle + Math.PI / 2),
+                'y1': (-radius + RADIUS_DIFFERENCE) * Math.sin(d.startAngle + Math.PI / 2),
+                'x2': -big_big_big_big_radius * Math.cos(d.startAngle + Math.PI / 2),
+                'y2': -big_big_big_big_radius * Math.sin(d.startAngle + Math.PI / 2)
+              }])
+              .enter().append('line')
+              .attr('class', 'line')
+              .attr('x1', function(d) {
+                return d.x1
+              })
+              .attr('y1', function(d) {
+                return d.y1
+              })
+              .attr('x2', function(d) {
+                return d.x2
+              })
+              .attr('y2', function(d) {
+                return d.y2
+              })
+              .style("stroke", 'black')
+              .style("stroke-width", '1.5')
+              .style("stroke-opacity", 0.5)
+              .style("display", "inline-block")
+
+          }
+        })
 
       g_arc.append('path')
         .attr('d', arc)
         .style('fill', function(d, i) {
           return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
         })
-        <!--.style('stroke', function(d) {-->
-        <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
-        <!--})-->
         .style('stroke-opacity', 0.4)
         .on('mousemove', function(d) {
           if (!d.data.metric.startsWith('empty')) {
@@ -237,9 +294,6 @@
           .style('fill', function(d, i) {
             return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
           })
-          <!--.attr('stroke', function(d) {-->
-          <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
-          <!--})-->
           .style('stroke-opacity', 0.4)
           .on('mousemove', function(d) {
             if (!d.data.metric.startsWith('empty')) {
@@ -339,9 +393,6 @@
             .style('fill', function(d, i) {
               return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
             })
-            <!--.attr('stroke', function(d) {-->
-            <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
-            <!--})-->
             .style('stroke-opacity', 0.4)
             .on('mousemove', function(d) {
               if (!d.data.metric.startsWith('empty')) {
@@ -441,9 +492,6 @@
               .style('fill', function(d, i) {
                 return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
               })
-              <!--.attr('stroke', function(d) {-->
-              <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
-              <!--})-->
               .style('stroke-opacity', 0.4)
               .on('mousemove', function(d) {
                 if (!d.data.metric.startsWith('empty')) {
@@ -543,9 +591,6 @@
                 .style('fill', function(d, i) {
                   return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
                 })
-                <!--.attr('stroke', function(d) {-->
-                <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
-                <!--})-->
                 .style('stroke-opacity', 0.4)
                 .on('mousemove', function(d) {
                   if (!d.data.metric.startsWith('empty')) {
@@ -759,7 +804,6 @@
 
 
     function type(d) {
-      <!--d.description = +d.description;-->
       return d;
     }
   </script>
