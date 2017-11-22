@@ -16,7 +16,7 @@
     },
     {
       "metric": "Licensing",
-      "description": "Project_license, License_statement Sourcecode_license License_headers",
+      "description": "Project_license License_statement Sourcecode_license License_headers",
       "ticks": 2
     },
     {

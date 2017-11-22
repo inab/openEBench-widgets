@@ -96,6 +96,7 @@
     <!--.value(function(d) { return d.description; });-->
 
     var tooltip_div = d3.select('body').append('div').attr('class', 'tooltip');
+    data_summary = {}
 
     //var svg = d3.select("body").append("svg")
     var svg = d3.selectAll('svg.widget')
@@ -104,9 +105,16 @@
       .append('g')
       .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-    d3.json('data/arc.json', function(error, data) {
+    d3.json('../data/evolution_Ixx_mockup/arc.json', function(error, data) {
       if (error) throw error;
       data = data.metrics
+      data_summary = {}
+      data_summary_keys = {}
+      for (let d of data) {
+        data_summary[d.metric] = d
+        for (let metric of d.description.split(' '))
+          data_summary_keys[metric] = d.metric
+      }
 
       var color = ['#006400', '#00008b', '#8b0000', '#9400d3', '#ff4500', '#008b8b'];
       // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
@@ -132,10 +140,9 @@
         .style('fill', function(d, i) {
           return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
         })
-        .style('stroke', function(d) {
-          return 'none'
-          return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
-        })
+        <!--.style('stroke', function(d) {-->
+        <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
+        <!--})-->
         .style('stroke-opacity', 0.4)
         .on('mousemove', function(d) {
           if (!d.data.metric.startsWith('empty')) {
@@ -143,7 +150,6 @@
             d3.select(this).style('opacity', 1);
             tooltip_div.style('left', d3.event.pageX + 10 + 'px');
             tooltip_div.style('top', d3.event.pageY - 25 + 'px');
-            tooltip_div.style('display', 'inline-block');
 
             description_counter = 0
             description_text = "";
@@ -153,7 +159,8 @@
               description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
               description_counter++
             }
-            tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (d.data.metric.replace(/_/,' ')) + '</b></div><div>' + description_text + '</div>');
+            tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (d.data.metric.replace(/_/, ' ')) + '</b></div><div>' + description_text + '</div>');
+            tooltip_div.style('display', 'inline-block');
           }
         })
         .on('mouseout', function(d) {
@@ -185,7 +192,6 @@
             d3.select(this).style('opacity', 1);
             tooltip_div.style('left', d3.event.pageX + 10 + 'px');
             tooltip_div.style('top', d3.event.pageY - 25 + 'px');
-            tooltip_div.style('display', 'inline-block');
 
             description_counter = 0
             description_text = ""
@@ -196,6 +202,7 @@
               description_counter++
             }
             tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (d.data.metric.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
+            tooltip_div.style('display', 'inline-block');
           }
         })
         .on('mouseout', function(d) {
@@ -204,7 +211,7 @@
             .style('opacity', 1);
         });
 
-      d3.json('data/outarc.json', function(error, outdata) {
+      d3.json('../data/evolution_Ixx_mockup/outarc.json', function(error, outdata) {
         if (error) throw error;
         outdata = outdata.metrics
         var color = ['#007c00', '#25259e', '#a10002', '#a72bd9', '#ff5e00', '#00a2a2'];
@@ -230,10 +237,9 @@
           .style('fill', function(d, i) {
             return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
           })
-          .attr('stroke', function(d) {
-            return 'none'
-            return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
-          })
+          <!--.attr('stroke', function(d) {-->
+          <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
+          <!--})-->
           .style('stroke-opacity', 0.4)
           .on('mousemove', function(d) {
             if (!d.data.metric.startsWith('empty')) {
@@ -241,6 +247,18 @@
               d3.select(this).style('opacity', 1);
               tooltip_div.style('left', d3.event.pageX + 10 + 'px');
               tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+
+              description_counter = 0
+              description_text = ""
+              category_name = data_summary_keys[d.data.metric]
+              data_category = data_summary[category_name]
+              for (let description of data_category.description.split(' ')) {
+                description = description.replace(/_/g, ' ')
+                icon = (description_counter < data_category.ticks) ? 'online' : 'offline'
+                description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+                description_counter++
+              }
+              tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (category_name.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
               tooltip_div.style('display', 'inline-block');
             }
           })
@@ -273,6 +291,18 @@
               d3.select(this.previousSibling).style('opacity', 1);
               tooltip_div.style('left', d3.event.pageX + 10 + 'px');
               tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+
+              description_counter = 0
+              description_text = ""
+              category_name = data_summary_keys[d.data.metric]
+              data_category = data_summary[category_name]
+              for (let description of data_category.description.split(' ')) {
+                description = description.replace(/_/g, ' ')
+                icon = (description_counter < data_category.ticks) ? 'online' : 'offline'
+                description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+                description_counter++
+              }
+              tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (category_name.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
               tooltip_div.style('display', 'inline-block');
             }
           })
@@ -282,7 +312,7 @@
               .style('opacity', 1);
           });
 
-        d3.json('data/outoutarc.json', function(error, outoutdata) {
+        d3.json('../data/evolution_Ixx_mockup/outoutarc.json', function(error, outoutdata) {
           if (error) throw error;
           outoutdata = outoutdata.metrics
 
@@ -309,10 +339,9 @@
             .style('fill', function(d, i) {
               return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
             })
-            .attr('stroke', function(d) {
-            return 'none'
-              return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
-            })
+            <!--.attr('stroke', function(d) {-->
+            <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
+            <!--})-->
             .style('stroke-opacity', 0.4)
             .on('mousemove', function(d) {
               if (!d.data.metric.startsWith('empty')) {
@@ -320,6 +349,18 @@
                 d3.select(this).style('opacity', 1);
                 tooltip_div.style('left', d3.event.pageX + 10 + 'px');
                 tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+
+                description_counter = 0
+                description_text = ""
+                category_name = data_summary_keys[d.data.metric]
+                data_category = data_summary[category_name]
+                for (let description of data_category.description.split(' ')) {
+                  description = description.replace(/_/g, ' ')
+                  icon = (description_counter < data_category.ticks) ? 'online' : 'offline'
+                  description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+                  description_counter++
+                }
+                tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (category_name.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
                 tooltip_div.style('display', 'inline-block');
               }
             })
@@ -352,6 +393,18 @@
                 d3.select(this.previousSibling).style('opacity', 1);
                 tooltip_div.style('left', d3.event.pageX + 10 + 'px');
                 tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+
+                description_counter = 0
+                description_text = ""
+                category_name = data_summary_keys[d.data.metric]
+                data_category = data_summary[category_name]
+                for (let description of data_category.description.split(' ')) {
+                  description = description.replace(/_/g, ' ')
+                  icon = (description_counter < data_category.ticks) ? 'online' : 'offline'
+                  description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+                  description_counter++
+                }
+                tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (category_name.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
                 tooltip_div.style('display', 'inline-block');
               }
             })
@@ -361,7 +414,7 @@
                 .style('opacity', 1);
             });
 
-          d3.json('data/outoutoutarc.json', function(error, outoutoutdata) {
+          d3.json('../data/evolution_Ixx_mockup/outoutoutarc.json', function(error, outoutoutdata) {
             if (error) throw error;
             outoutoutdata = outoutoutdata.metrics
 
@@ -388,10 +441,9 @@
               .style('fill', function(d, i) {
                 return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
               })
-              .attr('stroke', function(d) {
-            return 'none'
-                return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
-              })
+              <!--.attr('stroke', function(d) {-->
+              <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
+              <!--})-->
               .style('stroke-opacity', 0.4)
               .on('mousemove', function(d) {
                 if (!d.data.metric.startsWith('empty')) {
@@ -399,6 +451,18 @@
                   d3.select(this).style('opacity', 1);
                   tooltip_div.style('left', d3.event.pageX + 10 + 'px');
                   tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+
+                  description_counter = 0
+                  description_text = ""
+                  category_name = data_summary_keys[d.data.metric]
+                  data_category = data_summary[category_name]
+                  for (let description of data_category.description.split(' ')) {
+                    description = description.replace(/_/g, ' ')
+                    icon = (description_counter < data_category.ticks) ? 'online' : 'offline'
+                    description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+                    description_counter++
+                  }
+                  tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (category_name.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
                   tooltip_div.style('display', 'inline-block');
                 }
               })
@@ -431,6 +495,18 @@
                   d3.select(this.previousSibling).style('opacity', 1);
                   tooltip_div.style('left', d3.event.pageX + 10 + 'px');
                   tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+
+                  description_counter = 0
+                  description_text = ""
+                  category_name = data_summary_keys[d.data.metric]
+                  data_category = data_summary[category_name]
+                  for (let description of data_category.description.split(' ')) {
+                    description = description.replace(/_/g, ' ')
+                    icon = (description_counter < data_category.ticks) ? 'online' : 'offline'
+                    description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+                    description_counter++
+                  }
+                  tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (category_name.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
                   tooltip_div.style('display', 'inline-block');
                 }
               })
@@ -440,7 +516,7 @@
                   .style('opacity', 1);
               });
 
-            d3.json('data/outoutoutoutarc.json', function(error, outoutoutoutdata) {
+            d3.json('../data/evolution_Ixx_mockup/outoutoutoutarc.json', function(error, outoutoutoutdata) {
               if (error) throw error;
               outoutoutoutdata = outoutoutoutdata.metrics
 
@@ -467,10 +543,9 @@
                 .style('fill', function(d, i) {
                   return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
                 })
-                .attr('stroke', function(d) {
-            return 'none'
-                  return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
-                })
+                <!--.attr('stroke', function(d) {-->
+                <!--return (d.data.metric.startsWith('empty')) ? 'black' : 'black';-->
+                <!--})-->
                 .style('stroke-opacity', 0.4)
                 .on('mousemove', function(d) {
                   if (!d.data.metric.startsWith('empty')) {
@@ -478,6 +553,18 @@
                     d3.select(this).style('opacity', 1);
                     tooltip_div.style('left', d3.event.pageX + 10 + 'px');
                     tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+
+                    description_counter = 0
+                    description_text = ""
+                    category_name = data_summary_keys[d.data.metric]
+                    data_category = data_summary[category_name]
+                    for (let description of data_category.description.split(' ')) {
+                      description = description.replace(/_/g, ' ')
+                      icon = (description_counter < data_category.ticks) ? 'online' : 'offline'
+                      description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+                      description_counter++
+                    }
+                    tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (category_name.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
                     tooltip_div.style('display', 'inline-block');
                   }
                 })
@@ -510,6 +597,18 @@
                     d3.select(this.previousSibling).style('opacity', 1);
                     tooltip_div.style('left', d3.event.pageX + 10 + 'px');
                     tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+
+                    description_counter = 0
+                    description_text = ""
+                    category_name = data_summary_keys[d.data.metric]
+                    data_category = data_summary[category_name]
+                    for (let description of data_category.description.split(' ')) {
+                      description = description.replace(/_/g, ' ')
+                      icon = (description_counter < data_category.ticks) ? 'online' : 'offline'
+                      description_text += '<br><img src="icons/' + icon + '.png" height="12" width="12"> ' + description
+                      description_counter++
+                    }
+                    tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (category_name.replace(/_/g, ' ')) + '</b></div><div>' + description_text + '</div>');
                     tooltip_div.style('display', 'inline-block');
                   }
                 })
@@ -521,43 +620,9 @@
             });
           });
         });
-
       });
-      //var outerouterPath = svg.selectAll(".outoutlineArc")
-      //  .data(pie(data))
-      //  .enter().append("path")
-      //  .attr("fill", "none")
-      //  .attr("stroke", "black")
-      //  .attr("class", "outoutlineArc")
-      //  .attr("d", outoutlineArc);
 
-      //var outerouterouterPath = svg.selectAll(".outoutoutlineArc")
-      //  .data(pie(data))
-      //  .enter().append("path")
-      //  .attr("fill", "none")
-      //  .attr("stroke", "black")
-      //  .attr("class", "outoutoutlineArc")
-      //  .attr("d", outoutoutlineArc);
-
-      //var outerouterouterouterPath = svg.selectAll(".outoutoutoutlineArc")
-      //  .data(pie(data))
-      //  .enter().append("path")
-      //  .attr("fill", "none")
-      //  .attr("stroke", "black")
-      //  .attr("class", "outoutoutoutlineArc")
-      //  .attr("d", outoutoutoutlineArc);
-
-
-      // g.append("text")
-      //.attr("text-anchor", "middle")
-      //.style('font-size', '15em')
-      //.attr('y', 70)
-      //.text('42') ;
       svg.append('image')
-        //.attr("xlink:href", "https://github.com/favicon.ico")
-        //.attr("xlink:href", "plugOut_red.png")
-        // .attr("x", -100)
-        // .attr("y", -1250)
         .attr('width', function() {
           icon_index++;
           return (icon_index % 2 != 0 ? 40 : 30);
@@ -582,13 +647,9 @@
         })
         .on('mousemove', function(d) {
           draw_uptime_one_time++;
-          console.log('show_uptime')
           if (draw_uptime_one_time == 1) {
-            console.log('draw_uptime')
-            console.log(d3.event.pageX)
-            console.log(d3.event.pageY)
-            tooltip_div.style('left', d3.event.pageX + 0 + 'px');
-            tooltip_div.style('top', d3.event.pageY - 30 + 'px');
+            tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+            tooltip_div.style('top', d3.event.pageY - 25 + 'px');
             tooltip_div.style('display', 'inline-block');
             tooltip_div.html('<b>' + this.getAttribute("state") + '</b><br>');
 
@@ -614,7 +675,9 @@
             // Define the axes
             var xAxis = d3.axisBottom(x);
 
-            var yAxis = d3.axisLeft(y).ticks(1).tickFormat(function (d) {return d == 1 ? 'online' : 'offline'});
+            var yAxis = d3.axisLeft(y).ticks(1).tickFormat(function(d) {
+              return d == 1 ? 'online' : 'offline'
+            });
 
             // Define the line
             var valueline = d3.line()
@@ -628,7 +691,7 @@
             // Adds the svg canvas
 
             // Get the data
-            d3.json("data/uptime.json", function(error, data) {
+            d3.json("../data/evolution_Ixx_mockup/uptime.json", function(error, data) {
               if (error) throw error;
               data = data.uptime
               data.forEach(function(d) {
@@ -673,10 +736,10 @@
                 .attr("transform", "translate(0," + height_uptime + ")")
                 .call(xAxis)
                 .selectAll("text")
-                        .style("text-anchor", "end")
-                        .attr("dx", "-.8em")
-                        .attr("dy", ".15em")
-                        .attr("transform", "rotate(-65)");
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-65)");
 
               // Add the Y Axis
               svg_uptime.append("g")
