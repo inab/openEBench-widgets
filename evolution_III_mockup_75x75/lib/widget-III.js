@@ -396,7 +396,7 @@ d3.json('../data/evolution_Ixx_mockup/arc.json', function(error, data) {
     })
     .on('mouseout', function() {
       if (!clicked_tooltip) {
-        hide_summary_tooltip();
+        hide_uptime_tooltip();
       }
     });
 });
