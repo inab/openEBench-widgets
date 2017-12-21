@@ -112,8 +112,11 @@ var DemoDrawer = {
 		widgetRoot.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
 		widgetElem.appendChild(widgetRoot);
 
+		    console.log('widgetElem', widgetElem);
 		var widgetWidth = widgetElem.getAttribute("data-widget-width");
+		console.log(widgetWidth);
 		var widgetHeight = widgetElem.getAttribute("data-widget-height");
+		console.log(widgetHeight);
 		var widgetType = widgetElem.getAttribute("data-widget-type");
 		var width = widgetWidth !== null ? widgetWidth : DemoDrawer.DEFAULT_WIDTH;
 		var height = widgetHeight !== null ? widgetHeight : DemoDrawer.DEFAULT_HEIGHT;
@@ -400,6 +403,7 @@ var OpEB = {
 				};
 			} else {
 				retval = function() {
+					console.log("what?");
 					if(req) {
 						callback = errorCallback = req.onload =
 							req.onerror = req.onabort = req.onreadystatechange = null;

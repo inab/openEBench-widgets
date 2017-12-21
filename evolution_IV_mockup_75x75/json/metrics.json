@@ -1,0 +1,330 @@
+{
+	"metrics": [
+		{
+			"metric": "Documentation",
+			"description": "Help Tutorial Readme Publication",
+			"ticks": [
+				{
+					"name": "Help",
+					"ticked": true
+				},
+				{
+					"name": "Tutorial",
+					"ticked": true
+				},
+				{
+					"name": "Readme",
+					"ticked": true
+				},
+				{
+					"name": "Publication",
+					"ticked": true
+				}
+			],
+			"submetrics": [
+				{
+					"metric": "Help",
+					"description": "Whether there is a general help about how to use the tool",
+					"submetrics": [
+						{
+							"metric": "Tutorial",
+							"description": "Whether there is a tutorial associated",
+							"submetrics": [
+								{
+									"metric": "Readme",
+									"description": "Whether there is a readme file distributed along the code.",
+									"submetrics": [
+										{
+											"metric": "Publication",
+											"description": "Whether the resource has an associated publication."
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"metric": "Buildability",
+			"description": "Instructions Dependencies Automated Type Compiler",
+			"ticks": [
+				{
+					"name": "Instructions",
+					"ticked": true
+				},
+				{
+					"name": "Dependencies",
+					"ticked": true
+				},
+				{
+					"name": "Automated",
+					"ticked": true
+				},
+				{
+					"name": "Type",
+					"ticked": false
+				},
+				{
+					"name": "Compiler",
+					"ticked": false
+				}
+			],
+			"submetrics": [
+				{
+					"metric": "Instructions",
+					"description": "Whether instructions for building the software are provided.",
+					"submetrics": [
+						{
+							"metric": "Dependencies",
+							"description": "Whether the list of all third-party dependencies is provided.",
+							"submetrics": [
+								{
+									"metric": "Automated",
+									"empty": true,
+									"description": "Whether an automated build system used.",
+									"submetrics": [
+										{
+											"metric": "Type",
+											"empty": true,
+											"description": "Type of the automated build system used (make  maven  ant  etc)."
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"metric": "Copyright",
+			"empty": true,
+			"description": "Copyright_statement Credits Consistency Copyright_headers",
+			"ticks": [
+				{
+					"name": "Copyright statement",
+					"ticked": false
+				},
+				{
+					"name": "Credits",
+					"ticked": false
+				},
+				{
+					"name": "Consistency",
+					"ticked": false
+				},
+				{
+					"name": "Copyright headers",
+					"ticked": false
+				}
+			],
+			"submetrics": [
+				{
+					"metric": "Consistency",
+					"empty": true,
+					"description": "All sites state exactly the same copyright, licencing and authorship.",
+					"submetrics": [
+						{
+							"metric": "Consistency",
+							"empty": true,
+							"description": "All sites state exactly the same copyright, licencing and authorship.",
+							"submetrics": [
+								{
+									"metric": "Consistency",
+									"empty": true,
+									"description": "All sites state exactly the same copyright, licencing and authorship.",
+									"submetrics": [
+										{
+											"metric": "Copyright headers",
+											"empty": true,
+											"description": "Each source code file has a copyright statement."
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"metric": "Licensing",
+			"description": "Project_license, License_statement Sourcecode_license License_headers",
+			"ticks": [
+				{
+					"name": "Project license",
+					"ticked": true
+				},
+				{
+					"name": "License statement",
+					"ticked": false
+				},
+				{
+					"name": "Sourcecode license",
+					"ticked": true
+				},
+				{
+					"name": "License headers",
+					"ticked": false
+				}
+			],
+			"submetrics": [
+				{
+					"metric": "Project license",
+					"description": "Project has a license",
+					"submetrics": [
+						{
+							"metric": "License statement",
+							"description": "Web site states license.",
+							"submetrics": [
+								{
+									"metric": "Sourcecode license",
+									"description": "Code distribution includes a license file.",
+									"submetrics": [
+										{
+											"metric": "License headers",
+											"empty": true,
+											"description": "Each source code file has a license header."
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"metric": "Accesibility",
+			"description": "Binary_distribution Source_code Binary_distribution_freeness Binaries_download_registration Sourcecode_freeness",
+			"ticks": [
+				{
+					"name": "Binary distribution",
+					"ticked": false
+				},
+				{
+					"name": "Source code",
+					"ticked": false
+				},
+				{
+					"name": "Binary distribution freeness",
+					"ticked": false
+				},
+				{
+					"name": "Binaries download registration",
+					"ticked": false
+				},
+				{
+					"name": "Sourcecode freeness",
+					"ticked": false
+				}
+			],
+			"submetrics": [
+				{
+					"metric": "Binary distribution",
+					"empty": true,
+					"description": "Whether binary distributions are available.",
+					"submetrics": [
+						{
+							"metric": "Sourcecode",
+							"empty": true,
+							"description": "Source distributions are available.",
+							"submetrics": [
+								{
+									"metric": "Binary distribution freeness",
+									"empty": true,
+									"description": "Binary distributions are freely available.",
+									"submetrics": [
+										{
+											"metric": "Binary download registration",
+											"empty": true,
+											"description": "Binary distributions are available without the need for any registration."
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"metric": "Changeability",
+			"description": "Contributions_policy Govenance Issue_tracker Resolve_time",
+			"ticks": [
+				{
+					"name": "Contributions policy",
+					"ticked": false
+				},
+				{
+					"name": "Governance",
+					"ticked": false
+				},
+				{
+					"name": "Issue tracker",
+					"ticked": true
+				},
+				{
+					"name": "Resolve time",
+					"ticked": false
+				}
+			],
+			"submetrics": [
+				{
+					"metric": "Contributions policy",
+					"description": "Whether the project has defined a contributions policy.",
+					"submetrics": [
+						{
+							"metric": "Governance",
+							"empty": true,
+							"description": "Whether the project has defined a governance model.",
+							"submetrics": [
+								{
+									"metric": "Issue tracker",
+									"empty": true,
+									"description": "Whether the tool has a publicly accessible issue tracker.",
+									"submetrics": [
+										{
+											"metric": "Resolve time",
+											"empty": true,
+											"description": "How long are issues open."
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"enabled": true,
+	"uptime": [
+		{
+			"date": "1-May-12",
+			"state": 1
+		},
+		{
+			"date": "9-Apr-12",
+			"state": 1
+		},
+		{
+			"date": "7-Apr-12",
+			"state": 0
+		},
+		{
+			"date": "2-Apr-12",
+			"state": 1
+		},
+		{
+			"date": "6-Mar-12",
+			"state": 0
+		},
+		{
+			"date": "3-Mar-12",
+			"state": 1
+		}
+	]
+}

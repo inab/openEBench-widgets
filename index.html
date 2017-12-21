@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
+  <script src="lib/jquery-3.2.1.min.js"></script>
   <title>Mockups</title>
 </head>
 
@@ -13,7 +13,7 @@
       background-color: white;
     }
 
-    img {
+    img#eu {
       float: left;
       width: 48px;
       margin: 0px 10px 0 0;
@@ -55,11 +55,20 @@
     <li>All arcs now show the metrics summary</li>
     <li>Hide arc stroke lines</li>
     <li>Add mouse click event (and a exit button) to fix the tooltips in the screen </li>
-    <!--<li>Plot tooltip a bit little and move to left and</li>-->
   </ul>
   <div id="evolution_III_mockup" style="display: inline"></div>
   <div id="evolution_III_mockup_100" style="display: inline"></div>
   <div id="evolution_III_mockup_75" style="display: inline"></div>
+  <div style="margin: 100px;"></div>
+  <h3>Evolution IV (200x200), (100x100), (75x75)</h3>
+  <ul>
+    <li>Library isolation</li>
+    <li>Fix load html without iframe behaviour</li>
+    <li>Fix mime types in Ipad devices</li>
+  </ul>
+  <div id="evolution_IV_mockup" style="display: inline"></div>
+  <div id="evolution_IV_mockup_100" style="display: inline"></div>
+  <div id="evolution_IV_mockup_75" style="display: inline"></div>
   <div style="margin: 100px;"></div>
   <h2>Alternative mockups</h2>
   <h3>Bilevel mockup</h3>
@@ -76,7 +85,7 @@
   <hr>
   <footer>
     <p>Copyright © <a href="https://www.bsc.es/">BSC-CNS</a> 2017</p>
-    <img alt="EU flag" src="eu_flag.jpg"> ELIXIR is partly funded by the European Commission within the Research Infraestructure programme of Horizon 2020.<br> ELIXIR Excelerate is funded by the European Comission, contract no. 676559
+    <img alt="EU flag" id="eu" src="eu_flag.jpg"> ELIXIR is partly funded by the European Commission within the Research Infraestructure programme of Horizon 2020.<br> ELIXIR Excelerate is funded by the European Comission, contract no. 676559
   </footer>
 
   <script>
@@ -88,6 +97,9 @@
     document.getElementById('evolution_III_mockup').innerHTML = '<object type=text/html" width="550" height="250" data="evolution_III_mockup/index.html" ></object>';
     document.getElementById('evolution_III_mockup_100').innerHTML = '<object type=text/html" width="350" height="190" data="evolution_III_mockup_100x100/index.html" ></object>';
     document.getElementById('evolution_III_mockup_75').innerHTML = '<object type=text/html" width="360" height="190" data="evolution_III_mockup_75x75/index.html" ></object>';
+    $("#evolution_IV_mockup").load( "evolution_IV_mockup/index.html" );
+    <!--$("#evolution_IV_mockup_100").load( "evolution_IV_mockup_100x100/index.html" );-->
+    <!--$("#evolution_IV_mockup_75").load( "evolution_IV_mockup_75x75/index.html" );-->
     document.getElementById('bilevel_mockup').innerHTML = '<object type=text/html" width="440" height="170" data="bilevel_mockup/index.html" ></object>';
     document.getElementById('square_mockup').innerHTML = '<object type=text/html" width="300" height="110" data="square_mockup/index.html" ></object>';
   </script>

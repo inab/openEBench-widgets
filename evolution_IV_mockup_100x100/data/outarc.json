@@ -1,0 +1,27 @@
+{ "metrics": [
+    {
+      "metric": "Help",
+      "description": "Whether there is a general help about how to use the tool"
+    },
+    {
+      "metric": "Instructions",
+      "description": "Whether instructions for building the software are provided."
+    },
+    {
+      "metric": "empty_Consistency",
+      "description": "All sites state exactly the same copyright, licencing and authorship."
+    },
+    {
+      "metric": "Project_license",
+      "description": "Project has a license"
+    },
+    {
+      "metric": "empty_Binary_distribution",
+      "description": "Whether binary distributions are available."
+    },
+    {
+      "metric": "Contributions_policy",
+      "description": "Whether the project has defined a contributions policy."
+    }
+  ]
+}

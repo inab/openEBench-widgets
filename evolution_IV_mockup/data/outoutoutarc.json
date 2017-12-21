@@ -1,0 +1,27 @@
+{ "metrics": [
+    {
+      "metric": "Readme",
+      "description": "Whether there is a readme file distributed along the code."
+    },
+    {
+      "metric": "empty_Automated",
+      "description": "Whether an automated build system used."
+    },
+    {
+      "metric": "empty_Consistency",
+      "description": "All sites state exactly the same copyright, licencing and authorship."
+    },
+    {
+      "metric": "Sourcecode_license",
+      "description": "Code distribution includes a license file."
+    },
+    {
+      "metric": "empty_Binary_distribution_freeness",
+      "description": "Binary distributions are freely available."
+    },
+    {
+      "metric": "empty_Issue_tracker",
+      "description": "Whether the tool has a publicly accessible issue tracker."
+    }
+  ]
+}
