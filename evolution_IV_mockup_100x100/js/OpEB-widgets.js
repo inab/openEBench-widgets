@@ -112,14 +112,14 @@ var DemoDrawer = {
 		widgetRoot.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
 		widgetElem.appendChild(widgetRoot);
 
-		    console.log('widgetElem', widgetElem);
 		var widgetWidth = widgetElem.getAttribute("data-widget-width");
-		console.log(widgetWidth);
 		var widgetHeight = widgetElem.getAttribute("data-widget-height");
-		console.log(widgetHeight);
+		var widgetLevelSize = widgetElem.getAttribute("data-widget-level-size");
 		var widgetType = widgetElem.getAttribute("data-widget-type");
 		var width = widgetWidth !== null ? widgetWidth : DemoDrawer.DEFAULT_WIDTH;
 		var height = widgetHeight !== null ? widgetHeight : DemoDrawer.DEFAULT_HEIGHT;
+    var levelSize = widgetLevelSize !== null ? widgetLevelSize : DemoDrawer.DEFAULT_LEVEL_SIZE;
+    console.log('levelSize', levelSize)
 		var radius = Math.min(width, height) / 2 - 1;
 
 		var draw_uptime_one_time = 0;
@@ -134,11 +134,40 @@ var DemoDrawer = {
 			.append('g')
 			.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
+    svg_g.selectAll('.circle')
+      .data([{
+        'x_axis': 0,
+        'y_axis': 0,
+        'r_radius': (levelSize + 1)
+      }, {
+        'x_axis': 0,
+        'y_axis': 0,
+        'r_radius': ((levelSize * 6) + levelSize/1.6)
+      }])
+      .enter().append('circle')
+      .attr('class', 'circle')
+      .attr('cx', function(d) {
+        console.log('x_axis', d.y_axis)
+        return d.x_axis;
+      })
+      .attr('cy', function(d) {
+        console.log('y_axis', d.y_axis)
+        return d.y_axis;
+      })
+      .attr('r', function(d) {
+        console.log('d.r_radius',d.r_radius)
+        return d.r_radius;
+      })
+      .style('fill', 'none')
+      .style('stroke', 'black')
+      .style('stroke-opacity', 0.5)
+      .style('display', 'inline-block')
+
 
 		// First, getting the max depth
 		var statsNodeSet = DemoDrawer.getStatsNodeSet(widgetData);
 		var partition = d3.partition()
-			.size([2 * Math.PI, radius]);
+      .size([2 * Math.PI, radius]);
 		var root = d3.hierarchy(
 				{ name: "widget", description: "OpenEBench widget",submetrics: widgetData.metrics },
 				function(d) { return d.submetrics ; }
@@ -148,17 +177,18 @@ var DemoDrawer = {
 		partition(root);
 		var arc = d3.arc()
 			.startAngle(function(d) {
-				return d.x0;
+				return d.x0 + 0.005;
 			})
 			.endAngle(function(d) {
-				return d.x1;
+				return d.x1 - 0.005;
 			})
-			.innerRadius(function(d) {
+			.innerRadius(function(d, i) {
 				return d.y0;
 	 		})
 			.outerRadius(function(d) {
 				return d.y1;
 			});
+
 
 		var maxDepth = statsNodeSet.length;
 
@@ -203,26 +233,61 @@ var DemoDrawer = {
 
 		var tooltipHideFunc = function(d) {
 			tooltip_div.style('display', 'none');
-			d3.selectAll('path')
-				.style('opacity', 1);
+      d3.selectAll('path')
+        .style('opacity', 1);
 		};
 
 		svg_g.selectAll('path')
 			.data(root.descendants())
 			.enter()
 			.append('path')
+      .style('stroke', 'none')
 			.attr('display', function(d) {
 				return d.depth ? null : 'none';
 			})
 			.attr('d', arc)
-			.style('stroke', '#000000')
-			.style('stroke-opacity', 0.4)
+      .style('stroke', 'none')
+      //.style('stroke', '#000000')
 			//.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
 			.style('fill', function(d, i) {
+        //console.log(d.data)
 				return (!d.data.empty ) ? DemoDrawer.COLORS[i] : 'none';
 			})
 			.on('mousemove', tooltipFunc)
-			.on('mouseout',tooltipHideFunc);
+			.on('mouseout',tooltipHideFunc)
+
+    var radius_lines_number = 0
+    var path = svg_g.selectAll('path')
+    .each(function(d) {
+      if (radius_lines_number < 6) {
+        radius_lines_number++;
+        console.log('levelSize_lines',levelSize)
+        svg_g.selectAll('.radius').data([{
+            'x1': (levelSize + 1.5) * Math.cos(d.x1 + Math.PI / 2),
+            'y1': (levelSize + 1.5) * Math.sin(d.x1 + Math.PI / 2),
+            'x2': (levelSize * 6 + levelSize/1.6 - 0.5) * Math.cos(d.x1 + Math.PI / 2),
+            'y2': (levelSize * 6 + levelSize/1.6 - 0.5) * Math.sin(d.x1 + Math.PI / 2)
+          }])
+          .enter().append('line')
+          .attr('class', 'line')
+          .attr('x1', function(d) {
+            return d.x1;
+          })
+          .attr('y1', function(d) {
+            return d.y1;
+          })
+          .attr('x2', function(d) {
+            return d.x2;
+          })
+          .attr('y2', function(d) {
+            return d.y2;
+          })
+          .style('stroke', 'black')
+          .style('stroke-width', '1')
+          .style('stroke-opacity', 0.5)
+          .style('display', 'inline-block');
+      }
+      })
 
 	}
 };
@@ -403,7 +468,6 @@ var OpEB = {
 				};
 			} else {
 				retval = function() {
-					console.log("what?");
 					if(req) {
 						callback = errorCallback = req.onload =
 							req.onerror = req.onabort = req.onreadystatechange = null;
