@@ -118,8 +118,7 @@ var DemoDrawer = {
 		var widgetType = widgetElem.getAttribute("data-widget-type");
 		var width = widgetWidth !== null ? widgetWidth : DemoDrawer.DEFAULT_WIDTH;
 		var height = widgetHeight !== null ? widgetHeight : DemoDrawer.DEFAULT_HEIGHT;
-    var levelSize = widgetLevelSize !== null ? widgetLevelSize : DemoDrawer.DEFAULT_LEVEL_SIZE;
-    console.log('levelSize', levelSize)
+    var levelSize = widgetLevelSize !== null ? Number(widgetLevelSize) : DemoDrawer.DEFAULT_LEVEL_SIZE;
 		var radius = Math.min(width, height) / 2 - 1;
 
 		var draw_uptime_one_time = 0;
