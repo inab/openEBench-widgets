@@ -78,6 +78,7 @@ var DemoDrawer = {
 	DEFAULT_LEVEL_SIZE: 15,
 	DEFAULT_WIDTH: 200,
 	DEFAULT_HEIGHT: 200,
+	DEFAULT_SIZE: 200,
 	// Getting the max depth of the nested structure
 	getStatsNodeSet: function(widgetData) {
 		var levelNodeSet = [ ];
@@ -112,14 +113,15 @@ var DemoDrawer = {
 		widgetRoot.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
 		widgetElem.appendChild(widgetRoot);
 
-		var widgetWidth = widgetElem.getAttribute("data-widget-width");
-		var widgetHeight = widgetElem.getAttribute("data-widget-height");
-		var widgetLevelSize = widgetElem.getAttribute("data-widget-level-size");
+		var widgetSize = widgetElem.getAttribute("data-widget-size");
 		var widgetType = widgetElem.getAttribute("data-widget-type");
-		var width = widgetWidth !== null ? widgetWidth : DemoDrawer.DEFAULT_WIDTH;
-		var height = widgetHeight !== null ? widgetHeight : DemoDrawer.DEFAULT_HEIGHT;
-    var levelSize = widgetLevelSize !== null ? Number(widgetLevelSize) : DemoDrawer.DEFAULT_LEVEL_SIZE;
-		var radius = Math.min(width, height) / 2 - 1;
+    var width, height
+
+    width = height = widgetSize !== null ? Number(widgetSize) : DemoDrawer.DEFAULT_SIZE;
+
+    var levelSize = width * 15 / 200
+		var radius = Math.min(width, height) / 2 - 1.2;
+    var ext_radius = levelSize + (levelSize * 5.6)
 
 		var draw_uptime_one_time = 0;
 
@@ -141,20 +143,17 @@ var DemoDrawer = {
       }, {
         'x_axis': 0,
         'y_axis': 0,
-        'r_radius': ((levelSize * 6) + levelSize/1.6)
+        'r_radius': (ext_radius)
       }])
       .enter().append('circle')
       .attr('class', 'circle')
       .attr('cx', function(d) {
-        console.log('x_axis', d.y_axis)
         return d.x_axis;
       })
       .attr('cy', function(d) {
-        console.log('y_axis', d.y_axis)
         return d.y_axis;
       })
       .attr('r', function(d) {
-        console.log('d.r_radius',d.r_radius)
         return d.r_radius;
       })
       .style('fill', 'none')
@@ -249,7 +248,6 @@ var DemoDrawer = {
       //.style('stroke', '#000000')
 			//.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
 			.style('fill', function(d, i) {
-        //console.log(d.data)
 				return (!d.data.empty ) ? DemoDrawer.COLORS[i] : 'none';
 			})
 			.on('mousemove', tooltipFunc)
@@ -260,12 +258,11 @@ var DemoDrawer = {
     .each(function(d) {
       if (radius_lines_number < 6) {
         radius_lines_number++;
-        console.log('levelSize_lines',levelSize)
         svg_g.selectAll('.radius').data([{
             'x1': (levelSize + 1.5) * Math.cos(d.x1 + Math.PI / 2),
             'y1': (levelSize + 1.5) * Math.sin(d.x1 + Math.PI / 2),
-            'x2': (levelSize * 6 + levelSize/1.6 - 0.5) * Math.cos(d.x1 + Math.PI / 2),
-            'y2': (levelSize * 6 + levelSize/1.6 - 0.5) * Math.sin(d.x1 + Math.PI / 2)
+            'x2': (ext_radius) * Math.cos(d.x1 + Math.PI / 2),
+            'y2': (ext_radius) * Math.sin(d.x1 + Math.PI / 2)
           }])
           .enter().append('line')
           .attr('class', 'line')
