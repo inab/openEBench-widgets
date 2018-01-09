@@ -190,7 +190,7 @@ var DemoDrawer = {
 
 		var maxDepth = statsNodeSet.length;
 
-		var tooltipFunc = function(d,i,j) {
+		var tooltipFunc = function(d) {
 			if ( !d.data.empty ) {
 				d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
 				d3.select(this).style('opacity', 1);
@@ -198,17 +198,8 @@ var DemoDrawer = {
 				tooltip_div.style('top', d3.event.pageY - 25 + 'px');
 				tooltip_div.style('display', 'inline-block');
 
-				if (!d.parent.data.name || d.parent.data.name!= 'widget') {
-					var parent_arc_number = 1;
-					var inner_arcs_size = 6;
-					var outer_arcs_size = 4;
-					var arc_pos = inner_arcs_size + outer_arcs_size;
-					var last_arc_pos = inner_arcs_size * outer_arcs_size + inner_arcs_size;
-					while (arc_pos < i && arc_pos <= last_arc_pos) {
-						parent_arc_number++;
-						arc_pos += 4;
-					}
-					d3.select(j[parent_arc_number]).style('opacity', 1);
+				if (!d.parent.data.name || d.parent.data.name != 'widget') {
+          d3.select(this).style('opacity',1)
 				}
 
 				var description_counter = 0;
