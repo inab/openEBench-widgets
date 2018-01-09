@@ -3,6 +3,7 @@
 		{
 			"metric": "Documentation",
 			"description": "Help Tutorial Readme Publication",
+      "color": "#006400",
 			"ticks": [
 				{
 					"name": "Help",
@@ -25,18 +26,22 @@
 				{
 					"metric": "Help",
 					"description": "Whether there is a general help about how to use the tool",
+          "color": "#007c00",
 					"submetrics": [
 						{
 							"metric": "Tutorial",
 							"description": "Whether there is a tutorial associated",
+              "color": "#009500",
 							"submetrics": [
 								{
 									"metric": "Readme",
 									"description": "Whether there is a readme file distributed along the code.",
+                  "color": "#00ae00",
 									"submetrics": [
 										{
 											"metric": "Publication",
-											"description": "Whether the resource has an associated publication."
+											"description": "Whether the resource has an associated publication.",
+                      "color": "#00c800"
 										}
 									]
 								}
@@ -49,6 +54,7 @@
 		{
 			"metric": "Buildability",
 			"description": "Instructions Dependencies Automated Type Compiler",
+      "color": "#00008b",
 			"ticks": [
 				{
 					"name": "Instructions",
@@ -75,20 +81,24 @@
 				{
 					"metric": "Instructions",
 					"description": "Whether instructions for building the software are provided.",
+          "color": "#25259e",
 					"submetrics": [
 						{
 							"metric": "Dependencies",
 							"description": "Whether the list of all third-party dependencies is provided.",
+              "color": "#3941b1",
 							"submetrics": [
 								{
 									"metric": "Automated",
 									"empty": true,
 									"description": "Whether an automated build system used.",
+                  "color": "#3941b1",
 									"submetrics": [
 										{
 											"metric": "Type",
 											"empty": true,
-											"description": "Type of the automated build system used (make  maven  ant  etc)."
+											"description": "Type of the automated build system used (make  maven  ant  etc).",
+                       "color": "#3941b1"
 										}
 									]
 								}
@@ -102,6 +112,7 @@
 			"metric": "Copyright",
 			"empty": true,
 			"description": "Copyright_statement Credits Consistency Copyright_headers",
+      "color": "#8b0000",
 			"ticks": [
 				{
 					"name": "Copyright statement",
@@ -125,21 +136,25 @@
 					"metric": "Consistency",
 					"empty": true,
 					"description": "All sites state exactly the same copyright, licencing and authorship.",
+          "color": "#a10002",
 					"submetrics": [
 						{
 							"metric": "Consistency",
 							"empty": true,
 							"description": "All sites state exactly the same copyright, licencing and authorship.",
+              "color": "#b80002",
 							"submetrics": [
 								{
 									"metric": "Consistency",
 									"empty": true,
 									"description": "All sites state exactly the same copyright, licencing and authorship.",
+                  "color": "#cf0002",
 									"submetrics": [
 										{
 											"metric": "Copyright headers",
 											"empty": true,
-											"description": "Each source code file has a copyright statement."
+											"description": "Each source code file has a copyright statement.",
+                      "color": "#e60001"
 										}
 									]
 								}
@@ -152,6 +167,7 @@
 		{
 			"metric": "Licensing",
 			"description": "Project_license, License_statement Sourcecode_license License_headers",
+      "color": "#9400d3",
 			"ticks": [
 				{
 					"name": "Project license",
@@ -174,19 +190,23 @@
 				{
 					"metric": "Project license",
 					"description": "Project has a license",
+          "color": "#a72bd9",
 					"submetrics": [
 						{
 							"metric": "License statement",
 							"description": "Web site states license.",
+              "color": "#ba44de",
 							"submetrics": [
 								{
 									"metric": "Sourcecode license",
 									"description": "Code distribution includes a license file.",
+                  "color": "#cb5ae3",
 									"submetrics": [
 										{
 											"metric": "License headers",
 											"empty": true,
-											"description": "Each source code file has a license header."
+											"description": "Each source code file has a license header.",
+                      "color": "#dd6ee9"
 										}
 									]
 								}
@@ -199,6 +219,7 @@
 		{
 			"metric": "Accesibility",
 			"description": "Binary_distribution Source_code Binary_distribution_freeness Binaries_download_registration Sourcecode_freeness",
+      "color": "#ff4500",
 			"ticks": [
 				{
 					"name": "Binary distribution",
@@ -231,16 +252,19 @@
 							"metric": "Sourcecode",
 							"empty": true,
 							"description": "Source distributions are available.",
+              "color": "#ff5e00",
 							"submetrics": [
 								{
 									"metric": "Binary distribution freeness",
 									"empty": true,
 									"description": "Binary distributions are freely available.",
+                  "color": "#ff7300",
 									"submetrics": [
 										{
 											"metric": "Binary download registration",
 											"empty": true,
-											"description": "Binary distributions are available without the need for any registration."
+											"description": "Binary distributions are available without the need for any registration.",
+                      "color": "#ff7300"
 										}
 									]
 								}
@@ -253,6 +277,7 @@
 		{
 			"metric": "Changeability",
 			"description": "Contributions_policy Govenance Issue_tracker Resolve_time",
+      "color": "#008b8b",
 			"ticks": [
 				{
 					"name": "Contributions policy",
@@ -275,21 +300,25 @@
 				{
 					"metric": "Contributions policy",
 					"description": "Whether the project has defined a contributions policy.",
+          "color": "#00a2a2",
 					"submetrics": [
 						{
 							"metric": "Governance",
 							"empty": true,
 							"description": "Whether the project has defined a governance model.",
+              "color": "#00b7b7",
 							"submetrics": [
 								{
 									"metric": "Issue tracker",
 									"empty": true,
 									"description": "Whether the tool has a publicly accessible issue tracker.",
+                  "color": "#00cfcf",
 									"submetrics": [
 										{
 											"metric": "Resolve time",
 											"empty": true,
-											"description": "How long are issues open."
+											"description": "How long are issues open.",
+                      "color": "#00e6e6"
 										}
 									]
 								}

@@ -66,15 +66,6 @@ var DemoDrawer = {
 	//	['#00ae00', '#4a5cc5', '#cf0002', '#cb5ae3', '#ff8400', '#00cfcf'],
 	//	['#00c800', '#5879d9', '#e60001', '#dd6ee9', '#ff9600', '#00e6e6'],
 	//],
-	COLORS: [
-		'#006400', '#00008b', '#8b0000', '#9400d3', '#ff4500', '#008b8b',
-		'#007c00', '#009500', '#00ae00', '#00c800',
-		'#25259e', '#3941b1', '#4a5cc5', '#5879d9',
-		'#a10002', '#b80002', '#cf0002', '#e60001',
-		'#a72bd9', '#ba44de', '#cb5ae3', '#dd6ee9',
-		'#ff5e00', '#ff7300', '#ff8400', '#ff9600',
-		'#00a2a2', '#00b7b7', '#00cfcf', '#00e6e6'
-	],
 	DEFAULT_LEVEL_SIZE: 15,
 	DEFAULT_WIDTH: 200,
 	DEFAULT_HEIGHT: 200,
@@ -248,7 +239,7 @@ var DemoDrawer = {
       //.style('stroke', '#000000')
 			//.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
 			.style('fill', function(d, i) {
-				return (!d.data.empty ) ? DemoDrawer.COLORS[i] : 'none';
+				return (!d.data.empty) ? d.data.color : 'none';
 			})
 			.on('mousemove', tooltipFunc)
 			.on('mouseout',tooltipHideFunc)
