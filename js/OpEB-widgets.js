@@ -106,13 +106,13 @@ var DemoDrawer = {
 
 		var widgetSize = widgetElem.getAttribute("data-widget-size");
 		var widgetType = widgetElem.getAttribute("data-widget-type");
-    var width, height
+    var width, height;
 
     width = height = widgetSize !== null ? Number(widgetSize) : DemoDrawer.DEFAULT_SIZE;
 
-    var levelSize = width * 15 / 200
+    var levelSize = width * 15 / 200;
 		var radius = Math.min(width, height) / 2 - 1.2;
-    var ext_radius = levelSize + (levelSize * 5.6)
+    var ext_radius = levelSize + (levelSize * 5.6);
 
 		var draw_uptime_one_time = 0;
 
@@ -150,7 +150,7 @@ var DemoDrawer = {
       .style('fill', 'none')
       .style('stroke', 'black')
       .style('stroke-opacity', 0.5)
-      .style('display', 'inline-block')
+      .style('display', 'inline-block');
 
 
 		// First, getting the max depth
@@ -242,6 +242,7 @@ var DemoDrawer = {
 				return (!d.data.empty) ? d.data.color : 'none';
 			})
 			.on('mousemove', tooltipFunc)
+			.on('click', function(){console.log('click!')})
 			.on('mouseout',tooltipHideFunc)
 
     var radius_lines_number = 0
@@ -274,7 +275,19 @@ var DemoDrawer = {
           .style('stroke-opacity', 0.5)
           .style('display', 'inline-block');
       }
+      });
+
+      var state = widgetData.enabled ? 'online' : 'offline'
+      var xy_pos =  widgetData.enabled ? 0.8 : 0.7
+      var width_height = widgetData.enabled ? '12%' : '10%'
+      svg_g.append('image')
+      .attr('width', width_height)
+      .attr('height', width_height)
+      .attr('xlink:href', function(){
+        return 'styles/'+ state + '-icon.png'
       })
+      .attr('x', -levelSize*xy_pos)
+      .attr('y', -levelSize*xy_pos)
 
 	}
 };
@@ -331,7 +344,7 @@ var OpEB = {
 
 	composeQuery: function(opEBId) {
 		// TODO: generate URL from id
-		return opEBId
+		return opEBId;
 	},
 
 	fetchData: function(widgetElem) {

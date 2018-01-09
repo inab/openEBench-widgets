@@ -66,15 +66,6 @@ var DemoDrawer = {
 	//	['#00ae00', '#4a5cc5', '#cf0002', '#cb5ae3', '#ff8400', '#00cfcf'],
 	//	['#00c800', '#5879d9', '#e60001', '#dd6ee9', '#ff9600', '#00e6e6'],
 	//],
-	COLORS: [
-		'#006400', '#00008b', '#8b0000', '#9400d3', '#ff4500', '#008b8b',
-		'#007c00', '#009500', '#00ae00', '#00c800',
-		'#25259e', '#3941b1', '#4a5cc5', '#5879d9',
-		'#a10002', '#b80002', '#cf0002', '#e60001',
-		'#a72bd9', '#ba44de', '#cb5ae3', '#dd6ee9',
-		'#ff5e00', '#ff7300', '#ff8400', '#ff9600',
-		'#00a2a2', '#00b7b7', '#00cfcf', '#00e6e6'
-	],
 	DEFAULT_LEVEL_SIZE: 15,
 	DEFAULT_WIDTH: 200,
 	DEFAULT_HEIGHT: 200,
@@ -115,13 +106,13 @@ var DemoDrawer = {
 
 		var widgetSize = widgetElem.getAttribute("data-widget-size");
 		var widgetType = widgetElem.getAttribute("data-widget-type");
-    var width, height
+    var width, height;
 
     width = height = widgetSize !== null ? Number(widgetSize) : DemoDrawer.DEFAULT_SIZE;
 
-    var levelSize = width * 15 / 200
+    var levelSize = width * 15 / 200;
 		var radius = Math.min(width, height) / 2 - 1.2;
-    var ext_radius = levelSize + (levelSize * 5.6)
+    var ext_radius = levelSize + (levelSize * 5.6);
 
 		var draw_uptime_one_time = 0;
 
@@ -159,7 +150,7 @@ var DemoDrawer = {
       .style('fill', 'none')
       .style('stroke', 'black')
       .style('stroke-opacity', 0.5)
-      .style('display', 'inline-block')
+      .style('display', 'inline-block');
 
 
 		// First, getting the max depth
@@ -248,9 +239,10 @@ var DemoDrawer = {
       //.style('stroke', '#000000')
 			//.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
 			.style('fill', function(d, i) {
-				return (!d.data.empty ) ? DemoDrawer.COLORS[i] : 'none';
+				return (!d.data.empty) ? d.data.color : 'none';
 			})
 			.on('mousemove', tooltipFunc)
+			.on('click', function(){console.log('click!')})
 			.on('mouseout',tooltipHideFunc)
 
     var radius_lines_number = 0
@@ -283,7 +275,19 @@ var DemoDrawer = {
           .style('stroke-opacity', 0.5)
           .style('display', 'inline-block');
       }
+      });
+
+      var state = widgetData.enabled ? 'online' : 'offline'
+      var xy_pos =  widgetData.enabled ? 0.8 : 0.7
+      var width_height = widgetData.enabled ? '12%' : '10%'
+      svg_g.append('image')
+      .attr('width', width_height)
+      .attr('height', width_height)
+      .attr('xlink:href', function(){
+        return 'styles/'+ state + '-icon.png'
       })
+      .attr('x', -levelSize*xy_pos)
+      .attr('y', -levelSize*xy_pos)
 
 	}
 };
@@ -340,7 +344,7 @@ var OpEB = {
 
 	composeQuery: function(opEBId) {
 		// TODO: generate URL from id
-		return opEBId
+		return opEBId;
 	},
 
 	fetchData: function(widgetElem) {
