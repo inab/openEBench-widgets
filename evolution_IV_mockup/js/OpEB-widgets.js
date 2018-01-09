@@ -204,19 +204,28 @@ var DemoDrawer = {
 
 				var description_counter = 0;
 				var description_text = "";
+        var metric  = "";
         if(d.data.ticks) {
-					for(var iTick=0, nTick = d.data.ticks.length;  iTick < nTick; iTick++) {
-						var tick = d.data.ticks[iTick];
-						var description = tick.name;
-						var isTicked = !!tick.ticked;
-						var icon = (isTicked) ? 'online' : 'offline';
-						description_text += '<br><img src="styles/' + icon + '.png" height="15" width="15"> ' + description;
-						description_counter++;
-					}
+          data = d.data
         } else {
-          description_text += d.data.description;
+          for (let metric of widgetData.metrics) {
+            for(let tick of metric.ticks) {
+              if (d.data.metric == tick.name) {
+                data = metric;
+                break
+              }
+            }
+          }
         }
-				tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (d.data.metric) + '</b></div><div>' + description_text + '</div>');
+        for(var iTick=0, nTick = data.ticks.length;  iTick < nTick; iTick++) {
+          var tick = data.ticks[iTick];
+          var description = tick.name;
+          var isTicked = !!tick.ticked;
+          var icon = (isTicked) ? 'online' : 'offline';
+          description_text += '<br><img src="styles/' + icon + '.png" height="15" width="15"> ' + description;
+          description_counter++;
+        }
+				tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (data.metric) + '</b></div><div>' + description_text + '</div>');
 			}
 		};
 
