@@ -108,6 +108,10 @@
       var widgetType = widgetElem.getAttribute("data-widget-type");
       var width, height;
 
+
+     var random_close_icon_id = Math.random().toString(36).substring(8);
+
+
       width = height = widgetSize !== null ? Number(widgetSize) : DemoDrawer.DEFAULT_SIZE;
 
       var levelSize = width * 15 / 200;
@@ -115,6 +119,7 @@
       var ext_radius = levelSize + (levelSize * 5.6);
 
       var draw_uptime_one_time = true;
+      var clicked = false;
 
       var tooltip_div = d3.select(widgetElem)
         .append('div')
@@ -182,7 +187,7 @@
       var maxDepth = statsNodeSet.length;
 
       var tooltipFunc = function(d) {
-        if ( !d.data.empty ) {
+        if ( !d.data.empty && !clicked ) {
           d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
           d3.select(this).style('opacity', 1);
           tooltip_div.style('left', d3.event.pageX + 10 + 'px');
@@ -216,11 +221,12 @@
             description_text += '<br><img src="styles/' + icon + '.png" height="15" width="15"> ' + description;
             description_counter++;
           }
-          tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (data.metric) + '</b></div><div>' + description_text + '</div>');
+          tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (data.metric) + '</b><div id="close_icon' + random_close_icon_id + '" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
         }
       };
 
       var tooltipHideFunc = function(d) {
+        if (clicked) return;
         tooltip_div.style('display', 'none');
         tooltip_div.html('');
         d3.selectAll('path')
@@ -243,7 +249,22 @@
           return (!d.data.empty) ? d.data.color : 'none';
         })
         .on('mousemove', tooltipFunc)
-        .on('click', function(){console.log('click!')})
+        .on('click', function(){
+          if (clicked) return;
+          clicked=true;
+          d3.select('#close_icon'+ random_close_icon_id).append('img')
+            .attr("src", "styles/close-icon.png")
+            .attr("width", "15")
+            .attr("height", "15")
+            .style('cursor', 'pointer')
+            .on('click', function(){
+              tooltip_div.style('display', 'none');
+              tooltip_div.html('');
+              d3.selectAll('path')
+                .style('opacity', 1);
+              clicked=false;
+            })
+        })
         .on('mouseout',tooltipHideFunc)
 
       var radius_lines_number = 0
@@ -279,6 +300,8 @@
         });
 
       var tooltipUptimeFunc = function(d) {
+        if (clicked) return;
+
         var uptime = JSON.parse(JSON.stringify(widgetData.uptime));
         //http://bl.ocks.org/d3noob/38744a17f9c0141bcd04
         //https://bl.ocks.org/d3noob/3c040800ff6457717cca586ae9547dbf
@@ -328,53 +351,58 @@
         })]);
 
         // Add the valueline path.
-        if (draw_uptime_one_time){
-        var svg_uptime = tooltip_div.append('svg')
-          .attr('id', 'uptime')
-          .attr('width', width_uptime + margin.left + margin.right)
-          .attr('height', height_uptime + margin.top + margin.bottom)
-          .append('g')
-          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-        svg_uptime.append('path')
-          .attr('class', 'line')
-          .attr('d', valueline(uptime));
+        if (draw_uptime_one_time && !clicked){
+          tooltip_div.html('<div id="close_icon'+ random_close_icon_id + '" style="float:right;"></div>')
+          var svg_uptime = tooltip_div.append('svg')
+            .attr('id', 'uptime')
+            .attr('width', width_uptime + margin.left + margin.right)
+            .attr('height', height_uptime + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+          svg_uptime.append('path')
+            .attr('class', 'line')
+            .attr('d', valueline(uptime));
 
-        // Add the scatterplot
-        svg_uptime.selectAll('dot')
-          .data(uptime)
-          .enter().append('circle')
-          .attr('r', 3.5)
-          .attr('cx', function(d) {
-            return x(d.date);
-          })
-          .attr('cy', function(d) {
-            return y(d.state);
-          });
+          // Add the scatterplot
+          svg_uptime.selectAll('dot')
+            .data(uptime)
+            .enter().append('circle')
+            .attr('r', 3.5)
+            .attr('cx', function(d) {
+              return x(d.date);
+            })
+            .attr('cy', function(d) {
+              return y(d.state);
+            });
 
-        // Add the X Axis
-        svg_uptime.append('g')
-          .attr('class', 'x axis')
-          .attr('transform', 'translate(0,' + height_uptime + ')')
-          .call(xAxis)
-          .selectAll('text')
-          .style('text-anchor', 'end')
-          .attr('dx', '-.8em')
-          .attr('dy', '.15em')
-          .attr('transform', 'rotate(-65)');
+          // Add the X Axis
+          svg_uptime.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0,' + height_uptime + ')')
+            .call(xAxis)
+            .selectAll('text')
+            .style('text-anchor', 'end')
+            .attr('dx', '-.8em')
+            .attr('dy', '.15em')
+            .attr('transform', 'rotate(-65)');
 
-        // Add the Y Axis
-        svg_uptime.append('g')
-          .attr('class', 'y axis')
-          .call(yAxis);
+          // Add the Y Axis
+          svg_uptime.append('g')
+            .attr('class', 'y axis')
+            .call(yAxis);
 
           draw_uptime_one_time = false;
-      }
+        }
+
+        if (!clicked) {
           tooltip_div.style('left', d3.event.pageX + 10 + 'px');
           tooltip_div.style('top', d3.event.pageY - 25 + 'px');
           tooltip_div.style('display', 'inline-block');
-    };
+        }
+      };
 
       var tooltipUptimeHideFunc = function() {
+        if (clicked) return;
         draw_uptime_one_time = true;
         tooltip_div.style('display', 'none');
         tooltip_div.html('');
@@ -392,7 +420,21 @@
         .attr('x', -levelSize*xy_pos)
         .attr('y', -levelSize*xy_pos)
         .on('mousemove', tooltipUptimeFunc)
-        .on('click', function(){console.log('click!')})
+        .on('click', function(){
+          if (clicked) return;
+          clicked=true;
+          d3.select('#close_icon'+random_close_icon_id).append('img')
+            .attr("src", "styles/close-icon.png")
+            .attr("width", "15")
+            .attr("height", "15")
+            .style('cursor', 'pointer')
+            .on('click', function(){
+              tooltip_div.style('display', 'none');
+              tooltip_div.html('');
+              draw_uptime_one_time = true;
+              clicked=false;
+            })
+        })
         .on('mouseout', tooltipUptimeHideFunc);
 
     }
