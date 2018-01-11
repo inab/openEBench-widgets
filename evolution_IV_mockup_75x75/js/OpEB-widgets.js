@@ -187,13 +187,15 @@
       var maxDepth = statsNodeSet.length;
 
       var tooltipFunc = function(d) {
-        if ( !d.data.empty && !clicked ) {
-          if (!d.parent.data.name || d.parent.data.name != 'widget') {
+        if ( !clicked ) {
+          if (!d.data.empty && (!d.parent.data.name || d.parent.data.name != 'widget')) {
             d3.select(this).style('opacity',1);
           }
-          d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
-          d3.select(this).style('opacity', 1);
-
+          if (!d.data.empty) {
+            d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0);
+            d3.select(this.parentNode.parentNode).selectAll('.path_shown').style('opacity', 0.3);
+            d3.select(this).style('opacity', 1);
+          }
           tooltipFuncAux(d)
         }
       };
@@ -234,8 +236,8 @@
         if (clicked) return;
         tooltip_div.style('display', 'none');
         tooltip_div.html('');
-        d3.selectAll('path')
-          .style('opacity', 1);
+        d3.selectAll('path').style('opacity', 0);
+        d3.selectAll('.path_shown').style('opacity', 1);
       };
 
       svg_g.selectAll('path')
@@ -250,12 +252,20 @@
         .style('stroke', 'none')
       //.style('stroke', '#000000')
       //.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
-        .style('fill', function(d, i) {
-          return (!d.data.empty) ? d.data.color : 'none';
+        .classed('path_shown', function(d) {
+          return !d.data.empty
+        })
+        .style('opacity', function(d) {
+          return d.data.empty ? 0 : 1
+        })
+        .style('fill', function(d) {
+          return d.data.color;
         })
         .on('mousemove', tooltipFunc)
         .on('click', function(d){
-          d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+          if (d.data.empty) return;
+          d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0);
+          d3.select(this.parentNode.parentNode).selectAll('.path_shown').style('opacity', 0.3);
           d3.select(this).style('opacity', 1);
 
           if (!d.parent.data.name || d.parent.data.name != 'widget') {
@@ -273,7 +283,7 @@
             .on('click', function(){
               tooltip_div.style('display', 'none');
               tooltip_div.html('');
-              d3.selectAll('path')
+              d3.selectAll('.path_shown')
                 .style('opacity', 1);
               clicked=false;
             })
