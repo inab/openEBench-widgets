@@ -148,7 +148,7 @@
 									"metric": "Consistency",
 									"empty": true,
 									"description": "All sites state exactly the same copyright, licencing and authorship.",
-                  "color": "#cf0002",
+                  "color": "#cf0002" ,
 									"submetrics": [
 										{
 											"metric": "Copyright headers",
@@ -247,24 +247,25 @@
 					"metric": "Binary distribution",
 					"empty": true,
 					"description": "Whether binary distributions are available.",
+          "color": "#ff5e00",
 					"submetrics": [
 						{
 							"metric": "Sourcecode",
 							"empty": true,
 							"description": "Source distributions are available.",
-              "color": "#ff5e00",
+              "color": "#ff7300",
 							"submetrics": [
 								{
 									"metric": "Binary distribution freeness",
 									"empty": true,
 									"description": "Binary distributions are freely available.",
-                  "color": "#ff7300",
+                  "color": "#ff8400",
 									"submetrics": [
 										{
 											"metric": "Binary download registration",
 											"empty": true,
 											"description": "Binary distributions are available without the need for any registration.",
-                      "color": "#ff7300"
+                      "color": "#ff9600"
 										}
 									]
 								}
