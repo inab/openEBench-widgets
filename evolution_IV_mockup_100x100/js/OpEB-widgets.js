@@ -221,7 +221,7 @@
             description_text += '<br><img src="styles/' + icon + '.png" height="15" width="15"> ' + description;
             description_counter++;
           }
-          tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b>' + (data.metric) + '</b><div id="close_icon' + random_close_icon_id + '" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
+          tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon' + random_close_icon_id + '" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
         }
       };
 
