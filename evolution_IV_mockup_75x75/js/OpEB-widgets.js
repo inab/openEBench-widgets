@@ -109,9 +109,6 @@
       var width, height;
 
 
-     var random_close_icon_id = Math.random().toString(36).substring(8);
-
-
       width = height = widgetSize !== null ? Number(widgetSize) : DemoDrawer.DEFAULT_SIZE;
 
       var levelSize = width * 15 / 200;
@@ -192,9 +189,10 @@
             d3.select(this).style('opacity',1);
           }
           if (!d.data.empty) {
-            d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0);
-            d3.select(this.parentNode.parentNode).selectAll('.path_shown').style('opacity', 0.3);
+            d3.select(widgetRoot).selectAll('path').style('opacity', 0);
+            d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
             d3.select(this).style('opacity', 1);
+            d3.select(this).selectAll('path').style('fill', 'black')
           }
           tooltipFuncAux(d)
         }
@@ -229,15 +227,15 @@
             description_text += '<br><img src="styles/' + icon + '.png" height="15" width="15"> ' + description;
             description_counter++;
           }
-          tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon' + random_close_icon_id + '" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
+          tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
       };
 
       var tooltipHideFunc = function(d) {
         if (clicked) return;
         tooltip_div.style('display', 'none');
         tooltip_div.html('');
-        d3.selectAll('path').style('opacity', 0);
-        d3.selectAll('.path_shown').style('opacity', 1);
+        d3.select(widgetRoot).selectAll('path').style('opacity', 0);
+        d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
       };
 
       svg_g.selectAll('path')
@@ -264,8 +262,8 @@
         .on('mousemove', tooltipFunc)
         .on('click', function(d){
           if (d.data.empty) return;
-          d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0);
-          d3.select(this.parentNode.parentNode).selectAll('.path_shown').style('opacity', 0.3);
+          d3.select(widgetRoot).selectAll('path').style('opacity', 0);
+          d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
           d3.select(this).style('opacity', 1);
 
           if (!d.parent.data.name || d.parent.data.name != 'widget') {
@@ -275,7 +273,7 @@
           tooltipFuncAux(d)
 
           clicked=true;
-          d3.select('#close_icon'+ random_close_icon_id).append('img')
+          d3.select(widgetElem).select('#close_icon').append('img')
             .attr("src", "styles/close-icon.png")
             .attr("width", "15")
             .attr("height", "15")
@@ -283,8 +281,7 @@
             .on('click', function(){
               tooltip_div.style('display', 'none');
               tooltip_div.html('');
-              d3.selectAll('.path_shown')
-                .style('opacity', 1);
+              d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
               clicked=false;
             })
         })
@@ -378,7 +375,7 @@
 
         // Add the valueline path.
         if (draw_uptime_one_time && !clicked){
-          tooltip_div.html('<div id="close_icon'+ random_close_icon_id + '" style="float:right;"></div>')
+          tooltip_div.html('<div id="close_icon" style="float:right;"></div>')
           var svg_uptime = tooltip_div.append('svg')
             .attr('id', 'uptime')
             .attr('width', width_uptime + margin.left + margin.right)
@@ -450,11 +447,13 @@
 
         draw_uptime_one_time = true;
 
+        d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+
         clicked=false;
         tooltipUptimeFuncAux(d)
         clicked=true;
 
-        d3.select('#close_icon'+random_close_icon_id).append('img')
+        d3.select(widgetElem).select('#close_icon').append('img')
           .attr("src", "styles/close-icon.png")
           .attr("width", "15")
           .attr("height", "15")
