@@ -188,15 +188,21 @@
 
       var tooltipFunc = function(d) {
         if ( !d.data.empty && !clicked ) {
+          if (!d.parent.data.name || d.parent.data.name != 'widget') {
+            d3.select(this).style('opacity',1);
+          }
           d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
           d3.select(this).style('opacity', 1);
+
+          tooltipFuncAux(d)
+        }
+      };
+
+      var tooltipFuncAux = function(d) {
           tooltip_div.style('left', d3.event.pageX + 10 + 'px');
           tooltip_div.style('top', d3.event.pageY - 25 + 'px');
           tooltip_div.style('display', 'inline-block');
 
-          if (!d.parent.data.name || d.parent.data.name != 'widget') {
-            d3.select(this).style('opacity',1);
-          }
 
           var description_counter = 0;
           var description_text = "";
@@ -222,7 +228,6 @@
             description_counter++;
           }
           tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon' + random_close_icon_id + '" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
-        }
       };
 
       var tooltipHideFunc = function(d) {
@@ -249,8 +254,16 @@
           return (!d.data.empty) ? d.data.color : 'none';
         })
         .on('mousemove', tooltipFunc)
-        .on('click', function(){
-          if (clicked) return;
+        .on('click', function(d){
+          d3.select(this.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+          d3.select(this).style('opacity', 1);
+
+          if (!d.parent.data.name || d.parent.data.name != 'widget') {
+            d3.select(this).style('opacity',1);
+          }
+
+          tooltipFuncAux(d)
+
           clicked=true;
           d3.select('#close_icon'+ random_close_icon_id).append('img')
             .attr("src", "styles/close-icon.png")
@@ -301,7 +314,10 @@
 
       var tooltipUptimeFunc = function(d) {
         if (clicked) return;
+        tooltipUptimeFuncAux(d)
+      };
 
+      var tooltipUptimeFuncAux = function(d) {
         var uptime = JSON.parse(JSON.stringify(widgetData.uptime));
         //http://bl.ocks.org/d3noob/38744a17f9c0141bcd04
         //https://bl.ocks.org/d3noob/3c040800ff6457717cca586ae9547dbf
@@ -420,20 +436,25 @@
         .attr('x', -levelSize*xy_pos)
         .attr('y', -levelSize*xy_pos)
         .on('mousemove', tooltipUptimeFunc)
-        .on('click', function(){
-          if (clicked) return;
-          clicked=true;
-          d3.select('#close_icon'+random_close_icon_id).append('img')
-            .attr("src", "styles/close-icon.png")
-            .attr("width", "15")
-            .attr("height", "15")
-            .style('cursor', 'pointer')
-            .on('click', function(){
-              tooltip_div.style('display', 'none');
-              tooltip_div.html('');
-              draw_uptime_one_time = true;
-              clicked=false;
-            })
+        .on('click', function(d){
+
+        draw_uptime_one_time = true;
+
+        clicked=false;
+        tooltipUptimeFuncAux(d)
+        clicked=true;
+
+        d3.select('#close_icon'+random_close_icon_id).append('img')
+          .attr("src", "styles/close-icon.png")
+          .attr("width", "15")
+          .attr("height", "15")
+          .style('cursor', 'pointer')
+          .on('click', function(){
+            tooltip_div.style('display', 'none');
+            tooltip_div.html('');
+            draw_uptime_one_time = true;
+            clicked=false;
+          })
         })
         .on('mouseout', tooltipUptimeHideFunc);
 
