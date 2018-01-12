@@ -1,8 +1,8 @@
-( function( global, factory ) {
+(function(global, factory) {
 
-  "use strict";
+  'use strict';
 
-  if ( typeof module === "object" && typeof module.exports === "object" ) {
+  if (typeof module === 'object' && typeof module.exports === 'object') {
 
     // For CommonJS and CommonJS-like environments where a proper `window`
     // is present, execute the factory and get jQuery.
@@ -12,19 +12,19 @@
     // e.g. var jQuery = require("jquery")(window);
     // See ticket #14549 for more info.
     module.exports = global.document ?
-      factory( global, true ) :
-      function( w ) {
-        if ( !w.document ) {
-          throw new Error( "jQuery requires a window with a document" );
+      factory(global, true) :
+      function(w) {
+        if (!w.document) {
+          throw new Error('jQuery requires a window with a document');
         }
-        return factory( w );
+        return factory(w);
       };
   } else {
-    factory( global );
+    factory(global);
   }
 
   // Pass this if window is not defined yet
-} )( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
+})(typeof window !== 'undefined' ? window : this, function(window, noGlobal) {
 
   // Copied from jQuery
   var document = window.document;
@@ -41,8 +41,7 @@
 
   // This one should be used to draw something when the data could not be
   // parsed, fetched, etc...
-  function ErrorDrawer(widgetElem) {
-  }
+  function ErrorDrawer(widgetElem) {}
 
   // All the widget drawing functions take as input an element and the
   // fetched data
@@ -72,22 +71,22 @@
     DEFAULT_SIZE: 200,
     // Getting the max depth of the nested structure
     getStatsNodeSet: function(widgetData) {
-      var levelNodeSet = [ ];
-      for(var iNode=0, nNode = widgetData.metrics.length; iNode < nNode; iNode++) {
+      var levelNodeSet = [];
+      for (var iNode = 0, nNode = widgetData.metrics.length; iNode < nNode; iNode++) {
         levelNodeSet.push([widgetData.metrics[iNode]]);
       }
-      var statsNodeSet = [ levelNodeSet ];
-      while(levelNodeSet) {
+      var statsNodeSet = [levelNodeSet];
+      while (levelNodeSet) {
         var nextLevelNodeSet = [];
-        for(var iNodeSet=0,nNodeSet = levelNodeSet.length; iNodeSet < nNodeSet; iNodeSet++) {
+        for (var iNodeSet = 0, nNodeSet = levelNodeSet.length; iNodeSet < nNodeSet; iNodeSet++) {
           var levelNodes = levelNodeSet[iNodeSet];
-          for(var iNode=0, nNode = levelNodes.length; iNode < nNode; iNode++) {
-            if('submetrics' in levelNodes[iNode] && levelNodes[iNode].submetrics.length > 0) {
+          for (var iNode = 0, nNode = levelNodes.length; iNode < nNode; iNode++) {
+            if ('submetrics' in levelNodes[iNode] && levelNodes[iNode].submetrics.length > 0) {
               nextLevelNodeSet.push(levelNodes[iNode].submetrics);
             }
           }
         }
-        if(nextLevelNodeSet.length > 0) {
+        if (nextLevelNodeSet.length > 0) {
           statsNodeSet.push(nextLevelNodeSet);
           levelNodeSet = nextLevelNodeSet;
         } else {
@@ -99,13 +98,13 @@
       return statsNodeSet;
     },
     draw: function(widgetElem, widgetData) {
-      var widgetRoot = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      widgetRoot.setAttribute("class", "widget");
-      widgetRoot.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+      var widgetRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      widgetRoot.setAttribute('class', 'widget');
+      widgetRoot.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
       widgetElem.appendChild(widgetRoot);
 
-      var widgetSize = widgetElem.getAttribute("data-widget-size");
-      var widgetType = widgetElem.getAttribute("data-widget-type");
+      var widgetSize = widgetElem.getAttribute('data-widget-size');
+      var widgetType = widgetElem.getAttribute('data-widget-type');
       var width, height;
 
 
@@ -159,11 +158,16 @@
       var statsNodeSet = DemoDrawer.getStatsNodeSet(widgetData);
       var partition = d3.partition()
         .size([2 * Math.PI, radius]);
-      var root = d3.hierarchy(
-        { name: "widget", description: "OpenEBench widget",submetrics: widgetData.metrics },
-        function(d) { return d.submetrics ; }
-      )
-      //.sum(function (d) { return d.size});
+      var root = d3.hierarchy({
+            name: 'widget',
+            description: 'OpenEBench widget',
+            submetrics: widgetData.metrics
+          },
+          function(d) {
+            return d.submetrics;
+          }
+        )
+        //.sum(function (d) { return d.size});
         .count();
       partition(root);
       var arc = d3.arc()
@@ -173,7 +177,7 @@
         .endAngle(function(d) {
           return d.x1 - 0.005;
         })
-        .innerRadius(function(d, i) {
+        .innerRadius(function(d) {
           return d.y0;
         })
         .outerRadius(function(d) {
@@ -184,53 +188,51 @@
       var maxDepth = statsNodeSet.length;
 
       var tooltipFunc = function(d) {
-        if ( !clicked ) {
+        if (!clicked) {
           if (!d.data.empty && (!d.parent.data.name || d.parent.data.name != 'widget')) {
-            d3.select(this).style('opacity',1);
+            d3.select(this).style('opacity', 1);
           }
           if (!d.data.empty) {
             d3.select(widgetRoot).selectAll('path').style('opacity', 0);
             d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
             d3.select(this).style('opacity', 1);
-            d3.select(this).selectAll('path').style('fill', 'black')
+            d3.select(this).selectAll('path').style('fill', 'black');
           }
-          tooltipFuncAux(d)
+          tooltipFuncAux(d);
         }
       };
 
       var tooltipFuncAux = function(d) {
-          tooltip_div.style('left', d3.event.pageX + 10 + 'px');
-          tooltip_div.style('top', d3.event.pageY - 25 + 'px');
-          tooltip_div.style('display', 'inline-block');
+        tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+        tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+        tooltip_div.style('display', 'inline-block');
 
 
-          var description_counter = 0;
-          var description_text = "";
-          var metric  = "";
-          if(d.data.ticks) {
-            data = d.data;
-          } else {
-            for (let metric of widgetData.metrics) {
-              for(let tick of metric.ticks) {
-                if (d.data.metric == tick.name) {
-                  data = metric;
-                  break
-                }
+        var description_text = '';
+        var data;
+        if (d.data.ticks) {
+          data = d.data;
+        } else {
+          for (let metric of widgetData.metrics) {
+            for (let tick of metric.ticks) {
+              if (d.data.metric == tick.name) {
+                data = metric;
+                break;
               }
             }
           }
-          for(var iTick=0, nTick = data.ticks.length;  iTick < nTick; iTick++) {
-            var tick = data.ticks[iTick];
-            var description = tick.name;
-            var isTicked = !!tick.ticked;
-            var icon = (isTicked) ? 'online' : 'offline';
-            description_text += '<br><img src="styles/' + icon + '.png" height="15" width="15"> ' + description;
-            description_counter++;
-          }
-          tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
+        }
+        for (var iTick = 0, nTick = data.ticks.length; iTick < nTick; iTick++) {
+          var tick = data.ticks[iTick];
+          var description = tick.name;
+          var isTicked = !!tick.ticked;
+          var icon = (isTicked) ? 'online' : 'offline';
+          description_text += '<br><img src="styles/' + icon + '.png" height="15" width="15"> ' + description;
+        }
+        tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
       };
 
-      var tooltipHideFunc = function(d) {
+      var tooltipHideFunc = function() {
         if (clicked) return;
         tooltip_div.style('display', 'none');
         tooltip_div.html('');
@@ -248,56 +250,56 @@
         })
         .attr('d', arc)
         .style('stroke', 'none')
-      //.style('stroke', '#000000')
-      //.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
+        //.style('stroke', '#000000')
+        //.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
         .classed('path_shown', function(d) {
-          return !d.data.empty
+          return !d.data.empty;
         })
         .style('opacity', function(d) {
-          return d.data.empty ? 0 : 1
+          return d.data.empty ? 0 : 1;
         })
         .style('fill', function(d) {
           return d.data.color;
         })
         .on('mousemove', tooltipFunc)
-        .on('click', function(d){
+        .on('click', function(d) {
           if (d.data.empty) return;
           d3.select(widgetRoot).selectAll('path').style('opacity', 0);
           d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
           d3.select(this).style('opacity', 1);
 
           if (!d.parent.data.name || d.parent.data.name != 'widget') {
-            d3.select(this).style('opacity',1);
+            d3.select(this).style('opacity', 1);
           }
 
-          tooltipFuncAux(d)
+          tooltipFuncAux(d);
 
-          clicked=true;
+          clicked = true;
           d3.select(widgetElem).select('#close_icon').append('img')
-            .attr("src", "styles/close-icon.png")
-            .attr("width", "15")
-            .attr("height", "15")
+            .attr('src', 'styles/close-icon.png')
+            .attr('width', '15')
+            .attr('height', '15')
             .style('cursor', 'pointer')
-            .on('click', function(){
+            .on('click', function() {
               tooltip_div.style('display', 'none');
               tooltip_div.html('');
               d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
-              clicked=false;
-            })
+              clicked = false;
+            });
         })
-        .on('mouseout',tooltipHideFunc)
+        .on('mouseout', tooltipHideFunc);
 
-      var radius_lines_number = 0
-      var path = svg_g.selectAll('path')
+      var radius_lines_number = 0;
+      svg_g.selectAll('path')
         .each(function(d) {
           if (radius_lines_number < 6) {
             radius_lines_number++;
             svg_g.selectAll('.radius').data([{
-              'x1': (levelSize + 1.5) * Math.cos(d.x1 + Math.PI / 2),
-              'y1': (levelSize + 1.5) * Math.sin(d.x1 + Math.PI / 2),
-              'x2': (ext_radius) * Math.cos(d.x1 + Math.PI / 2),
-              'y2': (ext_radius) * Math.sin(d.x1 + Math.PI / 2)
-            }])
+                'x1': (levelSize + 1.5) * Math.cos(d.x1 + Math.PI / 2),
+                'y1': (levelSize + 1.5) * Math.sin(d.x1 + Math.PI / 2),
+                'x2': (ext_radius) * Math.cos(d.x1 + Math.PI / 2),
+                'y2': (ext_radius) * Math.sin(d.x1 + Math.PI / 2)
+              }])
               .enter().append('line')
               .attr('class', 'line')
               .attr('x1', function(d) {
@@ -321,20 +323,20 @@
 
       var tooltipUptimeFunc = function(d) {
         if (clicked) return;
-        tooltipUptimeFuncAux(d)
+        tooltipUptimeFuncAux(d);
       };
 
-      var tooltipUptimeFuncAux = function(d) {
+      var tooltipUptimeFuncAux = function() {
         var uptime = JSON.parse(JSON.stringify(widgetData.uptime));
         //http://bl.ocks.org/d3noob/38744a17f9c0141bcd04
         //https://bl.ocks.org/d3noob/3c040800ff6457717cca586ae9547dbf
         //https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e
         var margin = {
-          top: 15,
-          right: 15,
-          bottom: 45,
-          left: 45
-        },
+            top: 15,
+            right: 15,
+            bottom: 45,
+            left: 45
+          },
           width_uptime = 250 - margin.left - margin.right,
           height_uptime = 100 - margin.top - margin.bottom;
 
@@ -374,8 +376,8 @@
         })]);
 
         // Add the valueline path.
-        if (draw_uptime_one_time && !clicked){
-          tooltip_div.html('<div id="close_icon" style="float:right;"></div>')
+        if (draw_uptime_one_time && !clicked) {
+          tooltip_div.html('<div id="close_icon" style="float:right;"></div>');
           var svg_uptime = tooltip_div.append('svg')
             .attr('id', 'uptime')
             .attr('width', width_uptime + margin.left + margin.right)
@@ -431,39 +433,39 @@
         tooltip_div.html('');
       };
 
-      var state = widgetData.enabled ? 'online' : 'offline'
-      var xy_pos =  widgetData.enabled ? 0.8 : 0.7
-      var width_height = widgetData.enabled ? '12%' : '10%'
+      var state = widgetData.enabled ? 'online' : 'offline';
+      var xy_pos = widgetData.enabled ? 0.8 : 0.7;
+      var width_height = widgetData.enabled ? '12%' : '10%';
       svg_g.append('image')
         .attr('width', width_height)
         .attr('height', width_height)
-        .attr('xlink:href', function(){
-          return 'styles/'+ state + '-icon.png'
+        .attr('xlink:href', function() {
+          return 'styles/' + state + '-icon.png';
         })
-        .attr('x', -levelSize*xy_pos)
-        .attr('y', -levelSize*xy_pos)
+        .attr('x', -levelSize * xy_pos)
+        .attr('y', -levelSize * xy_pos)
         .on('mousemove', tooltipUptimeFunc)
-        .on('click', function(d){
+        .on('click', function(d) {
 
-        draw_uptime_one_time = true;
+          draw_uptime_one_time = true;
 
-        d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+          d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
 
-        clicked=false;
-        tooltipUptimeFuncAux(d)
-        clicked=true;
+          clicked = false;
+          tooltipUptimeFuncAux(d);
+          clicked = true;
 
-        d3.select(widgetElem).select('#close_icon').append('img')
-          .attr("src", "styles/close-icon.png")
-          .attr("width", "15")
-          .attr("height", "15")
-          .style('cursor', 'pointer')
-          .on('click', function(){
-            tooltip_div.style('display', 'none');
-            tooltip_div.html('');
-            draw_uptime_one_time = true;
-            clicked=false;
-          })
+          d3.select(widgetElem).select('#close_icon').append('img')
+            .attr('src', 'styles/close-icon.png')
+            .attr('width', '15')
+            .attr('height', '15')
+            .style('cursor', 'pointer')
+            .on('click', function() {
+              tooltip_div.style('display', 'none');
+              tooltip_div.html('');
+              draw_uptime_one_time = true;
+              clicked = false;
+            });
         })
         .on('mouseout', tooltipUptimeHideFunc);
 
@@ -471,22 +473,22 @@
   };
 
   var WIDGET_TYPES = {
-    "demo": DemoDrawer.draw
+    'demo': DemoDrawer.draw
   };
-  var DEFAULT_WIDGET_TYPE = "demo";
+  var DEFAULT_WIDGET_TYPE = 'demo';
 
   var OpEB = {
 
     apply: function() {
-      var widgetElems = document.getElementsByClassName("opeb");
-      for(var iw=0,nw=widgetElems.length; iw<nw ; iw++) {
+      var widgetElems = document.getElementsByClassName('opeb');
+      for (var iw = 0, nw = widgetElems.length; iw < nw; iw++) {
         var widgetElem = widgetElems[iw];
         // Does the element have what it is needed?
-        if(widgetElem.getAttribute("data-id")!==null || widgetElem.getAttribute("data-inline")!==null) {
+        if (widgetElem.getAttribute('data-id') !== null || widgetElem.getAttribute('data-inline') !== null) {
           // The element is skipped, in case it is already in processing stage
-          if(widgetElem.getAttribute("data-state")===null) {
+          if (widgetElem.getAttribute('data-state') === null) {
             // This is done before entering the state
-            widgetElem.setAttribute("data-state","fetching-data");
+            widgetElem.setAttribute('data-state', 'fetching-data');
             OpEB.fetchData(widgetElem);
           }
         }
@@ -494,29 +496,29 @@
     },
 
     // This method must select among the different drawing codes
-    draw: function(widgetElem,widgetData) {
+    draw: function(widgetElem, widgetData) {
       // First, remove all the children, from the end to the beginning
-      for(var children = widgetElem.childNodes, ichild = children.length-1; ichild >= 0 ; ichild --) {
+      for (var children = widgetElem.childNodes, ichild = children.length - 1; ichild >= 0; ichild--) {
         children.removeChild(children[ichild]);
       }
 
       // Now, delegate on the corresponding
-      var widgetType = widgetElem.getAttribute("data-widget-type");
-      if(widgetType===null) {
+      var widgetType = widgetElem.getAttribute('data-widget-type');
+      if (widgetType === null) {
         widgetType = DEFAULT_WIDGET_TYPE;
       }
       var drawFunc = ErrorDrawer;
-      if(widgetType in WIDGET_TYPES) {
+      if (widgetType in WIDGET_TYPES) {
         drawFunc = WIDGET_TYPES[widgetType];
       }
-      drawFunc(widgetElem,widgetData);
+      drawFunc(widgetElem, widgetData);
 
       // Last, changing the state
-      widgetElem.setAttribute("data-state","widget-drawn");
+      widgetElem.setAttribute('data-state', 'widget-drawn');
     },
 
-    drawError: function(widgetElem,status, statusText,responseText,parseException) {
-      console.log(status+' '+statusText+' '+responseText);
+    drawError: function(widgetElem, status, statusText, responseText, parseException) {
+      console.log(status + ' ' + statusText + ' ' + responseText);
       console.log(parseException);
     },
 
@@ -528,29 +530,29 @@
     fetchData: function(widgetElem) {
       // This method should draw the widget
       var doOnComplete = function(answer, headers, status, statusText) {
-        widgetElem.setAttribute("data-state","drawing-data");
-        OpEB.draw(widgetElem,answer);
+        widgetElem.setAttribute('data-state', 'drawing-data');
+        OpEB.draw(widgetElem, answer);
       };
 
       // This method should draw what appears when there is an
       // error in the widget
-      var doOnError = function(status, statusText,responseText,parseException) {
-        widgetElem.setAttribute("data-state",(status!==-1) ? "error-fetching-data" : "error-data");
-        OpEB.drawError(widgetElem,status, statusText,responseText,parseException);
+      var doOnError = function(status, statusText, responseText, parseException) {
+        widgetElem.setAttribute('data-state', (status !== -1) ? 'error-fetching-data' : 'error-data');
+        OpEB.drawError(widgetElem, status, statusText, responseText, parseException);
       };
 
-      var inlineData = widgetElem.getAttribute("data-inline");
-      if(inlineData !== null) {
+      var inlineData = widgetElem.getAttribute('data-inline');
+      if (inlineData !== null) {
         try {
           var answer = JSON.parse(inlineData);
           doOnComplete(answer);
-        } catch(e) {
-          doOnError(-1,'JSON Parse Error',inlineData,e);
+        } catch (e) {
+          doOnError(-1, 'JSON Parse Error', inlineData, e);
         }
 
       } else {
         // TODO: setup the proper path
-        var queryId = widgetElem.getAttribute("data-id");
+        var queryId = widgetElem.getAttribute('data-id');
         var queryURL = OpEB.composeQuery(queryId);
         OpEB.send({
           url: queryURL,
@@ -576,14 +578,14 @@
 
       var req = new XMLHttpRequest();
 
-      req.open(method,url,isAsync,username,password);
+      req.open(method, url, isAsync, username, password);
       // Overriding for JSON requests
-      if(isJSONAnswer) {
-        params.mimeType = "application/json";
+      if (isJSONAnswer) {
+        params.mimeType = 'application/json';
       }
       // Override mime type if needed
-      if( params.mimeType && req.overrideMimeType ) {
-        req.overrideMimeType( params.mimeType );
+      if (params.mimeType && req.overrideMimeType) {
+        req.overrideMimeType(params.mimeType);
       }
 
       // X-Requested-With header
@@ -591,23 +593,23 @@
       // akin to a jigsaw puzzle, we simply never set it to be sure.
       // (it can always be set on a per-request basis or even using ajaxSetup)
       // For same-domain requests, won't change header if already provided.
-      if ( !params.crossDomain && !headers[ "X-Requested-With" ] ) {
-        headers[ "X-Requested-With" ] = "XMLHttpRequest";
+      if (!params.crossDomain && !headers['X-Requested-With']) {
+        headers['X-Requested-With'] = 'XMLHttpRequest';
       }
 
       // Set headers
-      for ( var h in headers ) {
-        req.setRequestHeader( h, headers[ h ] );
+      for (var h in headers) {
+        req.setRequestHeader(h, headers[h]);
       }
 
       // Inspired on jQuery (and borrowed from it)
       var errorCallback = null;
       var callback = function(type) {
         var retval = null;
-        if(type === "abort") {
+        if (type === 'abort') {
           retval = function() {
-            console.log("abort");
-            if(req) {
+            console.log('abort');
+            if (req) {
               callback = errorCallback = req.onload =
                 req.onerror = req.onabort = req.onreadystatechange = null;
 
@@ -615,10 +617,10 @@
               req = null;
             }
           };
-        } else if(type === "error") {
+        } else if (type === 'error') {
           retval = function() {
             console.log(req);
-            if(req) {
+            if (req) {
               callback = errorCallback = req.onload =
                 req.onerror = req.onabort = req.onreadystatechange = null;
 
@@ -626,8 +628,8 @@
               // On a manual native abort, IE9 throws
               // errors on any property access that is not readyState
               try {
-                if ( typeof req.status !== "number" ) {
-                  doOnError( 0, "error" );
+                if (typeof req.status !== 'number') {
+                  doOnError(0, 'error');
                 } else {
                   doOnError(
                     // File: protocol always yields status 0; see #8605, #14207
@@ -635,9 +637,9 @@
                     req.statusText
                   );
                 }
-              } catch(e) {
+              } catch (e) {
                 // Only protect from the callback's collateral damage
-                console.log('Unhandled exception on a callback',e);
+                console.log('Unhandled exception on a callback', e);
               }
 
 
@@ -646,21 +648,21 @@
           };
         } else {
           retval = function() {
-            if(req) {
+            if (req) {
               callback = errorCallback = req.onload =
                 req.onerror = req.onabort = req.onreadystatechange = null;
 
               var answer = req.responseText;
-              if(isJSONAnswer) {
+              if (isJSONAnswer) {
                 try {
                   answer = JSON.parse(answer);
-                } catch(e) {
+                } catch (e) {
                   answer = null;
-                  doOnError(-1,'JSON Parse Error',req.responseText,e);
+                  doOnError(-1, 'JSON Parse Error', req.responseText, e);
                 }
               }
 
-              if(answer) {
+              if (answer) {
                 try {
                   doOnComplete(
                     //// Support: IE <=9 only
@@ -672,12 +674,12 @@
                     //	{ text: xhr.responseText },
                     answer,
                     req.getAllResponseHeaders(),
-                    xhrSuccessStatus[ req.status ] || req.status,
+                    xhrSuccessStatus[req.status] || req.status,
                     req.statusText
                   );
-                } catch(e) {
+                } catch (e) {
                   // Only protect from the callback's collateral damage
-                  console.log('Unhandled exception on a callback',e);
+                  console.log('Unhandled exception on a callback', e);
                 }
               }
 
@@ -689,40 +691,40 @@
         return retval;
       };
       req.onload = callback();
-      errorCallback = req.onerror = callback("error");
+      errorCallback = req.onerror = callback('error');
 
       // Support: IE 9 only
       // Use onreadystatechange to replace onabort
       // to handle uncaught aborts
-      if ( req.onabort !== undefined ) {
+      if (req.onabort !== undefined) {
         req.onabort = errorCallback;
       } else {
         req.onreadystatechange = function() {
           // Check readyState before timeout as it changes
-          if ( req && req.readyState === 4 ) {
+          if (req && req.readyState === 4) {
             // Allow onerror to be called first,
             // but that will not handle a native abort
             // Also, save errorCallback to a variable
             // as xhr.onerror cannot be accessed
-            window.setTimeout( function() {
-              if ( callback ) {
+            window.setTimeout(function() {
+              if (callback) {
                 errorCallback();
               }
-            } );
+            });
           }
         };
       }
 
       // Create the abort callback
-      callback = callback( "abort" );
+      callback = callback('abort');
 
       try {
         // Do send the request (this may raise an exception)
         req.send(params.hasContent && params.data || null);
-      } catch ( e ) {
+      } catch (e) {
 
         // #14683: Only rethrow if this hasn't been notified as an error yet
-        if ( callback ) {
+        if (callback) {
           throw e;
         }
       }
@@ -737,10 +739,10 @@
 
   // This is launched once the page is loaded
   // Perhaps we should used 'DOMContentLoaded'
-  if(window.attachEvent) {
+  if (window.attachEvent) {
     window.attachEvent('onload', OpEBonLoad);
   } else {
-    if(window.onload) {
+    if (window.onload) {
       var curronload = window.onload;
       var newonload = function(evt) {
         curronload(evt);
@@ -758,9 +760,9 @@
   // Expose OpEB identifier, even in AMD
   // (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
   // and CommonJS for browser emulators (#13566)
-  if ( !noGlobal ) {
+  if (!noGlobal) {
     window.OpEB = OpEB;
   }
 
   return OpEB;
-} );
+});
