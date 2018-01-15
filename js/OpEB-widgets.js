@@ -108,7 +108,14 @@
       var width, height;
 
 
-      width = height = widgetSize !== null ? Number(widgetSize) : DemoDrawer.DEFAULT_SIZE;
+      widgetSize = Number(widgetSize);
+      if (widgetSize == null || widgetSize <= 0 || isNaN(widgetSize)) {
+        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + DemoDrawer.DEFAULT_SIZE);
+        widgetSize = DemoDrawer.DEFAULT_SIZE;
+      }
+
+      width = height = widgetSize;
+
 
       var levelSize = width * 15 / 200;
       var radius = Math.min(width, height) / 2 - 1.2;
@@ -159,14 +166,14 @@
       var partition = d3.partition()
         .size([2 * Math.PI, radius]);
       var root = d3.hierarchy({
-            name: 'widget',
-            description: 'OpenEBench widget',
-            submetrics: widgetData.metrics
-          },
-          function(d) {
-            return d.submetrics;
-          }
-        )
+        name: 'widget',
+        description: 'OpenEBench widget',
+        submetrics: widgetData.metrics
+      },
+      function(d) {
+        return d.submetrics;
+      }
+      )
         //.sum(function (d) { return d.size});
         .count();
       partition(root);
@@ -295,11 +302,11 @@
           if (radius_lines_number < 6) {
             radius_lines_number++;
             svg_g.selectAll('.radius').data([{
-                'x1': (levelSize + 1.5) * Math.cos(d.x1 + Math.PI / 2),
-                'y1': (levelSize + 1.5) * Math.sin(d.x1 + Math.PI / 2),
-                'x2': (ext_radius) * Math.cos(d.x1 + Math.PI / 2),
-                'y2': (ext_radius) * Math.sin(d.x1 + Math.PI / 2)
-              }])
+              'x1': (levelSize + 1.5) * Math.cos(d.x1 + Math.PI / 2),
+              'y1': (levelSize + 1.5) * Math.sin(d.x1 + Math.PI / 2),
+              'x2': (ext_radius) * Math.cos(d.x1 + Math.PI / 2),
+              'y2': (ext_radius) * Math.sin(d.x1 + Math.PI / 2)
+            }])
               .enter().append('line')
               .attr('class', 'line')
               .attr('x1', function(d) {
