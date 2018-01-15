@@ -133,13 +133,13 @@
 			],
 			"submetrics": [
 				{
-					"metric": "Consistency",
+					"metric": "Copyright statement",
 					"empty": true,
 					"description": "All sites state exactly the same copyright, licencing and authorship.",
           "color": "#a10002",
 					"submetrics": [
 						{
-							"metric": "Consistency",
+							"metric": "Credits",
 							"empty": true,
 							"description": "All sites state exactly the same copyright, licencing and authorship.",
               "color": "#b80002",
@@ -250,7 +250,7 @@
           "color": "#ff5e00",
 					"submetrics": [
 						{
-							"metric": "Sourcecode",
+							"metric": "Source code",
 							"empty": true,
 							"description": "Source distributions are available.",
               "color": "#ff7300",
@@ -262,7 +262,7 @@
                   "color": "#ff8400",
 									"submetrics": [
 										{
-											"metric": "Binary download registration",
+											"metric": "Sourcecode freeness",
 											"empty": true,
 											"description": "Binary distributions are available without the need for any registration.",
                       "color": "#ff9600"
@@ -277,7 +277,7 @@
 		},
 		{
 			"metric": "Changeability",
-			"description": "Contributions_policy Govenance Issue_tracker Resolve_time",
+			"description": "Contributions_policy Governance Issue_tracker Resolve_time",
       "color": "#008b8b",
 			"ticks": [
 				{
