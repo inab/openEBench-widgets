@@ -8,7 +8,13 @@ import online_tick from '../icons/online-tick.png';
 import offline_tick from '../icons/offline-tick.png';
 import close_button from '../icons/close-button.png';
 
-const d3 = require('d3');
+const d3_selection = require('d3-selection');
+const d3_hierarchy = require('d3-hierarchy');
+const d3_shape = require('d3-shape');
+const d3_time_format = require('d3-time-format');
+const d3_scale = require('d3-scale');
+const d3_axis = require('d3-axis');
+const d3_array = require('d3-array');
 
 // Copied from jQuery
 var document = window.document;
@@ -110,11 +116,11 @@ var DemoDrawer = {
     var draw_uptime_one_time = true;
     var clicked = false;
 
-    var tooltip_div = d3.select(widgetElem)
+    var tooltip_div = d3_selection.select(widgetElem)
       .append('div')
       .attr('class', 'tooltip');
 
-    var svg_g = d3.select(widgetRoot)
+    var svg_g = d3_selection.select(widgetRoot)
       .attr('width', width)
       .attr('height', height)
       .append('g')
@@ -149,9 +155,9 @@ var DemoDrawer = {
 
     // First, getting the max depth
     var statsNodeSet = DemoDrawer.getStatsNodeSet(widgetData);
-    var partition = d3.partition()
+    var partition = d3_hierarchy.partition()
       .size([2 * Math.PI, radius]);
-    var root = d3.hierarchy({
+    var root = d3_hierarchy.hierarchy({
           name: 'widget',
           description: 'OpenEBench widget',
           submetrics: widgetData.metrics
@@ -163,7 +169,7 @@ var DemoDrawer = {
       //.sum(function (d) { return d.size});
       .count();
     partition(root);
-    var arc = d3.arc()
+    var arc = d3_shape.arc()
       .startAngle(function(d) {
         return d.x0 + 0.005;
       })
@@ -183,21 +189,21 @@ var DemoDrawer = {
     var tooltipFunc = function(d) {
       if (!clicked) {
         if (!d.data.empty && (!d.parent.data.name || d.parent.data.name != 'widget')) {
-          d3.select(this).style('opacity', 1);
+          d3_selection.select(this).style('opacity', 1);
         }
         if (!d.data.empty) {
-          d3.select(widgetRoot).selectAll('path').style('opacity', 0);
-          d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
-          d3.select(this).style('opacity', 1);
-          d3.select(this).selectAll('path').style('fill', 'black');
+          d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
+          d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
+          d3_selection.select(this).style('opacity', 1);
+          d3_selection.select(this).selectAll('path').style('fill', 'black');
         }
         tooltipFuncAux(d);
       }
     };
 
     var tooltipFuncAux = function(d) {
-      tooltip_div.style('left', d3.event.pageX + 10 + 'px');
-      tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+      tooltip_div.style('left', d3_selection.event.pageX + 10 + 'px');
+      tooltip_div.style('top', d3_selection.event.pageY - 25 + 'px');
       tooltip_div.style('display', 'inline-block');
 
 
@@ -229,8 +235,8 @@ var DemoDrawer = {
       if (clicked) return;
       tooltip_div.style('display', 'none');
       tooltip_div.html('');
-      d3.select(widgetRoot).selectAll('path').style('opacity', 0);
-      d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+      d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
+      d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
     };
 
     svg_g.selectAll('path')
@@ -257,18 +263,18 @@ var DemoDrawer = {
       .on('mousemove', tooltipFunc)
       .on('click', function(d) {
         if (d.data.empty) return;
-        d3.select(widgetRoot).selectAll('path').style('opacity', 0);
-        d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
-        d3.select(this).style('opacity', 1);
+        d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
+        d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
+        d3_selection.select(this).style('opacity', 1);
 
         if (!d.parent.data.name || d.parent.data.name != 'widget') {
-          d3.select(this).style('opacity', 1);
+          d3_selection.select(this).style('opacity', 1);
         }
 
         tooltipFuncAux(d);
 
         clicked = true;
-        d3.select(widgetElem).select('#close_icon').append('img')
+        d3_selection.select(widgetElem).select('#close_icon').append('img')
           .attr('src', close_button)
           .attr('width', '15')
           .attr('height', '15')
@@ -276,7 +282,7 @@ var DemoDrawer = {
           .on('click', function() {
             tooltip_div.style('display', 'none');
             tooltip_div.html('');
-            d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+            d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
             clicked = false;
           });
       })
@@ -334,21 +340,21 @@ var DemoDrawer = {
         height_uptime = 100 - margin.top - margin.bottom;
 
       // Parse the date / time
-      var parseDate = d3.timeParse('%d-%b-%y');
+      var parseDate = d3_time_format.timeParse('%d-%b-%y');
 
       // Set the ranges
-      var x = d3.scaleTime().range([0, width_uptime]);
-      var y = d3.scaleLinear().range([height_uptime, 0]);
+      var x = d3_scale.scaleTime().range([0, width_uptime]);
+      var y = d3_scale.scaleLinear().range([height_uptime, 0]);
 
       // Define the axes
-      var xAxis = d3.axisBottom(x);
+      var xAxis = d3_axis.axisBottom(x);
 
-      var yAxis = d3.axisLeft(y).ticks(1).tickFormat(function(d) {
+      var yAxis = d3_axis.axisLeft(y).ticks(1).tickFormat(function(d) {
         return d == 1 ? 'online' : 'offline';
       });
 
       // Define the line
-      var valueline = d3.line()
+      var valueline = d3_shapes.line()
         .x(function(d) {
           return x(d.date);
         })
@@ -361,10 +367,10 @@ var DemoDrawer = {
         d.state = +d.state;
       });
       // Scale the range of the data
-      x.domain(d3.extent(uptime, function(d) {
+      x.domain(d3_array.extent(uptime, function(d) {
         return d.date;
       }));
-      y.domain([0, d3.max(uptime, function(d) {
+      y.domain([0, d3_array.max(uptime, function(d) {
         return d.state;
       })]);
 
@@ -413,8 +419,8 @@ var DemoDrawer = {
       }
 
       if (!clicked) {
-        tooltip_div.style('left', d3.event.pageX + 10 + 'px');
-        tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+        tooltip_div.style('left', d3_selection.event.pageX + 10 + 'px');
+        tooltip_div.style('top', d3_selection.event.pageY - 25 + 'px');
         tooltip_div.style('display', 'inline-block');
       }
     };
@@ -444,13 +450,13 @@ var DemoDrawer = {
 
         draw_uptime_one_time = true;
 
-        d3.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+        d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
 
         clicked = false;
         tooltipUptimeFuncAux(d);
         clicked = true;
 
-        d3.select(widgetElem).select('#close_icon').append('img')
+        d3_selection.select(widgetElem).select('#close_icon').append('img')
           .attr('src', close_button)
           .attr('width', '15')
           .attr('height', '15')
