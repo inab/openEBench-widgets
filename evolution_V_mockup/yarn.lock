@@ -1829,6 +1829,10 @@ mime@1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.4.1.tgz#121f9ebc49e3766f311a76e1fa1c8003c4b03aa6"
 
+mime@^2.0.3:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/mime/-/mime-2.2.0.tgz#161e541965551d3b549fa1114391e3a3d55b923b"
+
 minimalistic-assert@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.0.tgz#702be2dda6b37f4836bcb3f5db56641b64a1d3d3"
@@ -2092,6 +2096,12 @@ parcel-bundler@^1.4.1:
     v8-compile-cache "^1.1.0"
     worker-farm "^1.4.1"
     ws "^3.3.3"
+
+parcel-plugin-url-loader@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/parcel-plugin-url-loader/-/parcel-plugin-url-loader-1.2.2.tgz#69cc439cd874414da4305c643e8972afb5910c0c"
+  dependencies:
+    mime "^2.0.3"
 
 parse-asn1@^5.0.0:
   version "5.1.0"

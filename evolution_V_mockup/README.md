@@ -1,7 +1,11 @@
-# Instructions to build the widget's development distribution
+# Instructions to build the widget's development version
 ```
 yarn install
-cp -a js dist
-parcel watch index.html & python3 -m http.server
-xdg-open localhost:8000/dist/index.html
+yarn dev
+```
+
+# Instructions to build the widget's distribution version
+```
+yarn install
+yarn dist
 ```

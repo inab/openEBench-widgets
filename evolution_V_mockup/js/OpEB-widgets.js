@@ -1,13 +1,5 @@
 'use strict';
 
-import '../styles/OpEB-widgets.css';
-
-import online_plug from '../icons/online-plug.png';
-import offline_plug from '../icons/offline-plug.png';
-import online_tick from '../icons/online-tick.png';
-import offline_tick from '../icons/offline-tick.png';
-import close_button from '../icons/close-button.png';
-
 const d3_selection = require('d3-selection');
 const d3_hierarchy = require('d3-hierarchy');
 const d3_shape = require('d3-shape');
@@ -15,6 +7,14 @@ const d3_time_format = require('d3-time-format');
 const d3_scale = require('d3-scale');
 const d3_axis = require('d3-axis');
 const d3_array = require('d3-array');
+
+import online_plug from '../icons/online-plug.png';
+import offline_plug from '../icons/offline-plug.png';
+import online_tick from '../icons/online-tick.png';
+import offline_tick from '../icons/offline-tick.png';
+import close_button from '../icons/close-button.png';
+
+import style from '../styles/OpEB-widgets.css'
 
 // Copied from jQuery
 var document = window.document;
@@ -354,7 +354,7 @@ var DemoDrawer = {
       });
 
       // Define the line
-      var valueline = d3_shapes.line()
+      var valueline = d3_shape.line()
         .x(function(d) {
           return x(d.date);
         })

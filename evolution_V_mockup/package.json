@@ -6,6 +6,7 @@
   "author": "Miguel Madrid <miguel.madrid@bsc.es>",
   "devDependencies": {
     "parcel-bundler": "^1.4.1",
+    "parcel-plugin-url-loader": "^1.2.2",
     "yarn": "^1.3.2"
   },
   "private": true,
@@ -18,7 +19,12 @@
     "d3-hierarchy": "^1.1.5",
     "d3-scale": "^1.0.7",
     "d3-selection": "^1.2.0",
-    "d3-time-format": "^2.1.1",
-    "d3-shape": "^1.2.0"
+    "d3-shape": "^1.2.0",
+    "d3-time-format": "^2.1.1"
+  },
+  "scripts": {
+    "dev": "rm -rf .cache && rm -rf build && mkdir build && cp -a json build && python3 -m http.server & parcel watch ./index.html -d build & (sleep 5 && xdg-open localhost:8000/build/index.html)",
+    "dist": "rm -rf .cache && rm -rf dist && mkdir dist && cp -a json dist && parcel build ./index.html --no-cache -d dist/ --public-url /",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
