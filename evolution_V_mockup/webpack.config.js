@@ -1,7 +1,9 @@
+var webpack = require('webpack')
 var path = require('path');
 var merge = require('webpack-merge');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-var DEPLOYMENT = process.env.WEBPACK_DEPLOYMENT
+var DEPLOYMENT = process.env.WEBPACK_DEPLOYMENT || 'dev'
 
 var common = {
   entry: './js/OpEB-widgets.js',
@@ -67,6 +69,13 @@ if(DEPLOYMENT === 'dist') {
           ]
         }
       ]
-    }
+    },
+    plugins: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          compress: { warnings: true },
+        }
+      })
+    ]
   });
 }
