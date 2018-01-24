@@ -14,7 +14,7 @@ import online_tick from '../icons/online-tick.png';
 import offline_tick from '../icons/offline-tick.png';
 import close_button from '../icons/close-button.png';
 
-import style from '../styles/OpEB-widgets.css'
+import style from '../styles/OpEB-widgets.css';
 
 // Copied from jQuery
 var document = window.document;

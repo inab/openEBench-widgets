@@ -5,8 +5,12 @@
   "description": "OpenEBench widgets prototype",
   "author": "Miguel Madrid <miguel.madrid@bsc.es>",
   "devDependencies": {
-    "parcel-bundler": "^1.4.1",
-    "parcel-plugin-url-loader": "^1.2.2",
+    "css-loader": "^0.28.9",
+    "style-loader": "^0.19.1",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1",
+    "webpack-merge": "^4.1.1",
     "yarn": "^1.3.2"
   },
   "private": true,
@@ -23,8 +27,9 @@
     "d3-time-format": "^2.1.1"
   },
   "scripts": {
-    "dev": "rm -rf .cache && rm -rf build && mkdir build && cp -a json build && python3 -m http.server & parcel watch ./index.html -d build & (sleep 5 && xdg-open localhost:8000/build/index.html)",
-    "dist": "rm -rf .cache && rm -rf dist && mkdir dist && cp -a json dist && parcel build ./index.html --no-cache -d dist/ --public-url /",
+    "dev": "rm -rf build && WEBPACK_DEPLOYMENT='dev' yarn run webpack && WEBPACK_DEPLOYMENT='dev' yarn run webpack-dev-server --open",
+    "dist": "rm -rf dist && WEBPACK_DEPLOYMENT='dist' yarn run webpack",
+    "lint": "eslint --fix js/OpEB-widgets.js; js-beautify -r js/OpEB-widgets.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
