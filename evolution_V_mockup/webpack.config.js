@@ -10,16 +10,36 @@ var common = {
   module: {
     loaders: [
       {
-        test: /\.(png|jpg|gif)$/,
+        test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
+          //'url-loader?limit=130000',
+          'url-loader',
           {
-            loader: 'url-loader',
+            loader: 'img-loader',
             options: {
-              limit: 120000
+              enabled: DEPLOYMENT === 'dist',
+              gifsicle: {
+                interlaced: false
+              },
+              mozjpeg: {
+                progressive: true,
+                arithmetic: false
+              },
+              optipng: false, // disabled
+              pngquant: {
+                floyd: 0.5,
+                speed: 2
+              },
+              svgo: {
+                plugins: [
+                  { removeTitle: true },
+                  { convertPathData: false }
+                ]
+              }
             }
           }
         ]
-      },
+      }
     ],
   },
 };
@@ -43,7 +63,7 @@ if(DEPLOYMENT === 'dev') {
             { loader: 'style-loader' },
             { loader: 'css-loader',
               options: { minimize: false }
-            }
+            },
           ]
         }
       ],
@@ -67,7 +87,7 @@ if(DEPLOYMENT === 'dist') {
               options: { minimize: true }
             }
           ]
-        }
+        },
       ]
     },
     plugins: [

@@ -7,7 +7,7 @@
   "devDependencies": {
     "css-loader": "^0.28.9",
     "file-loader": "^1.1.6",
-    "image-webpack-loader": "^3.5.0",
+    "img-loader": "^2.0.1",
     "style-loader": "^0.19.1",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^0.6.2",
