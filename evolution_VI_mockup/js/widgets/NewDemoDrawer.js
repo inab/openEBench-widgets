@@ -211,16 +211,23 @@ var NewDemoDrawer = {
 
     var tooltipFunc = function(d) {
       if (!clicked) {
-        if (!d.data.empty && (!d.parent.data.name || d.parent.data.name != 'widget')) {
+        var one_green_tick = false
+        for (let tick of d.data.ticks) {
+          one_green_tick = one_green_tick || tick.ticked
+          if (tick.ticked) break
+        }
+
+
+        if (!d.parent.data.name || d.parent.data.name != 'widget') {
           d3_selection.select(this).style('opacity', 1);
         }
-        if (!d.data.empty) {
-          d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
-          d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
-          d3_selection.select(this).style('opacity', 1);
-          d3_selection.select(this).selectAll('path').style('fill', 'black');
-        }
-        tooltipFuncAux(d);
+          if (one_green_tick) {
+            d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
+            d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
+            d3_selection.select(this).style('opacity', 1);
+            d3_selection.select(this).selectAll('path').style('fill', 'black');
+          }
+            tooltipFuncAux(d);
       }
     };
 
@@ -297,6 +304,13 @@ var NewDemoDrawer = {
       .on('mousemove', tooltipFunc)
       .on('click', function(d) {
         if (d.data.empty) return;
+
+        var one_green_tick = false
+        for (let tick of d.data.ticks) {
+          one_green_tick = one_green_tick || tick.ticked
+          if (tick.ticked) break
+        }
+        if (!one_green_tick) return;
         d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
         d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
         d3_selection.select(this).style('opacity', 1);
