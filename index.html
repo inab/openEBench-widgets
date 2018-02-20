@@ -1,157 +1,562 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
-  <script src="lib/jquery-3.2.1.min.js"></script>
-  <title>Mockups</title>
+  <title>Index</title>
+  <script src="lib/d3.v4.min.js"></script>
 </head>
 
 <body>
   <style>
-    body {
-      background-color: white;
+    text {
+      font: 6px sans-serif;
+      text-anchor: middle;
+      fill: white;
+    }
+
+    .path {
+      stroke: #fff;
+    }
+
+    .tooltip {
+      position: absolute;
+      display: none;
+      width: auto;
+      height: auto;
+      background: none repeat scroll 0 0 white;
+      border: 0 none;
+      border-radius: 8px 8px 8px 8px;
+      box-shadow: -3px 3px 15px #888888;
       color: black;
-    }
-
-    img#eu {
-      float: left;
-      width: 48px;
-      margin: 0px 10px 0 0;
-    }
-
-    footer {
-      position: relative;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      font-size: 0.875rem;
-      padding: 5px 0 20px;
+      font: 12px sans-serif;
+      padding: 5px;
+      text-align: center;
     }
   </style>
-  <h2>Mockups</h2>
-  Technology used: d3.js version 4
-  <h3>Initial mockup (400x400)</h3>
-  <ul>
-    <li>First idea to widget</li>
-  </ul>
-  <div id="initial_mockup"></div>
-  <h3>Evolution I (300x300)</h3>
-  <ul>
-    <li>Tooltips highlighted on hovering</li>
-    <li>Colored plug-in icons</li>
-  </ul>
-  <div id="evolution_I_mockup"></div>
-  <h3>Evolution II (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Categories summary with tick icons</li>
-    <li>Online/Offline uptime plot inside the plug-in tooltip icon</li>
-    <li>200x200, 100x100, 75x75 sizes</li>
-  </ul>
-  <div id="evolution_II_mockup" style="display: inline"></div>
-  <div id="evolution_II_mockup_100" style="display: inline"></div>
-  <div id="evolution_II_mockup_75" style="display: inline"></div>
-  <h3>Evolution III (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>All arcs now show the metrics summary</li>
-    <li>Hide arc stroke lines</li>
-    <li>Add mouse click event (and a exit button) to fix the tooltips in the screen </li>
-  </ul>
-  <div id="evolution_III_mockup" style="display: inline"></div>
-  <div id="evolution_III_mockup_100" style="display: inline"></div>
-  <div id="evolution_III_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution IV (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Library isolation</li>
-    <li>Customizable widget size</li>
-    <li>Fix load html without iframe behaviour</li>
-    <li>Fix mime types in Ipad devices</li>
-    <li>Improved click behaviour</li>
-    <li>Added tooltip information to the empty widget parts</li>
-    <li>All data in one JSON</li>
-  </ul>
-  <div id="evolution_IV_mockup" style="display: inline"></div>
-  <div id="evolution_IV_mockup_100" style="display: inline"></div>
-  <div id="evolution_IV_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution V (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Added package.json</li>
-    <ul>
-      <li>Scripts section</li>
-      <ul>
-        <li>dev: development deployment</li>
-        <li>dist: distribution deployment</li>
-        <li>lint: linter javascript code</li>
-      </ul>
-    </ul>
-    <li>Refactored d3.js to import only used submodules (30 -> 7 modules)</li>
-    <li>Webpack (all javacripts, css and images bundled in one js)</li>
-    <ul>
-      <li>dev (without minified): 1.5MB</li>
-      <li>dist(with minified) 216KB</li>
-    </ul>
-    <li>Better icons names</li>
-  </ul>
-  <div id="evolution_V_mockup" style="display: inline"></div>
-  <div id="evolution_V_mockup_100" style="display: inline"></div>
-  <div id="evolution_V_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution VI (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Added template widget model</li>
-    <ul>
-      <li>Added new demo widget</li>
-    <ul>
-      <li>One arc per metric</li>
-      <li>Color gradient according to the number of submetrics</li>
-    </ul>
-    </ul>
-  </ul>
-  <div id="evolution_VI_mockup" style="display: inline"></div>
-  <div id="evolution_VI_mockup_100" style="display: inline"></div>
-  <div id="evolution_VI_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h2>Alternative mockups</h2>
-  <h3>Bilevel mockup</h3>
-  <ul>
-    <li>First idea mockup compressed in two levels</li>
-  </ul>
-  <div id="bilevel_mockup"></div>
-  <h3> Square mockup </h3>
-  <ul>
-    <li>First idea mockup represented with square shapes</li>
-  </ul>
-  <div id="square_mockup"></div>
-  <div style="margin: 50px;"></div>
-  <hr>
-  <footer>
-    <p>Copyright © <a href="https://www.bsc.es/">BSC-CNS</a> 2017</p>
-    <img alt="EU flag" id="eu" src="eu_flag.jpg"> ELIXIR is partly funded by the European Commission within the Research Infraestructure programme of Horizon 2020.<br> ELIXIR Excelerate is funded by the European Comission, contract no. 676559
-  </footer>
-
+  <div>
+    <svg class="chart"></svg>
+    <svg class="chart"></svg>
+  </div>
   <script>
-    document.getElementById('initial_mockup').innerHTML = '<object type=text/html" width="470" height="450" data="initial_mockup/index.html" ></object>';
-    document.getElementById('evolution_I_mockup').innerHTML = '<object type=text/html" width="740" height="320" data="evolution_I_mockup/index.html" ></object>';
-    document.getElementById('evolution_II_mockup').innerHTML = '<object type=text/html" width="550" height="250" data="evolution_II_mockup/index.html" ></object>';
-    document.getElementById('evolution_II_mockup_100').innerHTML = '<object type=text/html" width="350" height="190" data="evolution_II_mockup_100x100/index.html" ></object>';
-    document.getElementById('evolution_II_mockup_75').innerHTML = '<object type=text/html" width="360" height="190" data="evolution_II_mockup_75x75/index.html" ></object>';
-    document.getElementById('evolution_III_mockup').innerHTML = '<object type=text/html" width="550" height="250" data="evolution_III_mockup/index.html" ></object>';
-    document.getElementById('evolution_III_mockup_100').innerHTML = '<object type=text/html" width="350" height="190" data="evolution_III_mockup_100x100/index.html" ></object>';
-    document.getElementById('evolution_III_mockup_75').innerHTML = '<object type=text/html" width="360" height="190" data="evolution_III_mockup_75x75/index.html" ></object>';
-    $("#evolution_IV_mockup").load( "evolution_IV_mockup/index.html" );
-    $("#evolution_IV_mockup_100").load( "evolution_IV_mockup_100x100/index.html" );
-    $("#evolution_IV_mockup_75").load( "evolution_IV_mockup_75x75/index.html" );
-    $("#evolution_V_mockup").load( "evolution_V_mockup/index-dist.html" );
-    $("#evolution_V_mockup_100").load( "evolution_V_mockup_100x100/index-dist.html" );
-    $("#evolution_V_mockup_75").load( "evolution_V_mockup_75x75/index-dist.html" );
-    $("#evolution_VI_mockup").load( "evolution_VI_mockup/index-dist.html" );
-    $("#evolution_VI_mockup_100").load( "evolution_VI_mockup_100x100/index-dist.html" );
-    $("#evolution_VI_mockup_75").load( "evolution_VI_mockup_75x75/index-dist.html" );
-    document.getElementById('bilevel_mockup').innerHTML = '<object type=text/html" width="440" height="170" data="bilevel_mockup/index.html" ></object>';
-    document.getElementById('square_mockup').innerHTML = '<object type=text/html" width="300" height="110" data="square_mockup/index.html" ></object>';
+    var icon_index = 0;
+    var icons = ['plugIn_green.png', 'plugOut_red.png'].map(function(icon) {
+      return 'icons/' + icon;
+    });
+
+    var width = 300;
+    var height = 300;
+    var radius = Math.min(width, height) / 6 - 1;
+    var big_radius = radius + 25;
+    var big_big_radius = big_radius + 25;
+    var big_big_big_radius = big_big_radius + 25;
+    var big_big_big_big_radius = big_big_big_radius + 25;
+
+
+    var arc = d3.arc()
+      .outerRadius(radius)
+      .innerRadius(radius - 20);
+
+    var outArc = d3.arc()
+      .innerRadius(radius)
+      .outerRadius(big_radius);
+
+    var outoutArc = d3.arc()
+      .innerRadius(big_radius)
+      .outerRadius(big_big_radius);
+
+    var outoutoutArc = d3.arc()
+      .innerRadius(big_big_radius)
+      .outerRadius(big_big_big_radius);
+
+    var outoutoutoutArc = d3.arc()
+      .innerRadius(big_big_big_radius)
+      .outerRadius(big_big_big_big_radius);
+
+    var pie = d3.pie()
+      .sort(null)
+      .value(function(d) {
+        return 1;
+      });
+    <!--.value(function(d) { return d.description; });-->
+
+    var tooltip_div = d3.select('body').append('div').attr('class', 'tooltip');
+
+    //var svg = d3.select("body").append("svg")
+    var svg = d3.selectAll('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+    d3.csv('data/arc.csv', type, function(error, data) {
+      if (error) throw error;
+
+      var color = ['#006400', '#00008b', '#8b0000', '#9400d3', '#ff4500', '#008b8b'];
+      // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+      // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+      // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+      // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+      // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+      // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+      // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+      // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+      // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+      // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+      // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+      // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+
+      var g_arc = svg.selectAll('.arc')
+        .data(pie(data))
+        .enter().append('g')
+        .attr('class', 'arc');
+
+      g_arc.append('path')
+        .attr('d', arc)
+        .style('fill', function(d, i) {
+          return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+        })
+        .style('stroke', function(d) {
+          return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+        })
+        .style('stroke-opacity', 0.4)
+        .on('mousemove', function(d) {
+          if (!d.data.metric.startsWith('empty')) {
+            d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+            d3.select(this).style('opacity', 1);
+            tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+            tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+            tooltip_div.style('display', 'inline-block');
+            tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description.replace(/\s/g, '<br>')));
+          }
+        })
+        .on('mouseout', function(d) {
+          tooltip_div.style('display', 'none');
+          d3.selectAll('path')
+            .style('opacity', 1);
+        });
+
+      g_arc.append('text')
+        //.attr("dy", ".35em")
+        .attr('transform', function(d, i) {
+          //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
+          if (d.endAngle == Math.PI) {
+            return 'translate(' + arc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+          } else if (d.startAngle == Math.PI) {
+
+            return 'translate(' + arc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+          } else {
+
+            return 'translate(' + arc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+          }
+        })
+        //.attr("dx", function(d) { return (d.endAngle > 180 ? 10 : 0); })
+        .text(function(d) {
+          return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+        })
+        .on('mousemove', function(d) {
+          if (!d.data.metric.startsWith('empty')) {
+            d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+            d3.select(this.previousSibling).style('opacity', 1);
+            tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+            tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+            tooltip_div.style('display', 'inline-block');
+            tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description.replace(/\s/g, '<br>')));
+            //console.log(d.data.description.replace(/\s/,"<br>"))
+          }
+        })
+        .on('mouseout', function(d) {
+          tooltip_div.style('display', 'none');
+          d3.selectAll('path')
+            .style('opacity', 1);
+        });
+
+      d3.csv('data/outarc.csv', type, function(error, outdata) {
+        if (error) throw error;
+        var color = ['#007c00', '#25259e', '#a10002', '#a72bd9', '#ff5e00', '#00a2a2'];
+        // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+        // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+        // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+        // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+        // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+        // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+        // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+        // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+        // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+        // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+        // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+        // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+        var g_outArc = svg.selectAll('.outArc')
+          .data(pie(outdata))
+          .enter().append('g')
+          .attr('class', 'outArc');
+
+        g_outArc.append('path')
+          .attr('d', outArc)
+          .style('fill', function(d, i) {
+            return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+          })
+          .attr('stroke', function(d) {
+            return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+          })
+          .style('stroke-opacity', 0.4)
+          .on('mousemove', function(d) {
+            if (!d.data.metric.startsWith('empty')) {
+              d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+              d3.select(this).style('opacity', 1);
+              tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+              tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+              tooltip_div.style('display', 'inline-block');
+              tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description));
+            }
+          })
+          .on('mouseout', function(d) {
+            tooltip_div.style('display', 'none');
+            d3.selectAll('path')
+              .style('opacity', 1);
+          });
+
+        g_outArc.append('text')
+          //.style("font-size", "10px")
+          .attr('transform', function(d, i) {
+            //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
+            if (d.endAngle == Math.PI) {
+              return 'translate(' + outArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+            } else if (d.startAngle == Math.PI) {
+
+              return 'translate(' + outArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+            } else {
+
+              return 'translate(' + outArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+            }
+          })
+          //.attr("dx", function(d) { return (d.angle > 180 ? 10 : 0); })
+          .text(function(d) {
+            return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+          })
+          .on('mousemove', function(d) {
+            if (!d.data.metric.startsWith('empty')) {
+              d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+              d3.select(this.previousSibling).style('opacity', 1);
+              tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+              tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+              tooltip_div.style('display', 'inline-block');
+              tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description));
+            }
+          })
+          .on('mouseout', function(d) {
+            tooltip_div.style('display', 'none');
+            d3.selectAll('path')
+              .style('opacity', 1);
+          });
+        d3.csv('data/outoutarc.csv', type, function(error, outoutdata) {
+          if (error) throw error;
+          var color = ['#009500', '#3941b1', '#b80002', '#ba44de', '#ff7300', '#00b7b7'];
+          // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+          // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+          // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+          // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+          // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+          // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+          // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+          // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+          // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+          // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+          // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+          // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+          var g_outoutArc = svg.selectAll('.outoutArc')
+            .data(pie(outoutdata))
+            .enter().append('g')
+            .attr('class', 'outoutArc');
+
+          g_outoutArc.append('path')
+            .attr('d', outoutArc)
+            .style('fill', function(d, i) {
+              return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+            })
+            .attr('stroke', function(d) {
+              return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+            })
+            .style('stroke-opacity', 0.4)
+            .on('mousemove', function(d) {
+              if (!d.data.metric.startsWith('empty')) {
+                d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                d3.select(this).style('opacity', 1);
+                tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                tooltip_div.style('display', 'inline-block');
+                tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description));
+              }
+            })
+            .on('mouseout', function(d) {
+              tooltip_div.style('display', 'none');
+              d3.selectAll('path')
+                .style('opacity', 1);
+            });
+
+          g_outoutArc.append('text')
+            //.style("font-size", "10px")
+            .attr('transform', function(d, i) {
+              //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
+              if (d.endAngle == Math.PI) {
+                return 'translate(' + outoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+              } else if (d.startAngle == Math.PI) {
+
+                return 'translate(' + outoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+              } else {
+
+                return 'translate(' + outoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+              }
+            })
+            //.attr("dx", function(d) { return (d.angle > 180 ? 10 : 0); })
+            .text(function(d) {
+              return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+            })
+            .on('mousemove', function(d) {
+              if (!d.data.metric.startsWith('empty')) {
+                d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                d3.select(this.previousSibling).style('opacity', 1);
+                tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                tooltip_div.style('display', 'inline-block');
+                tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description));
+              }
+            })
+            .on('mouseout', function(d) {
+              tooltip_div.style('display', 'none');
+              d3.selectAll('path')
+                .style('opacity', 1);
+            });
+
+          d3.csv('data/outoutoutarc.csv', type, function(error, outoutoutdata) {
+            if (error) throw error;
+            var color = ['#00ae00', '#4a5cc5', '#cf0002', '#cb5ae3', '#ff8400', '#00cfcf'];
+            // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+            // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+            // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+            // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+            // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+            // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+            // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+            // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+            // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+            // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+            // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+            // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+            var g_outoutoutArc = svg.selectAll('.outoutoutArc')
+              .data(pie(outoutoutdata))
+              .enter().append('g')
+              .attr('class', 'outoutoutArc');
+
+            g_outoutoutArc.append('path')
+              .attr('d', outoutoutArc)
+              .style('fill', function(d, i) {
+                return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+              })
+              .attr('stroke', function(d) {
+                return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+              })
+              .style('stroke-opacity', 0.4)
+              .on('mousemove', function(d) {
+                if (!d.data.metric.startsWith('empty')) {
+                  d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                  d3.select(this).style('opacity', 1);
+                  tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                  tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                  tooltip_div.style('display', 'inline-block');
+                  tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description));
+                }
+              })
+              .on('mouseout', function(d) {
+                tooltip_div.style('display', 'none');
+                d3.selectAll('path')
+                  .style('opacity', 1);
+              });
+
+            g_outoutoutArc.append('text')
+              //.style("font-size", "10px")
+              .attr('transform', function(d, i) {
+                //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
+                if (d.endAngle == Math.PI) {
+                  return 'translate(' + outoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+                } else if (d.startAngle == Math.PI) {
+
+                  return 'translate(' + outoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+                } else {
+
+                  return 'translate(' + outoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+                }
+              })
+              //.attr("dx", function(d) { return (d.angle > 180 ? 10 : 0); })
+              .text(function(d) {
+                return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+              })
+              .on('mousemove', function(d) {
+                if (!d.data.metric.startsWith('empty')) {
+                  d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                  d3.select(this.previousSibling).style('opacity', 1);
+                  tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                  tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                  tooltip_div.style('display', 'inline-block');
+                  tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description));
+                }
+              })
+              .on('mouseout', function(d) {
+                tooltip_div.style('display', 'none');
+                d3.selectAll('path')
+                  .style('opacity', 1);
+              });
+
+            d3.csv('data/outoutoutoutarc.csv', type, function(error, outoutoutoutdata) {
+              if (error) throw error;
+              var color = ['#00c800', '#5879d9', '#e60001', '#dd6ee9', '#ff9600', '#00e6e6'];
+              // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
+              // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
+              // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
+              // blues '#00008b','#25259e','#3941b1','#4a5cc5','#5879d9','#6495ed'
+              // https://gka.github.io/palettes/#colors=DarkRed,Red|steps=6|bez=1|coL=1
+              // reds '#8b0000','#a10002','#b80002','#cf0002','#e60001','#ff0000'
+              // https://gka.github.io/palettes/#colors=DarkViolet,Violet|steps=6|bez=1|coL=1
+              // violets '#9400d3','#a72bd9','#ba44de','#cb5ae3','#dd6ee9','#ee82ee'
+              // https://gka.github.io/palettes/#colors=OrangeRed,Orange|steps=6|bez=1|coL=1
+              // oranges '#ff4500','#ff5e00','#ff7300','#ff8400','#ff9600','#ffa500'
+              // https://gka.github.io/palettes/#colors=DarkCyan,Cyan|steps=6|bez=1|coL=1
+              // cyans '#008b8b','#00a2a2','#00b7b7','#00cfcf','#00e6e6','#00ffff'
+              var g_outoutoutoutArc = svg.selectAll('.outoutoutoutArc')
+                .data(pie(outoutoutoutdata))
+                .enter().append('g')
+                .attr('class', 'outoutoutoutArc');
+
+              g_outoutoutoutArc.append('path')
+                .attr('d', outoutoutoutArc)
+                .style('fill', function(d, i) {
+                  return (!d.data.metric.startsWith('empty')) ? color[i] : 'none';
+                })
+                .attr('stroke', function(d) {
+                  return (d.data.metric.startsWith('empty')) ? 'black' : 'black';
+                })
+                .style('stroke-opacity', 0.4)
+                .on('mousemove', function(d) {
+                  if (!d.data.metric.startsWith('empty')) {
+                    d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                    d3.select(this).style('opacity', 1);
+                    tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                    tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                    tooltip_div.style('display', 'inline-block');
+                    tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description));
+                  }
+                })
+                .on('mouseout', function(d) {
+                  tooltip_div.style('display', 'none');
+                  d3.selectAll('path')
+                    .style('opacity', 1);
+                });
+
+              g_outoutoutoutArc.append('text')
+                //.style("font-size", "10px")
+                .attr('transform', function(d, i) {
+                  //console.log(i, d.data.metric,d.startAngle,d.endAngle, d.endAngle == Math.PI ||d.endAngle == Math.PI);
+                  if (d.endAngle == Math.PI) {
+                    return 'translate(' + outoutoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 - d.endAngle / 2 - 3 * Math.PI) * Math.PI + ')';
+                  } else if (d.startAngle == Math.PI) {
+
+                    return 'translate(' + outoutoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2 + 2 * Math.PI) * Math.PI + ')';
+                  } else {
+
+                    return 'translate(' + outoutoutoutArc.centroid(d) + ') rotate(' + (d.startAngle / 2 + d.endAngle / 2) * 180 / Math.PI + ')';
+                  }
+                })
+                //.attr("dx", function(d) { return (d.angle > 180 ? 10 : 0); })
+                .text(function(d) {
+                  return (!d.data.metric.startsWith('empty')) ? d.data.metric : '';
+                })
+                .on('mousemove', function(d) {
+                  if (!d.data.metric.startsWith('empty')) {
+                    d3.select(this.parentNode.parentNode.parentNode).selectAll('path').style('opacity', 0.3);
+                    d3.select(this.previousSibling).style('opacity', 1);
+                    tooltip_div.style('left', d3.event.pageX + 10 + 'px');
+                    tooltip_div.style('top', d3.event.pageY - 25 + 'px');
+                    tooltip_div.style('display', 'inline-block');
+                    tooltip_div.html('<b>' + (d.data.metric) + '</b><br>' + (d.data.description));
+                  }
+                })
+                .on('mouseout', function(d) {
+                  tooltip_div.style('display', 'none');
+                  d3.selectAll('path')
+                    .style('opacity', 1);
+                });
+            });
+          });
+        });
+
+      });
+      //var outerouterPath = svg.selectAll(".outoutlineArc")
+      //  .data(pie(data))
+      //  .enter().append("path")
+      //  .attr("fill", "none")
+      //  .attr("stroke", "black")
+      //  .attr("class", "outoutlineArc")
+      //  .attr("d", outoutlineArc);
+
+      //var outerouterouterPath = svg.selectAll(".outoutoutlineArc")
+      //  .data(pie(data))
+      //  .enter().append("path")
+      //  .attr("fill", "none")
+      //  .attr("stroke", "black")
+      //  .attr("class", "outoutoutlineArc")
+      //  .attr("d", outoutoutlineArc);
+
+      //var outerouterouterouterPath = svg.selectAll(".outoutoutoutlineArc")
+      //  .data(pie(data))
+      //  .enter().append("path")
+      //  .attr("fill", "none")
+      //  .attr("stroke", "black")
+      //  .attr("class", "outoutoutoutlineArc")
+      //  .attr("d", outoutoutoutlineArc);
+
+
+      // g.append("text")
+      //.attr("text-anchor", "middle")
+      //.style('font-size', '15em')
+      //.attr('y', 70)
+      //.text('42') ;
+      svg.append('image')
+        //.attr("xlink:href", "https://github.com/favicon.ico")
+        //.attr("xlink:href", "plugOut_red.png")
+        // .attr("x", -100)
+        // .attr("y", -1250)
+        .attr('width', function() {
+          icon_index++;
+          //console.log(icon_index, "width")
+          return (icon_index % 2 != 0 ? 50 : 40);
+        })
+        .attr('height', '100%')
+        .attr('xlink:href', function(d, i) {
+          //console.log(icon_index, "xlink")
+          icon = icons[icon_index % 2];
+          icon_index++;
+          return icon;
+        })
+        .attr('x', function() {
+          //console.log(icon_index, "x")
+          icon_index++;
+          return (icon_index % 2 != 0 ? -width / 2 + width / 2.3 : -width / 2 + width / 2.3);
+        })
+        .attr('y', function() {
+          //console.log(icon_index, "y")
+          icon_index++;
+          return (icon_index % 2 != 0 ? -height / 2 - 5 : -height / 2);
+        });
+    });
+
+
+    function type(d) {
+      <!--d.description = +d.description;-->
+      return d;
+    }
   </script>
+
 </body>
 
 </html>
