@@ -4,6 +4,8 @@ import style from '../styles/OpEB-widgets.css';
 
 import DemoDrawer from './widgets/DemoDrawer';
 import NewDemoDrawer from './widgets/NewDemoDrawer';
+import DemoWithBadgeDrawer from './widgets/DemoWithBadge';
+import DemoBadgeDrawer from './widgets/DemoBadge';
 
 // Copied from jQuery
 var document = window.document;
@@ -21,6 +23,8 @@ var WIDGET_TYPES = {};
 
 RegisterWidget(WIDGET_TYPES, DemoDrawer)
 RegisterWidget(WIDGET_TYPES, NewDemoDrawer)
+RegisterWidget(WIDGET_TYPES, DemoWithBadgeDrawer)
+RegisterWidget(WIDGET_TYPES, DemoBadgeDrawer)
 
 // Register widgets to draw
 function RegisterWidget(WIDGET_TYPES, Drawer) {

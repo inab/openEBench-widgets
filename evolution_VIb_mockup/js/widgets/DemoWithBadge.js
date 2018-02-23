@@ -56,7 +56,7 @@ function colorStepGradiant (start_color, end_color, percent) {
  };
 // All the widget drawing functions take as input an element and the
 // fetched data
-var NewDemoDrawer = {
+var DemoWithBadgeDrawer = {
   // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
   // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
   // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
@@ -78,6 +78,8 @@ var NewDemoDrawer = {
   //],
   DEFAULT_LEVEL_SIZE: 15,
   DEFAULT_SIZE: 200,
+  DEFAULT_BADGE_WIDTH: 175,
+  DEFAULT_BADGE_HEIGHT: 20,
   // Getting the max depth of the nested structure
   getStatsNodeSet: function(widgetData) {
     var levelNodeSet = [];
@@ -125,12 +127,12 @@ var NewDemoDrawer = {
     widgetSize = Number(widgetSize);
     if (widgetSize == null || widgetSize <= 0 || isNaN(widgetSize)) {
       if (widgetSize != 0) {
-        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + NewDemoDrawer.DEFAULT_SIZE);
+        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + DemoWithBadgeDrawer.DEFAULT_SIZE);
       }
-      widgetSize = NewDemoDrawer.DEFAULT_SIZE;
+      widgetSize = DemoWithBadgeDrawer.DEFAULT_SIZE;
     }
 
-    width = height = widgetSize;
+    width = height = (widgetSize - DemoWithBadgeDrawer.DEFAULT_BADGE_HEIGHT - 5); // badge height
 
     var levelSize = width * 15 / 200;
     var radius = Math.min(width, height) / 2 - 1.2;
@@ -145,7 +147,7 @@ var NewDemoDrawer = {
 
     var svg_g = d3_selection.select(widgetRoot)
       .attr('width', width)
-      .attr('height', height)
+      .attr('height', height + DemoWithBadgeDrawer.DEFAULT_BADGE_HEIGHT + 5)
       .append('g')
       .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
@@ -177,7 +179,7 @@ var NewDemoDrawer = {
 
 
     // First, getting the max depth
-    var statsNodeSet = NewDemoDrawer.getStatsNodeSet(widgetData);
+    var statsNodeSet = DemoWithBadgeDrawer.getStatsNodeSet(widgetData);
     var partition = d3_hierarchy.partition()
       .size([2 * Math.PI, radius]);
     var root = d3_hierarchy.hierarchy({
@@ -301,6 +303,7 @@ var NewDemoDrawer = {
         }
         return d.data.color;
       })
+      .style('cursor', 'pointer')
       .on('mousemove', tooltipFunc)
       .on('click', function(d) {
         if (d.data.empty) return;
@@ -493,6 +496,7 @@ var NewDemoDrawer = {
       })
       .attr('x', -levelSize * xy_pos)
       .attr('y', -levelSize * xy_pos)
+      .style('cursor', 'pointer')
       .on('mousemove', tooltipUptimeFunc)
       .on('click', function(d) {
 
@@ -517,8 +521,21 @@ var NewDemoDrawer = {
           });
       })
       .on('mouseout', tooltipUptimeHideFunc);
+
+    if (width >= DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH) {
+      svg_g.append('image')
+        .attr('width', DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH)
+        .attr('height', 20)
+        .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-avaible-green.svg?link=https://dev-openebench.bsc.es/html/')
+        .attr('x', -(width - ((width - DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH)/2))/2)
+        .attr('y', height/2 + 5)
+        .style('cursor', 'pointer')
+        .on('click', function() {
+          window.open('https://dev-openebench.bsc.es/html/')
+        })
+    }
   },
-  WIDGET_TYPE: 'new_demo'
+  WIDGET_TYPE: 'new_demo_with_badge'
 };
 
-export default NewDemoDrawer;
+export default DemoWithBadgeDrawer;
