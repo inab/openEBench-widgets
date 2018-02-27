@@ -1,157 +1,116 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width" />
-  <script src="lib/jquery-3.2.1.min.js"></script>
-  <title>Mockups</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="lib/d3.v4.min.js"></script>
+  </head>
+  <body>
+    <style>
 
-<body>
-  <style>
-    body {
-      background-color: white;
-      color: black;
-    }
+      .tooltip {
+        position: absolute;
+        display: none;
+        width: auto;
+        height: auto;
+        background: none repeat scroll 0 0 white;
+        border: 0 none;
+        border-radius: 8px 8px 8px 8px;
+        box-shadow: -3px 3px 15px #888888;
+        color: black;
+        font: 12px sans-serif;
+        padding: 5px;
+        text-align: center;
+      }
+    </style>
+    <div>
+      <svg class="chart"></svg>
+    </div>
+    <script>
+      var width_svg = 75,
+      height_svg = 75
+      var grid_layout = new Array();
+      var xpos = 1; //starting xpos and ypos at 1 so the stroke will show when we make the grid below
+      var ypos = 1;
+      var width = 18.25; // width_svg/4 -2
+      var height = 18.25;
+      var square_size = 4;
+      var colors = ["#007c00", "#009500", "#00ae00", "#00c800"]
+      colors = colors.concat(["#a72bd9", "#ba44de", "#cb5ae3", "#dd6ee9"])
+      colors = colors.concat(["#ff5e00", "#ff7300", "#ff8400", "#ff9600"])
+      colors = colors.concat(["#00a2a2", "#00b7b7", "#00cfcf", "#00e6e6"])
+      colors = colors.concat(["#a10002", "#b80002", "#cf0002", "#e60001"])
 
-    img#eu {
-      float: left;
-      width: 48px;
-      margin: 0px 10px 0 0;
-    }
+      var tooltip_div = d3.select("body").append("div").attr("class", "tooltip");
 
-    footer {
-      position: relative;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      font-size: 0.875rem;
-      padding: 5px 0 20px;
-    }
-  </style>
-  <h2>Mockups</h2>
-  Technology used: d3.js version 4
-  <h3>Initial mockup (400x400)</h3>
-  <ul>
-    <li>First idea to widget</li>
-  </ul>
-  <div id="initial_mockup"></div>
-  <h3>Evolution I (300x300)</h3>
-  <ul>
-    <li>Tooltips highlighted on hovering</li>
-    <li>Colored plug-in icons</li>
-  </ul>
-  <div id="evolution_I_mockup"></div>
-  <h3>Evolution II (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Categories summary with tick icons</li>
-    <li>Online/Offline uptime plot inside the plug-in tooltip icon</li>
-    <li>200x200, 100x100, 75x75 sizes</li>
-  </ul>
-  <div id="evolution_II_mockup" style="display: inline"></div>
-  <div id="evolution_II_mockup_100" style="display: inline"></div>
-  <div id="evolution_II_mockup_75" style="display: inline"></div>
-  <h3>Evolution III (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>All arcs now show the metrics summary</li>
-    <li>Hide arc stroke lines</li>
-    <li>Add mouse click event (and a exit button) to fix the tooltips in the screen </li>
-  </ul>
-  <div id="evolution_III_mockup" style="display: inline"></div>
-  <div id="evolution_III_mockup_100" style="display: inline"></div>
-  <div id="evolution_III_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution IV (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Library isolation</li>
-    <li>Customizable widget size</li>
-    <li>Fix load html without iframe behaviour</li>
-    <li>Fix mime types in Ipad devices</li>
-    <li>Improved click behaviour</li>
-    <li>Added tooltip information to the empty widget parts</li>
-    <li>All data in one JSON</li>
-  </ul>
-  <div id="evolution_IV_mockup" style="display: inline"></div>
-  <div id="evolution_IV_mockup_100" style="display: inline"></div>
-  <div id="evolution_IV_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution V (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Added package.json</li>
-    <ul>
-      <li>Scripts section</li>
-      <ul>
-        <li>dev: development deployment</li>
-        <li>dist: distribution deployment</li>
-        <li>lint: linter javascript code</li>
-      </ul>
-    </ul>
-    <li>Refactored d3.js to import only used submodules (30 -> 7 modules)</li>
-    <li>Webpack (all javacripts, css and images bundled in one js)</li>
-    <ul>
-      <li>dev (without minified): 1.5MB</li>
-      <li>dist(with minified) 216KB</li>
-    </ul>
-    <li>Better icons names</li>
-  </ul>
-  <div id="evolution_V_mockup" style="display: inline"></div>
-  <div id="evolution_V_mockup_100" style="display: inline"></div>
-  <div id="evolution_V_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution VI (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Added template widget model</li>
-    <ul>
-      <li>Added new demo widget</li>
-    <ul>
-      <li>One arc per metric</li>
-      <li>Color gradient according to the number of submetrics</li>
-    </ul>
-    </ul>
-  </ul>
-  <div id="evolution_VI_mockup" style="display: inline"></div>
-  <div id="evolution_VI_mockup_100" style="display: inline"></div>
-  <div id="evolution_VI_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h2>Alternative mockups</h2>
-  <h3>Bilevel mockup</h3>
-  <ul>
-    <li>First idea mockup compressed in two levels</li>
-  </ul>
-  <div id="bilevel_mockup"></div>
-  <h3> Square mockup </h3>
-  <ul>
-    <li>First idea mockup represented with square shapes</li>
-  </ul>
-  <div id="square_mockup"></div>
-  <div style="margin: 50px;"></div>
-  <hr>
-  <footer>
-    <p>Copyright © <a href="https://www.bsc.es/">BSC-CNS</a> 2017</p>
-    <img alt="EU flag" id="eu" src="eu_flag.jpg"> ELIXIR is partly funded by the European Commission within the Research Infraestructure programme of Horizon 2020.<br> ELIXIR Excelerate is funded by the European Comission, contract no. 676559
-  </footer>
+			d3.json("data/data.json", function(error, data) {
+  			if (error) throw error;
+      // iterate for rows
+			color_number = 0;
+      for (var row = 0; row < square_size; row++) {
+        grid_layout.push(new Array());
+        // iterate for cells/columns inside rows
+        for (var column = 0; column < square_size; column++) {
+          grid_layout[row].push({
+            x: xpos,
+            y: ypos,
+            width: width,
+            height: height,
+						metric: data.children[row].name,
+						name: data.children[row].children[column].name,
+						description: data.children[row].children[column].description,
+						color: colors[color_number]
+          })
+        // increment the x position. I.e. move it over by 50 (width variable)
+          xpos += width;
+					color_number += 1
+        }
+        // reset the x position after a row is complete
+        xpos = 1;
+        // increment the y position for the next row. Move it down 50 (height variable)
+        ypos += height;
+      }
 
-  <script>
-    document.getElementById('initial_mockup').innerHTML = '<object type=text/html" width="470" height="450" data="initial_mockup/index.html" ></object>';
-    document.getElementById('evolution_I_mockup').innerHTML = '<object type=text/html" width="740" height="320" data="evolution_I_mockup/index.html" ></object>';
-    document.getElementById('evolution_II_mockup').innerHTML = '<object type=text/html" width="550" height="250" data="evolution_II_mockup/index.html" ></object>';
-    document.getElementById('evolution_II_mockup_100').innerHTML = '<object type=text/html" width="350" height="190" data="evolution_II_mockup_100x100/index.html" ></object>';
-    document.getElementById('evolution_II_mockup_75').innerHTML = '<object type=text/html" width="360" height="190" data="evolution_II_mockup_75x75/index.html" ></object>';
-    document.getElementById('evolution_III_mockup').innerHTML = '<object type=text/html" width="550" height="250" data="evolution_III_mockup/index.html" ></object>';
-    document.getElementById('evolution_III_mockup_100').innerHTML = '<object type=text/html" width="350" height="190" data="evolution_III_mockup_100x100/index.html" ></object>';
-    document.getElementById('evolution_III_mockup_75').innerHTML = '<object type=text/html" width="360" height="190" data="evolution_III_mockup_75x75/index.html" ></object>';
-    $("#evolution_IV_mockup").load( "evolution_IV_mockup/index.html" );
-    $("#evolution_IV_mockup_100").load( "evolution_IV_mockup_100x100/index.html" );
-    $("#evolution_IV_mockup_75").load( "evolution_IV_mockup_75x75/index.html" );
-    $("#evolution_V_mockup").load( "evolution_V_mockup/index-dist.html" );
-    $("#evolution_V_mockup_100").load( "evolution_V_mockup_100x100/index-dist.html" );
-    $("#evolution_V_mockup_75").load( "evolution_V_mockup_75x75/index-dist.html" );
-    $("#evolution_VI_mockup").load( "evolution_VI_mockup/index-dist.html" );
-    $("#evolution_VI_mockup_100").load( "evolution_VI_mockup_100x100/index-dist.html" );
-    $("#evolution_VI_mockup_75").load( "evolution_VI_mockup_75x75/index-dist.html" );
-    document.getElementById('bilevel_mockup').innerHTML = '<object type=text/html" width="440" height="170" data="bilevel_mockup/index.html" ></object>';
-    document.getElementById('square_mockup').innerHTML = '<object type=text/html" width="300" height="110" data="square_mockup/index.html" ></object>';
-  </script>
-</body>
+      var grid = d3.selectAll("svg")
+        .attr("width", width_svg)
+        .attr("height", height_svg)
+        .append("g")
 
+      var row = grid.selectAll(".row")
+        .data(grid_layout)
+        .enter().append("g")
+        .attr("class", "row");
+
+      var column = row.selectAll(".square")
+        .data(function(d) { return d; })
+        .enter().append("rect")
+        .attr("class","square")
+        .attr("x", function(d) { return d.x; })
+        .attr("y", function(d) { return d.y; })
+        .attr("width", function(d) { return d.width; })
+        .attr("height", function(d) { return d.height; })
+    		.style("fill", function(d,i) {return !d.name.startsWith("empty") ? d.color : "none"; })
+        .style("stroke", "#222")
+        .style("stroke-opacity", 0.4)
+        .on("mousemove", function(d){
+            if (!d.name.startsWith("empty")) {
+						d3.select(this.parentNode.parentNode.parentNode).selectAll("rect").style("opacity", 0.4);
+            d3.select(this).style("opacity", 1)
+            tooltip_div.style("left", d3.event.pageX+10+"px");
+            tooltip_div.style("top", d3.event.pageY-25+"px");
+            tooltip_div.style("display", "inline-block");
+            tooltip_div.html("<b>"+ (d.metric) +">"+(d.name)+"</b><br>"+(d.description));
+						}
+        })
+        .on("mouseout", function(d){
+          tooltip_div.style("display", "none");
+          d3.selectAll("rect")
+            .style("opacity", 1);
+        });
+
+			})
+    </script>
+
+  </body>
 </html>
