@@ -1,157 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
-  <script src="lib/jquery-3.2.1.min.js"></script>
-  <title>Mockups</title>
+  <link rel="stylesheet" href="style/style.css">
+
+  <title>Index</title>
 </head>
 
 <body>
-  <style>
-    body {
-      background-color: white;
-      color: black;
-    }
-
-    img#eu {
-      float: left;
-      width: 48px;
-      margin: 0px 10px 0 0;
-    }
-
-    footer {
-      position: relative;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      font-size: 0.875rem;
-      padding: 5px 0 20px;
-    }
-  </style>
-  <h2>Mockups</h2>
-  Technology used: d3.js version 4
-  <h3>Initial mockup (400x400)</h3>
-  <ul>
-    <li>First idea to widget</li>
-  </ul>
-  <div id="initial_mockup"></div>
-  <h3>Evolution I (300x300)</h3>
-  <ul>
-    <li>Tooltips highlighted on hovering</li>
-    <li>Colored plug-in icons</li>
-  </ul>
-  <div id="evolution_I_mockup"></div>
-  <h3>Evolution II (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Categories summary with tick icons</li>
-    <li>Online/Offline uptime plot inside the plug-in tooltip icon</li>
-    <li>200x200, 100x100, 75x75 sizes</li>
-  </ul>
-  <div id="evolution_II_mockup" style="display: inline"></div>
-  <div id="evolution_II_mockup_100" style="display: inline"></div>
-  <div id="evolution_II_mockup_75" style="display: inline"></div>
-  <h3>Evolution III (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>All arcs now show the metrics summary</li>
-    <li>Hide arc stroke lines</li>
-    <li>Add mouse click event (and a exit button) to fix the tooltips in the screen </li>
-  </ul>
-  <div id="evolution_III_mockup" style="display: inline"></div>
-  <div id="evolution_III_mockup_100" style="display: inline"></div>
-  <div id="evolution_III_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution IV (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Library isolation</li>
-    <li>Customizable widget size</li>
-    <li>Fix load html without iframe behaviour</li>
-    <li>Fix mime types in Ipad devices</li>
-    <li>Improved click behaviour</li>
-    <li>Added tooltip information to the empty widget parts</li>
-    <li>All data in one JSON</li>
-  </ul>
-  <div id="evolution_IV_mockup" style="display: inline"></div>
-  <div id="evolution_IV_mockup_100" style="display: inline"></div>
-  <div id="evolution_IV_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution V (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Added package.json</li>
-    <ul>
-      <li>Scripts section</li>
-      <ul>
-        <li>dev: development deployment</li>
-        <li>dist: distribution deployment</li>
-        <li>lint: linter javascript code</li>
-      </ul>
-    </ul>
-    <li>Refactored d3.js to import only used submodules (30 -> 7 modules)</li>
-    <li>Webpack (all javacripts, css and images bundled in one js)</li>
-    <ul>
-      <li>dev (without minified): 1.5MB</li>
-      <li>dist(with minified) 216KB</li>
-    </ul>
-    <li>Better icons names</li>
-  </ul>
-  <div id="evolution_V_mockup" style="display: inline"></div>
-  <div id="evolution_V_mockup_100" style="display: inline"></div>
-  <div id="evolution_V_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h3>Evolution VI (200x200), (100x100), (75x75)</h3>
-  <ul>
-    <li>Added template widget model</li>
-    <ul>
-      <li>Added new demo widget</li>
-    <ul>
-      <li>One arc per metric</li>
-      <li>Color gradient according to the number of submetrics</li>
-    </ul>
-    </ul>
-  </ul>
-  <div id="evolution_VI_mockup" style="display: inline"></div>
-  <div id="evolution_VI_mockup_100" style="display: inline"></div>
-  <div id="evolution_VI_mockup_75" style="display: inline"></div>
-  <div style="margin: 100px;"></div>
-  <h2>Alternative mockups</h2>
-  <h3>Bilevel mockup</h3>
-  <ul>
-    <li>First idea mockup compressed in two levels</li>
-  </ul>
-  <div id="bilevel_mockup"></div>
-  <h3> Square mockup </h3>
-  <ul>
-    <li>First idea mockup represented with square shapes</li>
-  </ul>
-  <div id="square_mockup"></div>
-  <div style="margin: 50px;"></div>
-  <hr>
-  <footer>
-    <p>Copyright © <a href="https://www.bsc.es/">BSC-CNS</a> 2017</p>
-    <img alt="EU flag" id="eu" src="eu_flag.jpg"> ELIXIR is partly funded by the European Commission within the Research Infraestructure programme of Horizon 2020.<br> ELIXIR Excelerate is funded by the European Comission, contract no. 676559
-  </footer>
-
-  <script>
-    document.getElementById('initial_mockup').innerHTML = '<object type=text/html" width="470" height="450" data="initial_mockup/index.html" ></object>';
-    document.getElementById('evolution_I_mockup').innerHTML = '<object type=text/html" width="740" height="320" data="evolution_I_mockup/index.html" ></object>';
-    document.getElementById('evolution_II_mockup').innerHTML = '<object type=text/html" width="550" height="250" data="evolution_II_mockup/index.html" ></object>';
-    document.getElementById('evolution_II_mockup_100').innerHTML = '<object type=text/html" width="350" height="190" data="evolution_II_mockup_100x100/index.html" ></object>';
-    document.getElementById('evolution_II_mockup_75').innerHTML = '<object type=text/html" width="360" height="190" data="evolution_II_mockup_75x75/index.html" ></object>';
-    document.getElementById('evolution_III_mockup').innerHTML = '<object type=text/html" width="550" height="250" data="evolution_III_mockup/index.html" ></object>';
-    document.getElementById('evolution_III_mockup_100').innerHTML = '<object type=text/html" width="350" height="190" data="evolution_III_mockup_100x100/index.html" ></object>';
-    document.getElementById('evolution_III_mockup_75').innerHTML = '<object type=text/html" width="360" height="190" data="evolution_III_mockup_75x75/index.html" ></object>';
-    $("#evolution_IV_mockup").load( "evolution_IV_mockup/index.html" );
-    $("#evolution_IV_mockup_100").load( "evolution_IV_mockup_100x100/index.html" );
-    $("#evolution_IV_mockup_75").load( "evolution_IV_mockup_75x75/index.html" );
-    $("#evolution_V_mockup").load( "evolution_V_mockup/index-dist.html" );
-    $("#evolution_V_mockup_100").load( "evolution_V_mockup_100x100/index-dist.html" );
-    $("#evolution_V_mockup_75").load( "evolution_V_mockup_75x75/index-dist.html" );
-    $("#evolution_VI_mockup").load( "evolution_VI_mockup/index-dist.html" );
-    $("#evolution_VI_mockup_100").load( "evolution_VI_mockup_100x100/index-dist.html" );
-    $("#evolution_VI_mockup_75").load( "evolution_VI_mockup_75x75/index-dist.html" );
-    document.getElementById('bilevel_mockup').innerHTML = '<object type=text/html" width="440" height="170" data="bilevel_mockup/index.html" ></object>';
-    document.getElementById('square_mockup').innerHTML = '<object type=text/html" width="300" height="110" data="square_mockup/index.html" ></object>';
-  </script>
+  <div>
+    <svg class="widget" id="online"></svg>
+    <svg class="widget" id="offline"></svg>
+  </div>
+  <script src="lib/d3.v4.min.js"></script>
+  <script src="lib/widget-III.js"></script>
 </body>
 
 </html>
