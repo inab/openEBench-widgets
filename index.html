@@ -58,19 +58,20 @@
       return 'icons/' + icon;
     });
 
-    var width = 200;
-    var height = 200;
+    var width = 100;
+    var height = 100;
     var radius = Math.min(width, height) / 5 - 1;
-    var big_radius = radius + 15;
-    var big_big_radius = big_radius + 15;
-    var big_big_big_radius = big_big_radius + 15;
-    var big_big_big_big_radius = big_big_big_radius + 15;
+    const RADIUS_SIZE = 7;
+    var big_radius = radius + RADIUS_SIZE;
+    var big_big_radius = big_radius + RADIUS_SIZE;
+    var big_big_big_radius = big_big_radius + RADIUS_SIZE;
+    var big_big_big_big_radius = big_big_big_radius + RADIUS_SIZE;
 
     var draw_uptime_one_time = 0;
 
     var arc = d3.arc()
       .outerRadius(radius)
-      .innerRadius(radius - 15);
+      .innerRadius(radius - RADIUS_SIZE);
 
     var outArc = d3.arc()
       .innerRadius(radius)
@@ -563,7 +564,7 @@
         // .attr("y", -1250)
         .attr('width', function() {
           icon_index++;
-          return (icon_index % 2 != 0 ? 40 : 30);
+          return (icon_index % 2 != 0 ? 20 : 15);
         })
         .attr('height', '100%')
         .attr('state', function(d, i) {
@@ -581,7 +582,7 @@
         })
         .attr('y', function() {
           icon_index++;
-          return (icon_index % 2 != 0 ? -height / 2 - 5 : -height / 2);
+          return (icon_index % 2 != 0 ? -height / 2 - 2 : -height / 2 );
         })
         .on('mousemove', function(d) {
           draw_uptime_one_time++;
