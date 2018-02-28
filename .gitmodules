@@ -30,3 +30,7 @@
 	path = evolution_III_mockup
 	url = https://github.com/inab/openEBench-widgets.git
 	branch = evolution_III_mockup
+[submodule "evolution_IV_mockup"]
+	path = evolution_IV_mockup
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_IV_mockup
