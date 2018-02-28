@@ -1,7 +1,0 @@
-metric,description
-documentation,Help Tutorial Readme Publication Repository
-buildability,instructions dependencies automated type compiler warnings
-empty_copyright,copyright_statement credits consistency copyright_headers
-Licensing,project_license license_statement sourcecode_license license_headers
-Accesibility,binary_distribution sourcecode binary_distribution_freeness binaries_download_registration sourcecode_freeness
-Changeability,contributions_policy govenance issue_tracker resolve_time

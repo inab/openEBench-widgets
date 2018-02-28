@@ -1,0 +1,32 @@
+[submodule "initial_mockup"]
+	path = initial_mockup
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = initial_mockup
+[submodule "evolution_I_mockup"]
+	path = evolution_I_mockup
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_I_mockup
+[submodule "evolution_II_mockup"]
+	path = evolution_II_mockup
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_II_mockup
+[submodule "evolution_II_mockup_100x100"]
+	path = evolution_II_mockup_100x100
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_II_mockup_100x100
+[submodule "evolution_II_mockup_75x75"]
+	path = evolution_II_mockup_75x75
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_II_mockup_75x75
+[submodule "evolution_III_mockup_75x75"]
+	path = evolution_III_mockup_75x75
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_III_mockup_75x75
+[submodule "evolution_III_mockup_100x100"]
+	path = evolution_III_mockup_100x100
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_III_mockup_100x100
+[submodule "evolution_III_mockup"]
+	path = evolution_III_mockup
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_III_mockup
