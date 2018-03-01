@@ -9,48 +9,62 @@
 integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
-  <title>Test</title>
+  <title>openEBench Widgets</title>
 </head>
 
 <body>
-      <div class="ui sidebar inverted vertical menu generator_sidebar">
-        <a class="item">
+<div class="ui bottom attached segment pushable">
+      <div class="ui sidebar inverted vertical left visible menu changelog_sidebar">
+        <a id='initial_mockup' class="item">
+          Initial Mockup
+        </a>
+        <a id='evolution_I_mockup' class="item">
+          Evolution I Mockup
+        </a>
+        <a id='evolution_II_mockup' class="item">
+          Evolution II Mockup
+        </a>
+        <a id='evolution_III_mockup' class="item">
+          Evolution III Mockup
+        </a>
+        <a id='evolution_IV_mockup' class="item">
+          Evolution IV Mockup
+        </a>
+        <a id='evolution_V_mockup' class="item">
+          Evolution V Mockup
+        </a>
+        <a id='evolution_VI_mockup' class="item">
+          Evolution VI Mockup
+        </a>
+      </div>
+      <div class="ui sidebar inverted vertical left visible menu generator_sidebar">
+        <a id="type"class="item">
           Type
         </a>
-        <a class="item">
+        <a id="size" class="item">
           Size
         </a>
       </div>
-      <div class="ui sidebar inverted vertical menu changelog_sidebar">
-        <a class="item">
-          Initial Mockup
-        </a>
-        <a class="item">
-          Evolution I mockup
-        </a>
-        <a class="item">
-          Evolution II mockup
-        </a>
-        <a class="item">
-          Evolution III mockup
-        </a>
-        <a class="item">
-          Evolution IV mockup
-        </a>
-        <a class="item">
-          Evolution V mockup
-        </a>
-        <a class="item">
-          Evolution VI mockup
-        </a>
+    <div class="pusher">
+      <div class="ui basic center aligned segment">
+        <div class="ui secondary pointing compact menu widget_menu">
+          <a class="active item">Generator</a>
+          <a class="item">Changelog</a>
+        </div>
+      <div class id="widget_viewer"></div>
       </div>
-  <div class="pusher">
-      <div class="ui secondary pointing compact menu widget_menu">
-        <a class="active item">Generator</a>
-        <a class="item">Changelog</a>
-      </div>
+    </div>
   </div>
   <script>
+    $('.ui.sidebar')
+    .on('click', '.item', function() {
+      var id = $(this).prop("id")
+      path = id + "/index.html"
+      <!--console.log(path)-->
+      <!--console.log($("#widget_viewer").load(path));-->
+      <!--console.log('<object type="text/html" width="470" height="450" data="' + path + '"></object>')-->
+      $('#widget_viewer').html('<object type="text/html" width="800" height="600" data="' + path + '"></object>')
+    })
     $('.ui.widget_menu')
     .on('click', '.item', function() {
         $(this)
@@ -58,7 +72,7 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
           .siblings('.item')
           .removeClass('active');
       var page = $(this).text().toLowerCase()
-    $('.ui.'+page+ '_sidebar').sidebar('show').siblings('.sidebar').sidebar('hide')
+      $('.ui.' +  page + '_sidebar').show().siblings('.sidebar').hide()
     })
   </script>
 </body>
