@@ -15,9 +15,16 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 <body>
 <div class="ui bottom attached segment pushable">
       <div class="ui sidebar inverted vertical left visible menu generator_sidebar">
-        <a id="type"class="item">
-          Type
-        </a>
+      <div id="type" class="ui right pointing dropdown link item">
+          <i class="dropdown icon"></i>
+          Types
+          <div class="menu">
+            <div id="old_widget" class="item">Old widget</div>
+            <div id="new_widget" class="item">New widget</div>
+            <div id="new_widget_badge" class="item">New widget + badge </div>
+            <div id="badge_only" class="item">Badge only </div>
+          </div>
+        </div>
         <a id="size" class="item">
           Size
         </a>
@@ -56,9 +63,15 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     </div>
   </div>
   <script>
+      $('.ui.dropdown')
+      .dropdown({
+          on: 'hover'
+        })
     $('.ui.sidebar')
     .on('click', '.item', function() {
       var id = $(this).prop("id")
+      console.log(id)
+      if (["type"].includes(id)) return;
       path = id + "/index.html"
       <!--console.log(path)-->
       <!--console.log($("#widget_viewer").load(path));-->
