@@ -1,19 +1,66 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width" />
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
-  <script
-    src="https://code.jquery.com/jquery-3.1.1.min.js"
-    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
   <title>Test</title>
 </head>
 
 <body>
-  <h1 class="ui header">Test</h1>
+      <div class="ui sidebar inverted vertical menu generator_sidebar">
+        <a class="item">
+          Type
+        </a>
+        <a class="item">
+          Size
+        </a>
+      </div>
+      <div class="ui sidebar inverted vertical menu changelog_sidebar">
+        <a class="item">
+          Initial Mockup
+        </a>
+        <a class="item">
+          Evolution I mockup
+        </a>
+        <a class="item">
+          Evolution II mockup
+        </a>
+        <a class="item">
+          Evolution III mockup
+        </a>
+        <a class="item">
+          Evolution IV mockup
+        </a>
+        <a class="item">
+          Evolution V mockup
+        </a>
+        <a class="item">
+          Evolution VI mockup
+        </a>
+      </div>
+  <div class="pusher">
+      <div class="ui secondary pointing compact menu widget_menu">
+        <a class="active item">Generator</a>
+        <a class="item">Changelog</a>
+      </div>
+  </div>
+  <script>
+    $('.ui.widget_menu')
+    .on('click', '.item', function() {
+        $(this)
+          .addClass('active')
+          .siblings('.item')
+          .removeClass('active');
+      var page = $(this).text().toLowerCase()
+    $('.ui.'+page+ '_sidebar').sidebar('show').siblings('.sidebar').sidebar('hide')
+    })
+  </script>
 </body>
 
 </html>
