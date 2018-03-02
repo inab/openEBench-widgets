@@ -99,3 +99,34 @@ if(DEPLOYMENT === 'dist') {
     ]
   });
 }
+
+if(DEPLOYMENT === 'dist-compat') {
+  module.exports = merge(common, {
+    output: {
+      filename: 'OpEB-widgets-compat.js',
+      library: 'OpEB_widgets',
+      libraryTarget: 'window',
+      path: __dirname + '/dist'
+    },
+    module: {
+      loaders: [
+        {
+          test: /\.css$/,
+          use: [
+            { loader: 'style-loader' },
+            { loader: 'css-loader',
+              options: { minimize: true }
+            }
+          ]
+        },
+      ]
+    },
+    plugins: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          compress: { warnings: true },
+        }
+      })
+    ]
+  });
+}

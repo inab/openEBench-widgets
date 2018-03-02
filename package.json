@@ -32,6 +32,7 @@
   "scripts": {
     "dev": "WEBPACK_DEPLOYMENT='dev' yarn run webpack && WEBPACK_DEPLOYMENT='dev' yarn run webpack-dev-server --open",
     "dist": "WEBPACK_DEPLOYMENT='dist' yarn run webpack",
+    "dist-compat": "WEBPACK_DEPLOYMENT='dist-compat' yarn run webpack",
     "lint": "eslint --fix js/OpEB-widgets.js",
     "beautify": "js-beautify -r js/OpEB-widgets.js",
     "test": "echo \"Error: no test specified\" && exit 1"
