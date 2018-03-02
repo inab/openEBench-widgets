@@ -9,7 +9,11 @@
 integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui-range@1.0.1/range.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui-range@1.0.1/range.css">
+
   <title>openEBench Widgets</title>
+
 </head>
 
 <body>
@@ -18,7 +22,7 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       <div id="type" class="ui right pointing dropdown link item">
           <i class="dropdown icon"></i>
           Types
-          <div class="menu">
+          <div class="menu type_menu">
             <div id="old_widget" class="item">Old widget</div>
             <div id="new_widget" class="item">New widget</div>
             <div id="new_widget_badge" class="item">New widget + badge </div>
@@ -26,7 +30,8 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
           </div>
         </div>
         <a id="size" class="item">
-          Size
+          <div id="size_label">Size: 75</div>
+          <div class="ui range" id="size_range"></div>
         </a>
       </div>
       <div class="ui sidebar inverted vertical left visible menu evolutions_sidebar">
@@ -67,16 +72,28 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       .dropdown({
           on: 'hover'
         })
-    $('.ui.sidebar')
+    $(document).ready(function() {
+      $('#size_range').range({
+        min: 75,
+        max: 500,
+        start: 75,
+        step: 10,
+        onChange: function(value, meta){
+          if(meta.triggeredByUser) {
+            $('#size_label').html('Size: ' + value)
+          }
+          }
+      });
+    });
+    $('.ui.evolutions_sidebar')
     .on('click', '.item', function() {
       var id = $(this).prop("id")
-      console.log(id)
-      if (["type"].includes(id)) return;
       path = id + "/index.html"
-      <!--console.log(path)-->
-      <!--console.log($("#widget_viewer").load(path));-->
-      <!--console.log('<object type="text/html" width="470" height="450" data="' + path + '"></object>')-->
       $('#widget_viewer').html('<object type="text/html" width="800" height="600" data="' + path + '"></object>')
+    })
+    $('.menu.type_menu')
+    .on('click', '.item', function() {
+      var id = $(this).prop("id")
     })
     $('.ui.widget_menu')
     .on('click', '.item', function() {
