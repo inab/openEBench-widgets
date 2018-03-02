@@ -13,7 +13,6 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui-range@1.0.1/range.css">
 
   <title>openEBench Widgets</title>
-
 </head>
 
 <body>
@@ -27,6 +26,14 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
             <div id="new_widget" class="item">New widget</div>
             <div id="new_widget_badge" class="item">New widget + badge </div>
             <div id="badge_only" class="item">Badge only </div>
+          </div>
+        </div>
+      <div id="status" class="ui right pointing dropdown link item">
+          <i class="dropdown icon"></i>
+          Status
+          <div class="menu status_menu">
+            <div id="offline" class="item"><font color="red">Offline</font></div>
+            <div id="online" class="item"><font color="green">Online</font></div>
           </div>
         </div>
         <a id="size" class="item">
@@ -91,7 +98,7 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       path = id + "/index.html"
       $('#widget_viewer').html('<object type="text/html" width="800" height="600" data="' + path + '"></object>')
     })
-    $('.menu.type_menu')
+    $('.menu.type_menu, .menu.status_menu')
     .on('click', '.item', function() {
       var id = $(this).prop("id")
     })
