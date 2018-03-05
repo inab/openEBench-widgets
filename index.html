@@ -17,30 +17,6 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 
 <body>
 <div class="ui bottom attached segment pushable">
-      <div class="ui sidebar inverted vertical left visible menu generator_sidebar">
-      <div id="type" class="ui right pointing dropdown link item">
-          <i class="dropdown icon"></i>
-          Types
-          <div class="menu type_menu">
-            <div id="new_widget" class="item">widget</div>
-            <div id="new_widget_badge" class="item">widget + badge </div>
-            <div id="badge_only" class="item">Badge only </div>
-          </div>
-        </div>
-      <div id="status" class="ui right pointing dropdown link item">
-          <i class="dropdown icon"></i>
-          Status
-          <div class="menu status_menu">
-            <div id="offline" class="item"><font color="red">Offline</font></div>
-            <div id="online" class="item"><font color="green">Online</font></div>
-          </div>
-        </div>
-        <a id="size" class="item">
-          <div id="size_label">Size: 200px</div>
-          <div class="ui range" id="size_range"></div>
-        </a>
-        <button id="doApply" class="ui primary basic button">Apply</button>
-      </div>
       <div class="ui sidebar inverted vertical left visible menu evolutions_sidebar">
         <a id='initial_mockup' class="item">
           Initial Mockup
@@ -60,9 +36,33 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         <a id='evolution_V_mockup' class="item">
           Evolution V Mockup
         </a>
-        <a id='evolution_VI_mockup' class="item">
+        <a id='evolution_VI_mockup' class="active item">
           Evolution VI Mockup
         </a>
+      </div>
+      <div class="ui sidebar inverted vertical left visible menu generator_sidebar">
+      <div id="type" class="ui right pointing dropdown link item">
+          <i class="dropdown icon"></i>
+          Types
+          <div class="menu type_menu">
+            <div id="new_widget" class="active item">widget</div>
+            <div id="new_widget_badge" class="item">widget + badge </div>
+            <div id="badge_only" class="item">Badge only </div>
+          </div>
+        </div>
+      <div id="status" class="ui right pointing dropdown link item">
+          <i class="dropdown icon"></i>
+          Status
+          <div class="menu status_menu">
+            <div id="offline" class="item"><font color="red">Offline</font></div>
+            <div id="online" class="active item"><font color="green">Online</font></div>
+          </div>
+        </div>
+        <a id="size" class="item">
+          <div id="size_label">Size: 200px</div>
+          <div class="ui range" id="size_range"></div>
+        </a>
+        <button id="doApply" class="ui primary basic button">Apply</button>
       </div>
     <div class="pusher">
       <div class="ui basic center aligned segment">
@@ -70,8 +70,8 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
           <div class="four wide column"></div>
           <div class="six wide column">
             <div class="ui secondary pointing compact menu widget_menu">
-              <a class="item">Generator</a>
-              <a class="active item">Evolutions</a>
+              <a class="active item">Generator</a>
+              <a class="item">Evolutions</a>
             </div>
           </div>
           <div class="six wide column"></div>
@@ -84,7 +84,6 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
             <div class id="widget_viewer" style="margin: 20px 0px 0px 0px;"></div>
           </div>
         </div>
-      <!--<div class id="widget_box"></div>-->
       </div>
     </div>
   </div>
@@ -109,6 +108,7 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     });
     $('.ui.evolutions_sidebar')
     .on('click', '.item', function() {
+      $(this).addClass('active').siblings().removeClass('active')
       var id = $(this).prop("id")
       path = id + "/index.html"
       if (['evolution_I_mockup'].includes(id)) {
