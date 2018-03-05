@@ -45,23 +45,23 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       <div id="type" class="ui right pointing dropdown link item">
           <i class="dropdown icon"></i>
           Types
-          <div class="menu type_menu">
-            <div id="new_widget" class="active item">widget</div>
-            <div id="new_widget_badge" class="item">widget + badge </div>
-            <div id="badge_only" class="item">Badge only </div>
+          <div id="type_menu" class="menu">
+            <div id="new_demo" class="active item">widget</div>
+            <div id="new_demo_with_badge" class="item">widget + badge </div>
+            <div id="demo_badge" class="item">Badge only </div>
           </div>
         </div>
       <div id="status" class="ui right pointing dropdown link item">
           <i class="dropdown icon"></i>
           Status
-          <div class="menu status_menu">
+          <div id="status_menu" class="menu">
             <div id="offline" class="item"><font color="red">Offline</font></div>
             <div id="online" class="active item"><font color="green">Online</font></div>
           </div>
         </div>
         <a id="size" class="item">
           <div id="size_label">Size: 200px</div>
-          <div class="ui range" id="size_range"></div>
+          <div id="size_range" class="ui range"></div>
         </a>
         <div id="generator_buttons" class="ui center aligned grid">
         <button id="doReset" class="ui grey basic button">Reset</button>
@@ -86,6 +86,8 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
           </div>
           <div class="twelve wide column">
             <div class id="widget_viewer"></div>
+          </div>
+          <div class id="widget_box_url"></div>
           </div>
         </div>
       </div>

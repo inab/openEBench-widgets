@@ -2,16 +2,19 @@ $('.ui.dropdown')
   .dropdown({
     on: 'hover'
   })
+const WIDGET_SIZE_DEFAULT = 200
+var widget_size = WIDGET_SIZE_DEFAULT
 $(document).ready(function() {
   $('#doApply').trigger('click')
   $('#size_range').range({
     min: 75,
     max: 500,
-    start: 200,
+    start: WIDGET_SIZE_DEFAULT,
     step: 10,
     onChange: function(value, meta){
       if(meta.triggeredByUser) {
         $('#size_label').html('Size: ' + value + ' px')
+        widget_size = value
       }
     }
   });
@@ -37,7 +40,7 @@ $('.ui.evolutions_sidebar')
 
     $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  id.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box[id] + '</div>')
   })
-$('.menu.type_menu, .menu.status_menu')
+$('.menu#type_menu, .menu#status_menu')
   .on('click', '.item', function() {
     var id = $(this).prop("id")
   })
@@ -54,19 +57,33 @@ $('.ui.widget_menu')
       $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VI_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box['evolution_VI_mockup'] + '</div>')
     } else {
       $('#doApply').trigger('click')
-      $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">embedded url</h4></div>')
     }
   });
 $('#doApply')
   .on('click',function() {
+    var widget_type = $('#type_menu > .active ').prop('id')
+    var widget_status = $('#status_menu > .active ').prop('id')
     var area = $('#widget_viewer');
     area.empty();
-    // <div class="opeb" data-id="json/metrics-online.json" data-widget-type="new_demo_with_badge" data-widget-benchmarking-type="Technical" style="display: inline; width: 200px; height: 200px;"></div>
+    var widget_url = '<div class="opeb"></div>'
+    //var widget_url = '<div class="opeb" data-id="json/metrics-online.json" data-widget-type="new_demo_with_badge"></div>';
     var widget = document.createElement('div');
-    widget.setAttribute("data-id","evolution_VI_mockup/json/metrics-online.json");
-    widget.setAttribute("data-widget-type","new_demo_with_badge");
+    widget.setAttribute("data-id","evolution_VI_mockup/json/metrics-" + widget_status + ".json");
+    widget.setAttribute("data-widget-type", widget_type);
+    widget.setAttribute("data-widget-size", widget_size);
     widget.setAttribute("class","opeb");
     area.append(widget);
+    var urlArea = $('#widget_box_url');
+    urlArea.empty();
+    var htmlwidget = area.html();
+    var htmlcontainer = document.createElement('div');
+    htmlcontainer.setAttribute('class','ui compact segment');
+    var headercontainer = document.createElement('h4');
+    headercontainer.setAttribute('class','ui header');
+    headercontainer.appendChild(document.createTextNode('Embedded Url:'));
+    htmlcontainer.appendChild(headercontainer);
+    htmlcontainer.appendChild(document.createTextNode(htmlwidget));
+    urlArea.append(htmlcontainer);
     OpEB_widgets.OpEB.apply();
   });
 
