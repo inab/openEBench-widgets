@@ -3,6 +3,7 @@ $('.ui.dropdown')
     on: 'hover'
   })
 $(document).ready(function() {
+  $('#doApply').trigger('click')
   $('#size_range').range({
     min: 75,
     max: 500,
