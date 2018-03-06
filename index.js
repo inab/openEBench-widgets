@@ -19,7 +19,7 @@ $(document).ready(function() {
     }
   });
 });
-$('.ui.evolutions_sidebar')
+$('.ui#evolutions_sidebar')
   .on('click', '.item', function() {
     $(this).addClass('active').siblings().removeClass('active')
     var id = $(this).prop("id")
@@ -44,17 +44,18 @@ $('.menu#type_menu, .menu#status_menu')
   .on('click', '.item', function() {
     var id = $(this).prop("id")
   })
-$('.ui.widget_menu')
+$('.ui#widget_menu')
   .on('click', '.item', function() {
     $(this)
       .addClass('active')
       .siblings('.item')
       .removeClass('active');
     var page = $(this).text().toLowerCase()
-    $('.ui.' +  page + '_sidebar').show().siblings('.sidebar').hide()
+    $('.ui#' +  page + '_sidebar').show().siblings('.sidebar').hide()
     if (page == 'evolutions') {
       $('.item#evolution_VI_mockup').trigger('click')
       $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VI_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box['evolution_VI_mockup'] + '</div>')
+      $('#widget_box_url').empty()
     } else {
       $('#doApply').trigger('click')
     }
