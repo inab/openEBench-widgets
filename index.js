@@ -44,15 +44,12 @@ function doApply() {
   var area = $('#widget_viewer');
   area.empty();
   $('#widget_box').hide()
-  var widget_url = '<div class="opeb"></div>'
-  //var widget_url = '<div class="opeb" data-id="json/metrics-online.json" data-widget-type="new_demo_with_badge"></div>';
   var widget = document.createElement('div');
   widget.setAttribute("data-id","evolution_VI_mockup/json/metrics-" + widget_status + ".json");
   widget.setAttribute("data-widget-type", widget_type);
   widget.setAttribute("data-widget-size", widget_size);
   widget.setAttribute("class","opeb");
   area.append(widget).hide();
-  OpEB_widgets.OpEB.apply();
   var urlArea = $('#widget_box_url');
   urlArea.hide()
   urlArea.empty();
@@ -65,8 +62,9 @@ function doApply() {
   htmlcontainer.appendChild(headercontainer);
   htmlcontainer.appendChild(document.createTextNode(htmlwidget));
   urlArea.append(htmlcontainer);
-  area.show()
   urlArea.show()
+  OpEB_widgets.OpEB.apply();
+  area.show()
 };
 
 $('#doReset').on('click', function() {
