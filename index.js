@@ -18,8 +18,8 @@ $(document).ready(function() {
       }
     }
   });
-  $('#widget_menu > .active').trigger('click')
 });
+
 $('.ui#evolutions_sidebar')
   .on('click', '.item', function() {
     $(this).addClass('active').siblings().removeClass('active')
