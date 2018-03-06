@@ -11,7 +11,7 @@ opeb {
 }
 
 .tooltip {
-	position: absolute;
+	position: fixed;
 	display: none;
 	width: auto;
 	height: auto;
@@ -22,6 +22,7 @@ opeb {
 	box-shadow: -3px 3px 15px #888888;
 	color: black;
 	font: 12px sans-serif;
+	z-index: 9999;
 }
 
 #uptime path {

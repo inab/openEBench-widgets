@@ -173,7 +173,7 @@ var NewDemoDrawer = {
       .style('fill', 'none')
       .style('stroke', 'black')
       .style('stroke-opacity', 0.5)
-      .style('display', 'inline-block');
+      .style('display', 'block');
 
 
     // First, getting the max depth
@@ -232,9 +232,10 @@ var NewDemoDrawer = {
     };
 
     var tooltipFuncAux = function(d) {
-      tooltip_div.style('left', d3_selection.event.pageX + 10 + 'px');
-      tooltip_div.style('top', d3_selection.event.pageY - 25 + 'px');
-      tooltip_div.style('display', 'inline-block');
+	var ev = d3_selection.event;
+      tooltip_div.style('left', ev.clientX+10+'px'); //'10px');
+      tooltip_div.style('top', ev.clientY-25+'px'); //'-25px');
+      tooltip_div.style('display', 'block');
 
 
       var description_text = '';
@@ -264,7 +265,7 @@ var NewDemoDrawer = {
     var tooltipHideFunc = function() {
       if (clicked) return;
       tooltip_div.style('display', 'none');
-      tooltip_div.html('');
+      tooltip_div.empty();
       d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
       d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
     };
@@ -324,12 +325,12 @@ var NewDemoDrawer = {
         clicked = true;
         d3_selection.select(widgetElem).select('#close_icon').append('img')
           .attr('src', close_button)
-          .attr('width', '15')
-          .attr('height', '15')
+          .attr('width', '15px')
+          .attr('height', '15px')
           .style('cursor', 'pointer')
           .on('click', function() {
             tooltip_div.style('display', 'none');
-            tooltip_div.html('');
+            tooltip_div.empty();
             d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
             clicked = false;
           });
@@ -467,9 +468,10 @@ var NewDemoDrawer = {
       }
 
       if (!clicked) {
-        tooltip_div.style('left', d3_selection.event.pageX + 10 + 'px');
-        tooltip_div.style('top', d3_selection.event.pageY - 25 + 'px');
-        tooltip_div.style('display', 'inline-block');
+	var ev = d3_selection.event;
+        tooltip_div.style('left', ev.clientX+10+'px'); //'10px');
+        tooltip_div.style('top', ev.clientY-25+'px'); //'-25px');
+        tooltip_div.style('display', 'block');
       }
     };
 
@@ -477,7 +479,7 @@ var NewDemoDrawer = {
       if (clicked) return;
       draw_uptime_one_time = true;
       tooltip_div.style('display', 'none');
-      tooltip_div.html('');
+      tooltip_div.empty();
     };
 
     var state = widgetData.enabled ? 'online' : 'offline';
@@ -506,12 +508,12 @@ var NewDemoDrawer = {
 
         d3_selection.select(widgetElem).select('#close_icon').append('img')
           .attr('src', close_button)
-          .attr('width', '15')
-          .attr('height', '15')
+          .attr('width', '15px')
+          .attr('height', '15px')
           .style('cursor', 'pointer')
           .on('click', function() {
             tooltip_div.style('display', 'none');
-            tooltip_div.html('');
+            tooltip_div.empty();
             draw_uptime_one_time = true;
             clicked = false;
           });
