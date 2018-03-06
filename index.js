@@ -87,6 +87,36 @@ $('#doApply')
     OpEB_widgets.OpEB.apply();
   });
 
+$('#doReset').on('click', function() {
+    var widget_type = 'new_demo'
+    var widget_status = 'online'
+    widget_size = WIDGET_SIZE_DEFAULT
+    $('#size_label').html('Size: ' + widget_size + ' px')
+    $('#size_range').range({
+      min: 75,
+      max: 500,
+      start: WIDGET_SIZE_DEFAULT,
+      step: 10,
+      onChange: function(value, meta){
+        if(meta.triggeredByUser) {
+          $('#size_label').html('Size: ' + value + ' px')
+          widget_size = value
+        }
+      }
+    });
+    $('#new_demo').addClass('active').siblings().removeClass('active')
+    $('#online').addClass('active').siblings().removeClass('active')
+    var area = $('#widget_viewer');
+    area.empty();
+    var widget = document.createElement('div');
+    widget.setAttribute("data-id","evolution_VI_mockup/json/metrics-" + widget_status + ".json");
+    widget.setAttribute("data-widget-type", widget_type);
+    widget.setAttribute("data-widget-size", widget_size);
+    widget.setAttribute("class","opeb");
+    area.append(widget);
+    OpEB_widgets.OpEB.apply();
+});
+
 var box = {}
 box['initial_mockup'] = `
       <ul class="ui list">
