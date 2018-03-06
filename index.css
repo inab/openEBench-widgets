@@ -3,8 +3,9 @@
 }
 
 #generator_buttons {
-  display: inline;
-  margin-left: 35px;
+  display: inline-block;
+  margin-left: 75px;
+  margin-bottom: 1px;
 }
 
 #widget_display {

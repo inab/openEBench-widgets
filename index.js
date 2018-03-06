@@ -5,19 +5,7 @@ $('.ui.dropdown')
 const WIDGET_SIZE_DEFAULT = 200
 var widget_size = WIDGET_SIZE_DEFAULT
 $(document).ready(function() {
-  $('#doApply').trigger('click')
-  $('#size_range').range({
-    min: 75,
-    max: 500,
-    start: WIDGET_SIZE_DEFAULT,
-    step: 10,
-    onChange: function(value, meta){
-      if(meta.triggeredByUser) {
-        $('#size_label').html('Size: ' + value + ' px')
-        widget_size = value
-      }
-    }
-  });
+  init_range();
 });
 
 $('.ui#evolutions_sidebar')
@@ -32,10 +20,7 @@ $('.ui#evolutions_sidebar')
 
     $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  id.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box[id] + '</div>')
   })
-$('.menu#type_menu, .menu#status_menu')
-  .on('click', '.item', function() {
-    var id = $(this).prop("id")
-  })
+
 $('.ui#widget_menu')
   .on('click', '.item', function() {
     $(this)
@@ -46,45 +31,57 @@ $('.ui#widget_menu')
     $('.ui#' +  page + '_sidebar').show().siblings('.my_sidebars').hide()
     if (page == 'evolutions') {
       $('.item#evolution_VI_mockup').trigger('click')
-      $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VI_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box['evolution_VI_mockup'] + '</div>')
+      $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VI_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box['evolution_VI_mockup'] + '</div>').show()
       $('#widget_box_url').empty()
     } else {
-      $('#doApply').trigger('click')
+      doApply()
     }
   });
-$('#doApply')
-  .on('click',function() {
-    var widget_type = $('#type_menu > .active ').prop('id')
-    var widget_status = $('#status_menu > .active ').prop('id')
-    var area = $('#widget_viewer');
-    area.empty();
-    var widget_url = '<div class="opeb"></div>'
-    //var widget_url = '<div class="opeb" data-id="json/metrics-online.json" data-widget-type="new_demo_with_badge"></div>';
-    var widget = document.createElement('div');
-    widget.setAttribute("data-id","evolution_VI_mockup/json/metrics-" + widget_status + ".json");
-    widget.setAttribute("data-widget-type", widget_type);
-    widget.setAttribute("data-widget-size", widget_size);
-    widget.setAttribute("class","opeb");
-    area.append(widget);
-    var urlArea = $('#widget_box_url');
-    urlArea.empty();
-    var htmlwidget = area.html();
-    var htmlcontainer = document.createElement('div');
-    htmlcontainer.setAttribute('class','ui compact segment');
-    var headercontainer = document.createElement('h4');
-    headercontainer.setAttribute('class','ui header');
-    headercontainer.appendChild(document.createTextNode('Embedded Url:'));
-    htmlcontainer.appendChild(headercontainer);
-    htmlcontainer.appendChild(document.createTextNode(htmlwidget));
-    urlArea.append(htmlcontainer);
-    OpEB_widgets.OpEB.apply();
-  });
+
+function doApply() {
+  var widget_type = $('#type_menu > .active ').prop('id')
+  var widget_status = $('#status_menu > .active ').prop('id')
+  var area = $('#widget_viewer');
+  area.empty();
+  $('#widget_box').hide()
+  var widget_url = '<div class="opeb"></div>'
+  //var widget_url = '<div class="opeb" data-id="json/metrics-online.json" data-widget-type="new_demo_with_badge"></div>';
+  var widget = document.createElement('div');
+  widget.setAttribute("data-id","evolution_VI_mockup/json/metrics-" + widget_status + ".json");
+  widget.setAttribute("data-widget-type", widget_type);
+  widget.setAttribute("data-widget-size", widget_size);
+  widget.setAttribute("class","opeb");
+  area.append(widget).hide();
+  OpEB_widgets.OpEB.apply();
+  var urlArea = $('#widget_box_url');
+  urlArea.hide()
+  urlArea.empty();
+  var htmlwidget = area.html();
+  var htmlcontainer = document.createElement('div');
+  htmlcontainer.setAttribute('class','ui compact segment');
+  var headercontainer = document.createElement('h4');
+  headercontainer.setAttribute('class','ui header');
+  headercontainer.appendChild(document.createTextNode('Embedded Url:'));
+  htmlcontainer.appendChild(headercontainer);
+  htmlcontainer.appendChild(document.createTextNode(htmlwidget));
+  urlArea.append(htmlcontainer);
+  area.show()
+  urlArea.show()
+};
 
 $('#doReset').on('click', function() {
-    var widget_type = 'new_demo'
-    var widget_status = 'online'
-    widget_size = WIDGET_SIZE_DEFAULT
-    $('#size_label').html('Size: ' + widget_size + ' px')
+    init_range()
+    $('#new_demo').addClass('active').siblings().removeClass('active')
+    $('#online').addClass('active').siblings().removeClass('active')
+    doApply();
+});
+
+$('.menu#type_menu, .menu#status_menu')
+  .on('click', '.item', function() {
+  doApply()
+ })
+
+function init_range() {
     $('#size_range').range({
       min: 75,
       max: 500,
@@ -93,23 +90,12 @@ $('#doReset').on('click', function() {
       onChange: function(value, meta){
         if(meta.triggeredByUser) {
           $('#size_label').html('Size: ' + value + ' px')
-          widget_size = value
+          widget_size = value;
+          doApply();
         }
       }
     });
-    $('#new_demo').addClass('active').siblings().removeClass('active')
-    $('#online').addClass('active').siblings().removeClass('active')
-    var area = $('#widget_viewer');
-    area.empty();
-    var widget = document.createElement('div');
-    widget.setAttribute("data-id","evolution_VI_mockup/json/metrics-" + widget_status + ".json");
-    widget.setAttribute("data-widget-type", widget_type);
-    widget.setAttribute("data-widget-size", widget_size);
-    widget.setAttribute("class","opeb");
-    area.append(widget);
-    OpEB_widgets.OpEB.apply();
-});
-
+}
 var box = {}
 box['initial_mockup'] = `
       <ul class="ui list">
