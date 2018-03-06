@@ -1,12 +1,24 @@
 #size {
-  margin-bottom:10px;
+  padding-bottom: 0px;
 }
 
 #generator_buttons {
   display: inline;
-  margin: 50px;
+  margin-left: 35px;
 }
 
 #widget_display {
   margin-top: 35px;
+}
+
+#generator_sidebar {
+  padding-bottom: 10px;
+}
+
+#widget_menu {
+  margin-left: 7px;
+}
+
+body {
+  margin-left: 10px;
 }

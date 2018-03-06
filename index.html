@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
     <script
-      src="https://code.jquery.com/jquery-3.1.1.min.js"
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
 integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
@@ -17,7 +17,14 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 </head>
 
 <body>
-      <div id="evolutions_sidebar" class="ui sidebar inverted vertical left visible menu">
+  <div class="ui grid">
+    <div class="three wide column">
+      <div id="widget_menu" class="ui secondary pointing compact menu">
+        <a class="active item">Generator</a>
+        <a class="item">Evolutions</a>
+      </div>
+
+      <div id="evolutions_sidebar" class="ui my_sidebars inverted vertical left menu">
         <a id='initial_mockup' class="item">
           Initial Mockup
         </a>
@@ -40,8 +47,8 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
           Evolution VI Mockup
         </a>
       </div>
-      <div id="generator_sidebar" class="ui sidebar inverted vertical left visible menu">
-      <div id="type" class="ui right pointing dropdown link item">
+      <div id="generator_sidebar" class="ui my_sidebars inverted vertical left visible menu">
+        <div id="type" class="ui dropdown link item">
           <i class="dropdown icon"></i>
           Types
           <div id="type_menu" class="menu">
@@ -50,10 +57,10 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
             <div id="demo_badge" class="item">Badge only </div>
           </div>
         </div>
-      <div id="status" class="ui right pointing dropdown link item">
+        <div id="status" class="ui left poiting dropdown link item">
           <i class="dropdown icon"></i>
           Status
-          <div id="status_menu" class="menu">
+          <div id="status_menu" class="compact menu">
             <div id="offline" class="item"><font color="red">Offline</font></div>
             <div id="online" class="active item"><font color="green">Online</font></div>
           </div>
@@ -62,32 +69,23 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
           <div id="size_label">Size: 200px</div>
           <div id="size_range" class="ui range"></div>
         </a>
+        <div class="ui divider"></div>
         <div id="generator_buttons" class="ui center aligned grid">
-        <button id="doReset" class="ui grey basic button">Reset</button>
-        <button id="doApply" class="ui primary basic button">Apply</button>
+          <button id="doReset" class="ui grey basic button">Reset</button>
+          <button id="doApply" class="ui primary basic button">Apply</button>
         </div>
       </div>
-    <div class="pusher">
+    </div>
+    <div class="thirteen wide column">
       <div class="ui basic center aligned segment">
-        <div class="ui grid">
-          <div class="four wide column"></div>
-          <div class="six wide column">
-            <div id="widget_menu" class="ui secondary pointing compact menu">
-              <a class="active item">Generator</a>
-              <a class="item">Evolutions</a>
-            </div>
-          </div>
-          <div class="six wide column"></div>
-        </div>
         <div id="widget_display" class="ui left aligned grid">
           <div class="four wide column">
-              <div class id="widget_box"></div>
+            <div class id="widget_box"></div>
           </div>
           <div class="twelve wide column">
             <div class id="widget_viewer"></div>
           </div>
           <div class id="widget_box_url"></div>
-          </div>
         </div>
       </div>
     </div>
