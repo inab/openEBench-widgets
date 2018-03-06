@@ -25,18 +25,9 @@ $('.ui#evolutions_sidebar')
     $(this).addClass('active').siblings().removeClass('active')
     var id = $(this).prop("id")
     path = id + "/index.html"
-    if (['evolution_I_mockup'].includes(id)) {
-      height = 330;
-      width = 700;
-    }
-    else if (['initial_mockup'].includes(id)) {
-      height = 430;
-      width = 450;
-    }
-    else if (['evolution_II_mockup', 'evolution_III_mockup', 'evolution_IV_mockup', 'evolution_V_mockup', 'evolution_VI_mockup'].includes(id)) {
-      height = 320;
-      width = 570;
-    }
+    height = 430;
+    width = 790;
+
     $('#widget_viewer').html('<object type="text/html" width="' + width +'" height="'+ height + '" data="' + path + '"></object>')
 
     $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  id.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box[id] + '</div>')
