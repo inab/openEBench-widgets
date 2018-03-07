@@ -40,6 +40,11 @@ $('.ui#widget_menu')
 
 function doApply() {
   var widget_type = $('#type_menu > .active ').prop('id')
+  if (widget_type == 'demo_badge') {
+    $('#status, #size, #size_range').addClass('disabled')
+  } else {
+    $('#status, #size, #size_range').removeClass('disabled')
+  }
   var widget_status = $('#status_menu > .active ').prop('id')
   var area = $('#widget_viewer');
   area.empty();
