@@ -259,7 +259,8 @@ var DemoWithBadgeDrawer = {
         var description = tick.name;
         var isTicked = !!tick.ticked;
         var icon = (isTicked) ? online_tick : offline_tick;
-        description_text += '<br><img src="' + icon + '" height="15" width="15"> ' + description;
+        var full_description = '<br><img src="' + icon + '" height="15" width="15"> ' + description;
+        description_text = (isTicked) ? full_description + description_text : description_text + full_description;
       }
       tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
     };
@@ -304,7 +305,6 @@ var DemoWithBadgeDrawer = {
         }
         return d.data.color;
       })
-      .style('cursor', 'pointer')
       .on('mousemove', tooltipFunc)
       .on('click', function(d) {
         if (d.data.empty) return;
@@ -498,7 +498,6 @@ var DemoWithBadgeDrawer = {
       })
       .attr('x', -levelSize * xy_pos)
       .attr('y', -levelSize * xy_pos)
-      .style('cursor', 'pointer')
       .on('mousemove', tooltipUptimeFunc)
       .on('click', function(d) {
 
