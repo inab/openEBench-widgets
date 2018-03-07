@@ -61,10 +61,6 @@ function doApply() {
   var htmlwidget = area.html();
   var htmlcontainer = document.createElement('div');
   htmlcontainer.setAttribute('class','ui compact segment');
-  var headercontainer = document.createElement('h4');
-  headercontainer.setAttribute('class','ui header');
-  headercontainer.appendChild(document.createTextNode('Embedded Url:'));
-  htmlcontainer.appendChild(headercontainer);
   htmlcontainer.appendChild(document.createTextNode(htmlwidget));
   urlArea.append(htmlcontainer);
   urlArea.show()
