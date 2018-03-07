@@ -529,7 +529,7 @@ var DemoWithBadgeDrawer = {
         .attr('width', DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH)
         .attr('height', 20)
         .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-avaible-green.svg?link=https://dev-openebench.bsc.es/html/')
-        .attr('x', -(width - ((width - DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH)/2))/2)
+        .attr('x', -(width - (width - DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH))/2)
         .attr('y', height/2 + 5)
         .style('cursor', 'pointer')
         .on('click', function() {
