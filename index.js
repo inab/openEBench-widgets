@@ -230,5 +230,6 @@ box['evolution_VI_mockup'] = `
           <li>Color gradient according to the number of submetrics</li>
         </ul>
         </ul>
+        <li>Show green ticks first in tooltips</li>
       </ul>
       `;
