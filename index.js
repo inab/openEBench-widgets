@@ -32,7 +32,7 @@ $('.ui#widget_menu')
     if (page == 'evolutions') {
       $('.item#evolution_VI_mockup').trigger('click')
       $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VI_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box['evolution_VI_mockup'] + '</div>').show()
-      $('#widget_box_url').empty()
+      $('#widget_grid_url').hide()
     } else {
       doApply()
     }
@@ -66,6 +66,7 @@ function doApply() {
   urlArea.show()
   OpEB_widgets.OpEB.apply();
   area.show()
+  $('#widget_grid_url').show()
 };
 
 $('#doReset').on('click', function() {
