@@ -41,16 +41,32 @@ $('.ui#widget_menu')
 function doApply() {
   var widget_type = $('#type_menu > .active ').prop('id')
   if (widget_type == 'demo_badge') {
-    $('#status, #size, #size_range').addClass('disabled')
+    $('#tools, #size, #size_range').addClass('disabled')
   } else {
-    $('#status, #size, #size_range').removeClass('disabled')
+    $('#tools, #size, #size_range').removeClass('disabled')
   }
-  var widget_status = $('#status_menu > .active ').prop('id')
+  var widget_tool = $('#tools_menu > .active ').prop('id')
+  tool_url = ""
+
+  switch(widget_tool) {
+    case 'pmut':
+      tool_url = "https://openebench.bsc.es/monitor/metrics/bio.tools:pmut:2017/cmd/mmb.irbbarcelona.org"
+      break;
+    case 'trimal':
+      tool_url = "https://openebench.bsc.es/monitor/metrics/bio.tools:trimAl:1.4/cmd/trimal.cgenomics.org"
+      break;
+    case 'rxnorm':
+      tool_url = "https://openebench.bsc.es/monitor/metrics/bio.tools:rxnorm_api:1/soap/rxnav.nlm.nih.gov"
+      break;
+    default:
+      "no-tool"
+  }
+
   var area = $('#widget_viewer');
   area.empty();
   $('#widget_box').hide()
   var widget = document.createElement('div');
-  widget.setAttribute("data-id","https://openebench.bsc.es/monitor/metrics/bio.tools:pmut:2017/cmd/mmb.irbbarcelona.org");
+  widget.setAttribute("data-id", tool_url);
   widget.setAttribute("data-widget-type", widget_type);
   widget.setAttribute("data-widget-size", widget_size);
   widget.setAttribute("class","opeb");
@@ -76,7 +92,7 @@ $('#doReset').on('click', function() {
     doApply();
 });
 
-$('.menu#type_menu, .menu#status_menu')
+$('.menu#type_menu, .menu#tools_menu')
   .on('click', '.item', function() {
   doApply()
  })
