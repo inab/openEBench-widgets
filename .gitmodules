@@ -26,3 +26,7 @@
 	path = evolution_VI_mockup
 	url = https://github.com/inab/openEBench-widgets.git
 	branch = evolution_VI_mockup
+[submodule "evolution_VII_mockup"]
+	path = evolution_VII_mockup
+	url = https://github.com/inab/openEBench-widgets.git
+	branch = evolution_VII_mockup
