@@ -253,5 +253,6 @@ box['evolution_VI_mockup'] = `
 box['evolution_VII_mockup'] = `
       <ul class="ui list">
         <li>Use real JSON url data</li>
+        <li>Show extern radius with big sizes</li>
       </ul>
       `;
