@@ -30,8 +30,8 @@ $('.ui#widget_menu')
     var page = $(this).text().toLowerCase()
     $('.ui#' +  page + '_sidebar').show().siblings('.my_sidebars').hide()
     if (page == 'evolutions') {
-      $('.item#evolution_VI_mockup').trigger('click')
-      $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VI_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box['evolution_VI_mockup'] + '</div>').show()
+      $('.item#evolution_VII_mockup').trigger('click')
+      $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VII_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box['evolution_VII_mockup'] + '</div>').show()
       $('#widget_grid_url').hide()
     } else {
       doApply()
@@ -232,5 +232,10 @@ box['evolution_VI_mockup'] = `
         </ul>
         </ul>
         <li>Show green ticks first in tooltips</li>
+      </ul>
+      `;
+box['evolution_VII_mockup'] = `
+      <ul class="ui list">
+        <li>Use real JSON url data</li>
       </ul>
       `;
