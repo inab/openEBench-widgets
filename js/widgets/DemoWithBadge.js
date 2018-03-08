@@ -340,8 +340,8 @@ var DemoWithBadgeDrawer = {
       .innerRadius(function() {
         return levelSize+1;
       })
-      .outerRadius(function(d) {
-        return d.y1;
+      .outerRadius(function() {
+        return ext_radius - 1;
       });
 
 
