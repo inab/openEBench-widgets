@@ -16,44 +16,44 @@ import close_button from '../../icons/close-button.png';
 
 // https://stackoverflow.com/a/27709336
 function colorStepGradiant (start_color, end_color, percent) {
-   // strip the leading # if it's there
-   start_color = start_color.replace(/^\s*#|\s*$/g, '');
-   end_color = end_color.replace(/^\s*#|\s*$/g, '');
+  // strip the leading # if it's there
+  start_color = start_color.replace(/^\s*#|\s*$/g, '');
+  end_color = end_color.replace(/^\s*#|\s*$/g, '');
 
-   // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-   if(start_color.length == 3){
-     start_color = start_color.replace(/(.)/g, '$1$1');
-   }
+  // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+  if(start_color.length == 3){
+    start_color = start_color.replace(/(.)/g, '$1$1');
+  }
 
-   if(end_color.length == 3){
-     end_color = end_color.replace(/(.)/g, '$1$1');
-   }
+  if(end_color.length == 3){
+    end_color = end_color.replace(/(.)/g, '$1$1');
+  }
 
-   // get colors
-   var start_red = parseInt(start_color.substr(0, 2), 16),
-       start_green = parseInt(start_color.substr(2, 2), 16),
-       start_blue = parseInt(start_color.substr(4, 2), 16);
+  // get colors
+  var start_red = parseInt(start_color.substr(0, 2), 16),
+    start_green = parseInt(start_color.substr(2, 2), 16),
+    start_blue = parseInt(start_color.substr(4, 2), 16);
 
-   var end_red = parseInt(end_color.substr(0, 2), 16),
-       end_green = parseInt(end_color.substr(2, 2), 16),
-       end_blue = parseInt(end_color.substr(4, 2), 16);
+  var end_red = parseInt(end_color.substr(0, 2), 16),
+    end_green = parseInt(end_color.substr(2, 2), 16),
+    end_blue = parseInt(end_color.substr(4, 2), 16);
 
-   // calculate new color
-   var diff_red = end_red - start_red;
-   var diff_green = end_green - start_green;
-   var diff_blue = end_blue - start_blue;
+  // calculate new color
+  var diff_red = end_red - start_red;
+  var diff_green = end_green - start_green;
+  var diff_blue = end_blue - start_blue;
 
-   diff_red = ( (diff_red * percent) + start_red ).toString(16).split('.')[0];
-   diff_green = ( (diff_green * percent) + start_green ).toString(16).split('.')[0];
-   diff_blue = ( (diff_blue * percent) + start_blue ).toString(16).split('.')[0];
+  diff_red = ( (diff_red * percent) + start_red ).toString(16).split('.')[0];
+  diff_green = ( (diff_green * percent) + start_green ).toString(16).split('.')[0];
+  diff_blue = ( (diff_blue * percent) + start_blue ).toString(16).split('.')[0];
 
-   // ensure 2 digits by color
-   if( diff_red.length == 1 ) diff_red = '0' + diff_red
-   if( diff_green.length == 1 ) diff_green = '0' + diff_green
-   if( diff_blue.length == 1 ) diff_blue = '0' + diff_blue
+  // ensure 2 digits by color
+  if( diff_red.length == 1 ) diff_red = '0' + diff_red
+  if( diff_green.length == 1 ) diff_green = '0' + diff_green
+  if( diff_blue.length == 1 ) diff_blue = '0' + diff_blue
 
-   return '#' + diff_red + diff_green + diff_blue;
- };
+  return '#' + diff_red + diff_green + diff_blue;
+};
 // All the widget drawing functions take as input an element and the
 // fetched data
 var NewDemoDrawer = {
@@ -246,7 +246,7 @@ var NewDemoDrawer = {
     widgetData = NewDemoDrawer.parseJson(widgetData)
 
     for (let metric of widgetData.metrics) {
-        delete metric.submetrics
+      delete metric.submetrics
     }
 
     var widgetRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -338,8 +338,8 @@ var NewDemoDrawer = {
       .innerRadius(function() {
         return levelSize+1;
       })
-      .outerRadius(function(d) {
-        return d.y1;
+      .outerRadius(function() {
+        return ext_radius - 1;
       });
 
 
@@ -357,18 +357,18 @@ var NewDemoDrawer = {
         if (!d.parent.data.name || d.parent.data.name != 'widget') {
           d3_selection.select(this).style('opacity', 1);
         }
-          if (one_green_tick) {
-            d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
-            d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
-            d3_selection.select(this).style('opacity', 1);
-            d3_selection.select(this).selectAll('path').style('fill', 'black');
-          }
-            tooltipFuncAux(d);
+        if (one_green_tick) {
+          d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
+          d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
+          d3_selection.select(this).style('opacity', 1);
+          d3_selection.select(this).selectAll('path').style('fill', 'black');
+        }
+        tooltipFuncAux(d);
       }
     };
 
     var tooltipFuncAux = function(d) {
-	var ev = d3_selection.event;
+      var ev = d3_selection.event;
       tooltip_div.style('left', ev.clientX+10+'px'); //'10px');
       tooltip_div.style('top', ev.clientY-25+'px'); //'-25px');
       tooltip_div.style('display', 'block');
@@ -613,7 +613,7 @@ var NewDemoDrawer = {
       }
 
       if (!clicked) {
-	var ev = d3_selection.event;
+        var ev = d3_selection.event;
         tooltip_div.style('left', ev.clientX+10+'px'); //'10px');
         tooltip_div.style('top', ev.clientY-25+'px'); //'-25px');
         tooltip_div.style('display', 'block');

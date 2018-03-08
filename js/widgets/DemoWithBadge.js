@@ -390,14 +390,22 @@ var DemoWithBadgeDrawer = {
           }
         }
       }
+
+      var green_ticks_descriptions = ""
+      var red_ticks_descriptions = ""
       for (var iTick = 0, nTick = data.ticks.length; iTick < nTick; iTick++) {
         var tick = data.ticks[iTick];
         var description = tick.name;
         var isTicked = !!tick.ticked;
         var icon = (isTicked) ? online_tick : offline_tick;
         var full_description = '<br><img src="' + icon + '" height="15" width="15"> ' + description;
-        description_text = (isTicked) ? full_description + description_text : description_text + full_description;
+        if (isTicked) {
+          green_ticks_descriptions += full_description
+        } else {
+          red_ticks_descriptions += full_description
+        }
       }
+      description_text = green_ticks_descriptions + red_ticks_descriptions
       tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
     };
 
