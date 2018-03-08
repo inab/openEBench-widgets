@@ -50,7 +50,7 @@ function doApply() {
   area.empty();
   $('#widget_box').hide()
   var widget = document.createElement('div');
-  widget.setAttribute("data-id","evolution_VI_mockup/json/metrics-" + widget_status + ".json");
+  widget.setAttribute("data-id","https://openebench.bsc.es/monitor/metrics/bio.tools:pmut:2017/cmd/mmb.irbbarcelona.org");
   widget.setAttribute("data-widget-type", widget_type);
   widget.setAttribute("data-widget-size", widget_size);
   widget.setAttribute("class","opeb");
