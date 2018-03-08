@@ -107,8 +107,144 @@ var NewDemoDrawer = {
     return statsNodeSet;
   },
 
+  parseJson: function(widgetData) {
+    console.log(widgetData)
+    var new_widgetData = {}
+    new_widgetData['metrics'] = []
+
+    // License
+    if (widgetData.project.license) {
+      //console.log(widgetData.project.license)
+      var metric = {}
+      metric['metric'] = 'License'
+      metric['color'] = '#ff895d'
+      metric['ticks'] = []
+
+      for (let key in widgetData.project.license) {
+        var tick = {}
+        tick['name'] = key.replace('_', ' ')
+        tick['ticked'] = widgetData.project.license[key]
+        metric['ticks'].push(tick)
+      }
+
+    } else {
+      var metric = {}
+      metric['metric'] = 'License'
+      metric['color'] = '#ff895d'
+      metric['ticks'] = []
+      var tick = {}
+      var tick = {}
+      tick['name'] = 'osi'
+      tick['ticked'] = false
+      metric['ticks'].push(tick)
+      var another_tick = {}
+      another_tick['name'] = 'open source'
+      another_tick['ticked'] = false
+      metric['ticks'].push(another_tick)
+    }
+    new_widgetData['metrics'].push(metric)
+
+    // Build
+    if (widgetData.project.build) {
+      var metric = {}
+      metric['metric'] = 'Buildability'
+      metric['color'] = '#d5eeff'
+      metric['ticks'] = []
+
+      var tick = {}
+      for (let key in widgetData.project.build) {
+        tick['name'] = key.replace('_', ' ')
+        tick['ticked'] = widgetData.project.license[key]
+        metric['ticks'].push(tick)
+      }
+
+      if (metric['ticks'].length == 0) {
+        tick['name'] = 'Compiler'
+        tick['ticked'] = false
+        metric['ticks'].push(tick)
+        var another_tick = {}
+        another_tick['name'] = 'Automated'
+        another_tick['ticked'] = false
+        metric['ticks'].push(another_tick)
+      }
+    } else {
+      var metric = {}
+      var tick = {}
+      metric['metric'] = 'Buildability'
+      metric['color'] = '#d5eeff'
+      metric['ticks'] = []
+      tick['name'] = 'Compiler'
+      tick['ticked'] = false
+      metric['ticks'].push(tick)
+      var another_tick = {}
+      another_tick['name'] = 'Automated'
+      another_tick['ticked'] = false
+      metric['ticks'].push(another_tick)
+    }
+    new_widgetData['metrics'].push(metric)
+
+    // Support
+    if (widgetData.support) {
+      var metric = {}
+      metric['metric'] = 'Support'
+      metric['color'] = '#78bbe6'
+      metric['ticks'] = []
+
+      var tick = {}
+      for (let key in widgetData.support) {
+        tick['name'] = key.replace('_', ' ')
+        tick['ticked'] = widgetData.support[key]
+        metric['ticks'].push(tick)
+      }
+
+    } else {
+      var metric = {}
+      metric['metric'] = 'Support'
+      metric['color'] = '#78bbe6'
+      metric['ticks'] = []
+      var tick = {}
+      tick['email'] = false
+      metric['ticks'].push(tick)
+
+    }
+    new_widgetData['metrics'].push(metric)
+
+    // Documentation
+    if (widgetData.project.summary) {
+      var metric = {}
+      metric['metric'] = 'Documentation'
+      metric['color'] = '#1b435d'
+      metric['ticks'] = []
+
+      var tick = {}
+      for (let key in widgetData.project.summary) {
+        tick['name'] = key.replace('_', ' ')
+        tick['ticked'] = widgetData.project.summary[key]
+        metric['ticks'].push(tick)
+      }
+
+    } else {
+      var metric = {}
+      metric['metric'] = 'Documentation'
+      metric['color'] = '#1b435d'
+      metric['ticks'] = []
+      var tick = {}
+      tick['description'] = false
+      metric['ticks'].push(tick)
+    }
+    new_widgetData['metrics'].push(metric)
+
+    new_widgetData['enabled'] = widgetData.project.website.operational == 200
+    new_widgetData['name'] = widgetData["@id"]
+
+    //new_widgetData['uptime']
+    return new_widgetData
+  },
 
   draw: function(widgetElem, widgetData) {
+
+    widgetData = NewDemoDrawer.parseJson(widgetData)
+
     for (let metric of widgetData.metrics) {
         delete metric.submetrics
     }

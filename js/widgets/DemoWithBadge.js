@@ -16,44 +16,44 @@ import close_button from '../../icons/close-button.png';
 
 // https://stackoverflow.com/a/27709336
 function colorStepGradiant (start_color, end_color, percent) {
-   // strip the leading # if it's there
-   start_color = start_color.replace(/^\s*#|\s*$/g, '');
-   end_color = end_color.replace(/^\s*#|\s*$/g, '');
+  // strip the leading # if it's there
+  start_color = start_color.replace(/^\s*#|\s*$/g, '');
+  end_color = end_color.replace(/^\s*#|\s*$/g, '');
 
-   // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-   if(start_color.length == 3){
-     start_color = start_color.replace(/(.)/g, '$1$1');
-   }
+  // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+  if(start_color.length == 3){
+    start_color = start_color.replace(/(.)/g, '$1$1');
+  }
 
-   if(end_color.length == 3){
-     end_color = end_color.replace(/(.)/g, '$1$1');
-   }
+  if(end_color.length == 3){
+    end_color = end_color.replace(/(.)/g, '$1$1');
+  }
 
-   // get colors
-   var start_red = parseInt(start_color.substr(0, 2), 16),
-       start_green = parseInt(start_color.substr(2, 2), 16),
-       start_blue = parseInt(start_color.substr(4, 2), 16);
+  // get colors
+  var start_red = parseInt(start_color.substr(0, 2), 16),
+    start_green = parseInt(start_color.substr(2, 2), 16),
+    start_blue = parseInt(start_color.substr(4, 2), 16);
 
-   var end_red = parseInt(end_color.substr(0, 2), 16),
-       end_green = parseInt(end_color.substr(2, 2), 16),
-       end_blue = parseInt(end_color.substr(4, 2), 16);
+  var end_red = parseInt(end_color.substr(0, 2), 16),
+    end_green = parseInt(end_color.substr(2, 2), 16),
+    end_blue = parseInt(end_color.substr(4, 2), 16);
 
-   // calculate new color
-   var diff_red = end_red - start_red;
-   var diff_green = end_green - start_green;
-   var diff_blue = end_blue - start_blue;
+  // calculate new color
+  var diff_red = end_red - start_red;
+  var diff_green = end_green - start_green;
+  var diff_blue = end_blue - start_blue;
 
-   diff_red = ( (diff_red * percent) + start_red ).toString(16).split('.')[0];
-   diff_green = ( (diff_green * percent) + start_green ).toString(16).split('.')[0];
-   diff_blue = ( (diff_blue * percent) + start_blue ).toString(16).split('.')[0];
+  diff_red = ( (diff_red * percent) + start_red ).toString(16).split('.')[0];
+  diff_green = ( (diff_green * percent) + start_green ).toString(16).split('.')[0];
+  diff_blue = ( (diff_blue * percent) + start_blue ).toString(16).split('.')[0];
 
-   // ensure 2 digits by color
-   if( diff_red.length == 1 ) diff_red = '0' + diff_red
-   if( diff_green.length == 1 ) diff_green = '0' + diff_green
-   if( diff_blue.length == 1 ) diff_blue = '0' + diff_blue
+  // ensure 2 digits by color
+  if( diff_red.length == 1 ) diff_red = '0' + diff_red
+  if( diff_green.length == 1 ) diff_green = '0' + diff_green
+  if( diff_blue.length == 1 ) diff_blue = '0' + diff_blue
 
-   return '#' + diff_red + diff_green + diff_blue;
- };
+  return '#' + diff_red + diff_green + diff_blue;
+};
 // All the widget drawing functions take as input an element and the
 // fetched data
 var DemoWithBadgeDrawer = {
@@ -109,10 +109,146 @@ var DemoWithBadgeDrawer = {
     return statsNodeSet;
   },
 
+  parseJson: function(widgetData) {
+    console.log(widgetData)
+    var new_widgetData = {}
+    new_widgetData['metrics'] = []
+
+    // License
+    if (widgetData.project.license) {
+      //console.log(widgetData.project.license)
+      var metric = {}
+      metric['metric'] = 'License'
+      metric['color'] = '#ff895d'
+      metric['ticks'] = []
+
+      for (let key in widgetData.project.license) {
+        var tick = {}
+        tick['name'] = key.replace('_', ' ')
+        tick['ticked'] = widgetData.project.license[key]
+        metric['ticks'].push(tick)
+      }
+
+    } else {
+      var metric = {}
+      metric['metric'] = 'License'
+      metric['color'] = '#ff895d'
+      metric['ticks'] = []
+      var tick = {}
+      var tick = {}
+      tick['name'] = 'osi'
+      tick['ticked'] = false
+      metric['ticks'].push(tick)
+      var another_tick = {}
+      another_tick['name'] = 'open source'
+      another_tick['ticked'] = false
+      metric['ticks'].push(another_tick)
+    }
+    new_widgetData['metrics'].push(metric)
+
+    // Build
+    if (widgetData.project.build) {
+      var metric = {}
+      metric['metric'] = 'Buildability'
+      metric['color'] = '#d5eeff'
+      metric['ticks'] = []
+
+      var tick = {}
+      for (let key in widgetData.project.build) {
+        tick['name'] = key.replace('_', ' ')
+        tick['ticked'] = widgetData.project.license[key]
+        metric['ticks'].push(tick)
+      }
+
+      if (metric['ticks'].length == 0) {
+        tick['name'] = 'Compiler'
+        tick['ticked'] = false
+        metric['ticks'].push(tick)
+        var another_tick = {}
+        another_tick['name'] = 'Automated'
+        another_tick['ticked'] = false
+        metric['ticks'].push(another_tick)
+      }
+    } else {
+      var metric = {}
+      var tick = {}
+      metric['metric'] = 'Buildability'
+      metric['color'] = '#d5eeff'
+      metric['ticks'] = []
+      tick['name'] = 'Compiler'
+      tick['ticked'] = false
+      metric['ticks'].push(tick)
+      var another_tick = {}
+      another_tick['name'] = 'Automated'
+      another_tick['ticked'] = false
+      metric['ticks'].push(another_tick)
+    }
+    new_widgetData['metrics'].push(metric)
+
+    // Support
+    if (widgetData.support) {
+      var metric = {}
+      metric['metric'] = 'Support'
+      metric['color'] = '#78bbe6'
+      metric['ticks'] = []
+
+      var tick = {}
+      for (let key in widgetData.support) {
+        tick['name'] = key.replace('_', ' ')
+        tick['ticked'] = widgetData.support[key]
+        metric['ticks'].push(tick)
+      }
+
+    } else {
+      var metric = {}
+      metric['metric'] = 'Support'
+      metric['color'] = '#78bbe6'
+      metric['ticks'] = []
+      var tick = {}
+      tick['email'] = false
+      metric['ticks'].push(tick)
+
+    }
+    new_widgetData['metrics'].push(metric)
+
+    // Documentation
+    if (widgetData.project.summary) {
+      var metric = {}
+      metric['metric'] = 'Documentation'
+      metric['color'] = '#1b435d'
+      metric['ticks'] = []
+
+      var tick = {}
+      for (let key in widgetData.project.summary) {
+        tick['name'] = key.replace('_', ' ')
+        tick['ticked'] = widgetData.project.summary[key]
+        metric['ticks'].push(tick)
+      }
+
+    } else {
+      var metric = {}
+      metric['metric'] = 'Documentation'
+      metric['color'] = '#1b435d'
+      metric['ticks'] = []
+      var tick = {}
+      tick['description'] = false
+      metric['ticks'].push(tick)
+    }
+    new_widgetData['metrics'].push(metric)
+
+    new_widgetData['enabled'] = widgetData.project.website.operational == 200
+    new_widgetData['name'] = widgetData["@id"]
+
+    //new_widgetData['uptime']
+    return new_widgetData
+  },
 
   draw: function(widgetElem, widgetData) {
+
+    widgetData = DemoWithBadgeDrawer.parseJson(widgetData)
+
     for (let metric of widgetData.metrics) {
-        delete metric.submetrics
+      delete metric.submetrics
     }
 
     var widgetRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -223,18 +359,18 @@ var DemoWithBadgeDrawer = {
         if (!d.parent.data.name || d.parent.data.name != 'widget') {
           d3_selection.select(this).style('opacity', 1);
         }
-          if (one_green_tick) {
-            d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
-            d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
-            d3_selection.select(this).style('opacity', 1);
-            d3_selection.select(this).selectAll('path').style('fill', 'black');
-          }
-            tooltipFuncAux(d);
+        if (one_green_tick) {
+          d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
+          d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
+          d3_selection.select(this).style('opacity', 1);
+          d3_selection.select(this).selectAll('path').style('fill', 'black');
+        }
+        tooltipFuncAux(d);
       }
     };
 
     var tooltipFuncAux = function(d) {
-	var ev = d3_selection.event;
+      var ev = d3_selection.event;
       tooltip_div.style('left', ev.clientX+10+'px'); //'10px');
       tooltip_div.style('top', ev.clientY-25+'px'); //'-25px');
       tooltip_div.style('display', 'block');
@@ -471,7 +607,7 @@ var DemoWithBadgeDrawer = {
       }
 
       if (!clicked) {
-	var ev = d3_selection.event;
+        var ev = d3_selection.event;
         tooltip_div.style('left', ev.clientX+10+'px'); //'10px');
         tooltip_div.style('top', ev.clientY-25+'px'); //'-25px');
         tooltip_div.style('display', 'block');
