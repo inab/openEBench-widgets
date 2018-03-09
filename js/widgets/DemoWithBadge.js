@@ -667,16 +667,20 @@ var DemoWithBadgeDrawer = {
       })
       .on('mouseout', tooltipUptimeHideFunc);
 
+    var tool_id = widgetElem.getAttribute('data-id');
+    var tool_url = "https://dev-openebench.bsc.es/html/ws/#!/tool/"
+    var tool_name = tool_id.match(/:(.+):/)[1]
+
     if (width >= DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH) {
       svg_g.append('image')
         .attr('width', DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH)
         .attr('height', 20)
-        .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-avaible-green.svg?link=https://dev-openebench.bsc.es/html/')
+        .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-avaible-green.svg?link=' + tool_url + tool_name)
         .attr('x', -(width - (width - DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH))/2)
         .attr('y', height/2 + 5)
         .style('cursor', 'pointer')
         .on('click', function() {
-          window.open('https://dev-openebench.bsc.es/html/')
+          window.open(tool_url + tool_name)
         })
     }
   },

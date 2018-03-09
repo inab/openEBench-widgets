@@ -1,3 +1,4 @@
+
 'use strict';
 
 import style from '../styles/OpEB-widgets.css';
@@ -83,8 +84,7 @@ var OpEB = {
   },
 
   composeQuery: function(opEBId) {
-    // TODO: generate URL from id
-    return opEBId;
+    return "https://openebench.bsc.es/monitor/metrics/" + opEBId;
   },
 
   fetchData: function(widgetElem) {
