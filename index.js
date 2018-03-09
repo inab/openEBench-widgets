@@ -50,13 +50,13 @@ function doApply() {
 
   switch(widget_tool) {
     case 'pmut':
-      tool_url = "https://openebench.bsc.es/monitor/metrics/bio.tools:pmut:2017/cmd/mmb.irbbarcelona.org"
+      tool_url = "bio.tools:pmut:2017/cmd/mmb.irbbarcelona.org"
       break;
     case 'trimal':
-      tool_url = "https://openebench.bsc.es/monitor/metrics/bio.tools:trimAl:1.4/cmd/trimal.cgenomics.org"
+      tool_url = "bio.tools:trimAl:1.4/cmd/trimal.cgenomics.org"
       break;
     case 'rxnorm':
-      tool_url = "https://openebench.bsc.es/monitor/metrics/bio.tools:rxnorm_api:1/soap/rxnav.nlm.nih.gov"
+      tool_url = "bio.tools:rxnorm_api:1/soap/rxnav.nlm.nih.gov"
       break;
     default:
       "no-tool"
@@ -254,5 +254,6 @@ box['evolution_VII_mockup'] = `
       <ul class="ui list">
         <li>Use real JSON url data</li>
         <li>Show extern radius with big sizes</li>
+        <li>Only use tool id in data-id attribute</li>
       </ul>
       `;
