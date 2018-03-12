@@ -674,20 +674,27 @@ var DemoWithBadgeDrawer = {
       .on('mouseout', tooltipUptimeHideFunc);
 
     var tool_id = widgetElem.getAttribute('data-id');
-    var tool_url = "https://dev-openebench.bsc.es/html/ws/#!/tool/"
-    var tool_name = tool_id.match(/:(.+):/)[1]
+    var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
+    var tool_name = tool_id.match(/:(.+):/)[1];
+
+    var available_scientific_benchmark = state == 'online';
+    var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';
 
     if (width >= DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH) {
       svg_g.append('image')
         .attr('width', DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH)
         .attr('height', 20)
-        .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-avaible-green.svg?link=' + tool_url + tool_name)
+        .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-' + scientific_benchmark_status + '-' + (available_scientific_benchmark ? 'green' : 'red') + '.svg?link=' + tool_url + tool_name)
         .attr('x', -(width - (width - DemoWithBadgeDrawer.DEFAULT_BADGE_WIDTH))/2)
         .attr('y', height/2 + 5)
-        .style('cursor', 'pointer')
-        .on('click', function() {
-          window.open(tool_url + tool_name)
+        .style('cursor', function () {
+          return available_scientific_benchmark ? 'pointer' : 'auto';
         })
+        .on('click', function() {
+          if (available_scientific_benchmark) {
+            window.open(tool_url + tool_name);
+          }
+        });
     }
   },
   WIDGET_TYPE: 'new_demo_with_badge'
