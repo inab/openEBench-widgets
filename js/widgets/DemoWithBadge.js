@@ -15,17 +15,17 @@ import offline_tick from '../../icons/offline-tick.png';
 import close_button from '../../icons/close-button.png';
 
 // https://stackoverflow.com/a/27709336
-function colorStepGradiant (start_color, end_color, percent) {
+function colorStepGradiant(start_color, end_color, percent) {
   // strip the leading # if it's there
   start_color = start_color.replace(/^\s*#|\s*$/g, '');
   end_color = end_color.replace(/^\s*#|\s*$/g, '');
 
   // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-  if(start_color.length == 3){
+  if (start_color.length == 3) {
     start_color = start_color.replace(/(.)/g, '$1$1');
   }
 
-  if(end_color.length == 3){
+  if (end_color.length == 3) {
     end_color = end_color.replace(/(.)/g, '$1$1');
   }
 
@@ -43,17 +43,17 @@ function colorStepGradiant (start_color, end_color, percent) {
   var diff_green = end_green - start_green;
   var diff_blue = end_blue - start_blue;
 
-  diff_red = ( (diff_red * percent) + start_red ).toString(16).split('.')[0];
-  diff_green = ( (diff_green * percent) + start_green ).toString(16).split('.')[0];
-  diff_blue = ( (diff_blue * percent) + start_blue ).toString(16).split('.')[0];
+  diff_red = ((diff_red * percent) + start_red).toString(16).split('.')[0];
+  diff_green = ((diff_green * percent) + start_green).toString(16).split('.')[0];
+  diff_blue = ((diff_blue * percent) + start_blue).toString(16).split('.')[0];
 
   // ensure 2 digits by color
-  if( diff_red.length == 1 ) diff_red = '0' + diff_red
-  if( diff_green.length == 1 ) diff_green = '0' + diff_green
-  if( diff_blue.length == 1 ) diff_blue = '0' + diff_blue
+  if (diff_red.length == 1) diff_red = '0' + diff_red;
+  if (diff_green.length == 1) diff_green = '0' + diff_green;
+  if (diff_blue.length == 1) diff_blue = '0' + diff_blue;
 
   return '#' + diff_red + diff_green + diff_blue;
-};
+}
 // All the widget drawing functions take as input an element and the
 // fetched data
 var DemoWithBadgeDrawer = {
@@ -81,7 +81,7 @@ var DemoWithBadgeDrawer = {
   DEFAULT_BADGE_WIDTH: 175,
   DEFAULT_BADGE_HEIGHT: 20,
   // Getting the max depth of the nested structure
-  getStatsNodeSet: function(widgetData) {
+  getStatsNodeSet: function (widgetData) {
     var levelNodeSet = [];
     for (var iNode = 0, nNode = widgetData.metrics.length; iNode < nNode; iNode++) {
       levelNodeSet.push([widgetData.metrics[iNode]]);
@@ -109,146 +109,145 @@ var DemoWithBadgeDrawer = {
     return statsNodeSet;
   },
 
-  parseJson: function(widgetData) {
-    console.log(widgetData)
-    var new_widgetData = {}
-    new_widgetData['metrics'] = []
+  parseJson: function (widgetData) {
+    console.log(widgetData);
+    var new_widgetData = {};
+    new_widgetData.metrics = [];
 
     // License
     if (widgetData.project.license) {
       //console.log(widgetData.project.license)
-      var metric = {}
-      metric['metric'] = 'License'
-      metric['color'] = '#ff895d'
-      metric['ticks'] = []
+      var metric = {};
+      metric.metric = 'License';
+      metric.color = '#ff895d';
+      metric.ticks = [];
 
       for (let key in widgetData.project.license) {
-        var tick = {}
-        tick['name'] = key.replace('_', ' ')
-        tick['ticked'] = widgetData.project.license[key]
-        metric['ticks'].push(tick)
+        var tick = {};
+        tick.name = key.replace('_', ' ');
+        tick.ticked = widgetData.project.license[key];
+        metric.ticks.push(tick);
       }
 
     } else {
-      var metric = {}
-      metric['metric'] = 'License'
-      metric['color'] = '#ff895d'
-      metric['ticks'] = []
-      var tick = {}
-      var tick = {}
-      tick['name'] = 'osi'
-      tick['ticked'] = false
-      metric['ticks'].push(tick)
-      var another_tick = {}
-      another_tick['name'] = 'open source'
-      another_tick['ticked'] = false
-      metric['ticks'].push(another_tick)
+      var metric = {};
+      metric.metric = 'License';
+      metric.color = '#ff895d';
+      metric.ticks = [];
+      var tick = {};
+      tick.name = 'osi';
+      tick.ticked = false;
+      metric.ticks.push(tick);
+      var another_tick = {};
+      another_tick.name = 'open source';
+      another_tick.ticked = false;
+      metric.ticks.push(another_tick);
     }
-    new_widgetData['metrics'].push(metric)
+    new_widgetData.metrics.push(metric);
 
     // Build
     if (widgetData.project.build) {
-      var metric = {}
-      metric['metric'] = 'Buildability'
-      metric['color'] = '#d5eeff'
-      metric['ticks'] = []
+      var metric = {};
+      metric.metric = 'Buildability';
+      metric.color = '#d5eeff';
+      metric.ticks = [];
 
-      var tick = {}
+      var tick = {};
       for (let key in widgetData.project.build) {
-        tick['name'] = key.replace('_', ' ')
-        tick['ticked'] = widgetData.project.license[key]
-        metric['ticks'].push(tick)
+        tick.name = key.replace('_', ' ');
+        tick.ticked = widgetData.project.license[key];
+        metric.ticks.push(tick);
       }
 
-      if (metric['ticks'].length == 0) {
-        tick['name'] = 'Compiler'
-        tick['ticked'] = false
-        metric['ticks'].push(tick)
-        var another_tick = {}
-        another_tick['name'] = 'Automated'
-        another_tick['ticked'] = false
-        metric['ticks'].push(another_tick)
+      if (metric.ticks.length == 0) {
+        tick.name = 'Compiler';
+        tick.ticked = false;
+        metric.ticks.push(tick);
+        var another_tick = {};
+        another_tick.name = 'Automated';
+        another_tick.ticked = false;
+        metric.ticks.push(another_tick);
       }
     } else {
-      var metric = {}
-      var tick = {}
-      metric['metric'] = 'Buildability'
-      metric['color'] = '#d5eeff'
-      metric['ticks'] = []
-      tick['name'] = 'Compiler'
-      tick['ticked'] = false
-      metric['ticks'].push(tick)
-      var another_tick = {}
-      another_tick['name'] = 'Automated'
-      another_tick['ticked'] = false
-      metric['ticks'].push(another_tick)
+      var metric = {};
+      var tick = {};
+      metric.metric = 'Buildability';
+      metric.color = '#d5eeff';
+      metric.ticks = [];
+      tick.name = 'Compiler';
+      tick.ticked = false;
+      metric.ticks.push(tick);
+      var another_tick = {};
+      another_tick.name = 'Automated';
+      another_tick.ticked = false;
+      metric.ticks.push(another_tick);
     }
-    new_widgetData['metrics'].push(metric)
+    new_widgetData.metrics.push(metric);
 
     // Support
     if (widgetData.support) {
-      var metric = {}
-      metric['metric'] = 'Support'
-      metric['color'] = '#78bbe6'
-      metric['ticks'] = []
+      var metric = {};
+      metric.metric = 'Support';
+      metric.color = '#78bbe6';
+      metric.ticks = [];
 
-      var tick = {}
+      var tick = {};
       for (let key in widgetData.support) {
-        tick['name'] = key.replace('_', ' ')
-        tick['ticked'] = widgetData.support[key]
-        metric['ticks'].push(tick)
+        tick.name = key.replace('_', ' ');
+        tick.ticked = widgetData.support[key];
+        metric.ticks.push(tick);
       }
 
     } else {
-      var metric = {}
-      metric['metric'] = 'Support'
-      metric['color'] = '#78bbe6'
-      metric['ticks'] = []
-      var tick = {}
-      tick['email'] = false
-      metric['ticks'].push(tick)
+      var metric = {};
+      metric.metric = 'Support';
+      metric.color = '#78bbe6';
+      metric.ticks = [];
+      var tick = {};
+      tick.email = false;
+      metric.ticks.push(tick);
 
     }
-    new_widgetData['metrics'].push(metric)
+    new_widgetData.metrics.push(metric);
 
-    // Documentation
+    // Documentation;
     if (widgetData.project.summary) {
-      var metric = {}
-      metric['metric'] = 'Documentation'
-      metric['color'] = '#1b435d'
-      metric['ticks'] = []
+      var metric = {};
+      metric.metric = 'Documentation';
+      metric.color = '#1b435d';
+      metric.ticks = [];
 
-      var tick = {}
+      var tick = {};
       for (let key in widgetData.project.summary) {
-        tick['name'] = key.replace('_', ' ')
-        tick['ticked'] = widgetData.project.summary[key]
-        metric['ticks'].push(tick)
+        tick.name = key.replace('_', ' ');
+        tick.ticked = widgetData.project.summary[key];
+        metric.ticks.push(tick);
       }
 
     } else {
-      var metric = {}
-      metric['metric'] = 'Documentation'
-      metric['color'] = '#1b435d'
-      metric['ticks'] = []
-      var tick = {}
-      tick['description'] = false
-      metric['ticks'].push(tick)
+      var metric = {};
+      metric.metric = 'Documentation';
+      metric.color = '#1b435d';
+      metric.ticks = [];
+      var tick = {};
+      tick.description = false;
+      metric.ticks.push(tick);
     }
-    new_widgetData['metrics'].push(metric)
+    new_widgetData.metrics.push(metric);
 
-    new_widgetData['enabled'] = widgetData.project.website.operational == 200
-    new_widgetData['name'] = widgetData["@id"]
+    new_widgetData.enabled = widgetData.project.website.operational == 200;
+    new_widgetData.name = widgetData['@id'];
 
     //new_widgetData['uptime']
-    return new_widgetData
+    return new_widgetData;
   },
 
-  draw: function(widgetElem, widgetData) {
+  draw: function (widgetElem, widgetData) {
 
-    widgetData = DemoWithBadgeDrawer.parseJson(widgetData)
+    widgetData = DemoWithBadgeDrawer.parseJson(widgetData);
 
     for (let metric of widgetData.metrics) {
-      delete metric.submetrics
+      delete metric.submetrics;
     }
 
     var widgetRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -295,17 +294,17 @@ var DemoWithBadgeDrawer = {
       }, {
         'x_axis': 0,
         'y_axis': 0,
-        'r_radius': (ext_radius)
+        'r_radius': ext_radius
       }])
       .enter().append('circle')
       .attr('class', 'circle')
-      .attr('cx', function(d) {
+      .attr('cx', function (d) {
         return d.x_axis;
       })
-      .attr('cy', function(d) {
+      .attr('cy', function (d) {
         return d.y_axis;
       })
-      .attr('r', function(d) {
+      .attr('r', function (d) {
         return d.r_radius;
       })
       .style('fill', 'none')
@@ -323,36 +322,40 @@ var DemoWithBadgeDrawer = {
       description: 'OpenEBench widget',
       submetrics: widgetData.metrics
     },
-      function(d) {
-        return d.submetrics;
-      }
+    function (d) {
+      return d.submetrics;
+    }
     )
-    //.sum(function (d) { return d.size});
+      //.sum(function (d) { return d.size});
       .count();
     partition(root);
+
+    var total_metrics = widgetData.metrics.length;
+    var radius_separator = (total_metrics > 1) ? 0.005 : 0;
+
     var arc = d3_shape.arc()
-      .startAngle(function(d) {
-        return d.x0 + 0.005;
+      .startAngle(function (d) {
+        return d.x0 + radius_separator;
       })
-      .endAngle(function(d) {
-        return d.x1 - 0.005;
+      .endAngle(function (d) {
+        return d.x1 - radius_separator;
       })
-      .innerRadius(function() {
-        return levelSize+1;
+      .innerRadius(function () {
+        return levelSize + 1;
       })
-      .outerRadius(function() {
-        return ext_radius - 1;
+      .outerRadius(function () {
+        return ext_radius - 0.65;
       });
 
 
     var maxDepth = statsNodeSet.length;
 
-    var tooltipFunc = function(d) {
+    var tooltipFunc = function (d) {
       if (!clicked) {
-        var one_green_tick = false
+        var one_green_tick = false;
         for (let tick of d.data.ticks) {
-          one_green_tick = one_green_tick || tick.ticked
-          if (tick.ticked) break
+          one_green_tick = one_green_tick || tick.ticked;
+          if (tick.ticked) break;
         }
 
 
@@ -369,14 +372,14 @@ var DemoWithBadgeDrawer = {
       }
     };
 
-    var tooltipFuncAux = function(d) {
+    var tooltipFuncAux = function (d) {
       var ev = d3_selection.event;
-      tooltip_div.style('left', ev.clientX+10+'px'); //'10px');
-      tooltip_div.style('top', ev.clientY-25+'px'); //'-25px');
+      tooltip_div.style('left', ev.clientX + 10 + 'px'); //'10px');
+      tooltip_div.style('top', ev.clientY - 25 + 'px'); //'-25px');
       tooltip_div.style('display', 'block');
 
 
-      var description_text = '';
+      var description_text = '';uu
       var data;
       if (d.data.ticks) {
         data = d.data;
@@ -391,8 +394,8 @@ var DemoWithBadgeDrawer = {
         }
       }
 
-      var green_ticks_descriptions = ""
-      var red_ticks_descriptions = ""
+      var green_ticks_descriptions = '';
+      var red_ticks_descriptions = '';
       for (var iTick = 0, nTick = data.ticks.length; iTick < nTick; iTick++) {
         var tick = data.ticks[iTick];
         var description = tick.name;
@@ -400,16 +403,16 @@ var DemoWithBadgeDrawer = {
         var icon = (isTicked) ? online_tick : offline_tick;
         var full_description = '<br><img src="' + icon + '" height="15" width="15"> ' + description;
         if (isTicked) {
-          green_ticks_descriptions += full_description
+          green_ticks_descriptions += full_description;
         } else {
-          red_ticks_descriptions += full_description
+          red_ticks_descriptions += full_description;
         }
       }
-      description_text = green_ticks_descriptions + red_ticks_descriptions
+      description_text = green_ticks_descriptions + red_ticks_descriptions;
       tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
     };
 
-    var tooltipHideFunc = function() {
+    var tooltipHideFunc = function () {
       if (clicked) return;
       tooltip_div.style('display', 'none');
       tooltip_div.empty();
@@ -422,41 +425,41 @@ var DemoWithBadgeDrawer = {
       .enter()
       .append('path')
       .style('stroke', 'none')
-      .attr('display', function(d) {
+      .attr('display', function (d) {
         return d.depth ? null : 'none';
       })
       .attr('d', arc)
       .style('stroke', 'none')
-    //.style('stroke', '#000000')
-    //.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
-      .classed('path_shown', function(d) {
+      //.style('stroke', '#000000')
+      //.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
+      .classed('path_shown', function (d) {
         return !d.data.empty;
       })
-      .style('opacity', function(d) {
+      .style('opacity', function (d) {
         return d.data.empty ? 0 : 1;
       })
-      .style('fill', function(d) {
+      .style('fill', function (d) {
         //gradient here
         if (d.data.ticks) {
-          var  ticks_counter = 0
-          var  total_ticks = 0
+          var ticks_counter = 0;
+          var total_ticks = 0;
 
           for (let tick of d.data.ticks) {
-            if (tick.ticked) ticks_counter++
-            total_ticks++
+            if (tick.ticked) ticks_counter++;
+            total_ticks++;
           }
-          return colorStepGradiant('#FFFFFF', d.data.color, ticks_counter/total_ticks)
+          return colorStepGradiant('#FFFFFF', d.data.color, ticks_counter / total_ticks);
         }
         return d.data.color;
       })
       .on('mousemove', tooltipFunc)
-      .on('click', function(d) {
+      .on('click', function (d) {
         if (d.data.empty) return;
 
-        var one_green_tick = false
+        var one_green_tick = false;
         for (let tick of d.data.ticks) {
-          one_green_tick = one_green_tick || tick.ticked
-          if (tick.ticked) break
+          one_green_tick = one_green_tick || tick.ticked;
+          if (tick.ticked) break;
         }
         if (!one_green_tick) return;
         d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
@@ -475,7 +478,7 @@ var DemoWithBadgeDrawer = {
           .attr('width', '15px')
           .attr('height', '15px')
           .style('cursor', 'pointer')
-          .on('click', function() {
+          .on('click', function () {
             tooltip_div.style('display', 'none');
             tooltip_div.empty();
             d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
@@ -503,41 +506,41 @@ var DemoWithBadgeDrawer = {
           }])
             .enter().append('line')
             .attr('class', 'line')
-            .attr('x1', function(d) {
+            .attr('x1', function (d) {
               return d.x1;
             })
-            .attr('y1', function(d) {
+            .attr('y1', function (d) {
               return d.y1;
             })
-            .attr('x2', function(d) {
+            .attr('x2', function (d) {
               return d.x2;
             })
-            .attr('y2', function(d) {
+            .attr('y2', function (d) {
               return d.y2;
             })
             .style('stroke', 'black')
             .style('stroke-width', '1')
             .style('stroke-opacity', 0.5)
             .style('display', 'inline-block');
-        }
-      });
+        });
+    }
 
-    var tooltipUptimeFunc = function(d) {
+    var tooltipUptimeFunc = function (d) {
       if (clicked) return;
       tooltipUptimeFuncAux(d);
     };
 
-    var tooltipUptimeFuncAux = function() {
+    var tooltipUptimeFuncAux = function () {
       var uptime = JSON.parse(JSON.stringify(widgetData.uptime));
       //http://bl.ocks.org/d3noob/38744a17f9c0141bcd04
       //https://bl.ocks.org/d3noob/3c040800ff6457717cca586ae9547dbf
       //https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e
       var margin = {
-        top: 15,
-        right: 15,
-        bottom: 45,
-        left: 45
-      },
+          top: 15,
+          right: 15,
+          bottom: 45,
+          left: 45
+        },
         width_uptime = 250 - margin.left - margin.right,
         height_uptime = 100 - margin.top - margin.bottom;
 
@@ -551,28 +554,28 @@ var DemoWithBadgeDrawer = {
       // Define the axes
       var xAxis = d3_axis.axisBottom(x);
 
-      var yAxis = d3_axis.axisLeft(y).ticks(1).tickFormat(function(d) {
+      var yAxis = d3_axis.axisLeft(y).ticks(1).tickFormat(function (d) {
         return d == 1 ? 'online' : 'offline';
       });
 
       // Define the line
       var valueline = d3_shape.line()
-        .x(function(d) {
+        .x(function (d) {
           return x(d.date);
         })
-        .y(function(d) {
+        .y(function (d) {
           return y(d.state);
         });
 
-      uptime.forEach(function(d) {
+      uptime.forEach(function (d) {
         d.date = parseDate(d.date);
         d.state = +d.state;
       });
       // Scale the range of the data
-      x.domain(d3_array.extent(uptime, function(d) {
+      x.domain(d3_array.extent(uptime, function (d) {
         return d.date;
       }));
-      y.domain([0, d3_array.max(uptime, function(d) {
+      y.domain([0, d3_array.max(uptime, function (d) {
         return d.state;
       })]);
 
@@ -594,10 +597,10 @@ var DemoWithBadgeDrawer = {
           .data(uptime)
           .enter().append('circle')
           .attr('r', 3.5)
-          .attr('cx', function(d) {
+          .attr('cx', function (d) {
             return x(d.date);
           })
-          .attr('cy', function(d) {
+          .attr('cy', function (d) {
             return y(d.state);
           });
 
@@ -622,13 +625,13 @@ var DemoWithBadgeDrawer = {
 
       if (!clicked) {
         var ev = d3_selection.event;
-        tooltip_div.style('left', ev.clientX+10+'px'); //'10px');
-        tooltip_div.style('top', ev.clientY-25+'px'); //'-25px');
+        tooltip_div.style('left', ev.clientX + 10 + 'px'); //'10px');
+        tooltip_div.style('top', ev.clientY - 25 + 'px'); //'-25px');
         tooltip_div.style('display', 'block');
       }
     };
 
-    var tooltipUptimeHideFunc = function() {
+    var tooltipUptimeHideFunc = function () {
       if (clicked) return;
       draw_uptime_one_time = true;
       tooltip_div.style('display', 'none');
@@ -642,14 +645,14 @@ var DemoWithBadgeDrawer = {
     svg_g.append('image')
       .attr('width', width_height)
       .attr('height', width_height)
-      .attr('xlink:href', function() {
+      .attr('xlink:href', function () {
         icon = (state == 'online') ? online_plug : offline_plug;
         return icon;
       })
       .attr('x', -levelSize * xy_pos)
       .attr('y', -levelSize * xy_pos)
       .on('mousemove', tooltipUptimeFunc)
-      .on('click', function(d) {
+      .on('click', function (d) {
 
         draw_uptime_one_time = true;
 
@@ -664,7 +667,7 @@ var DemoWithBadgeDrawer = {
           .attr('width', '15px')
           .attr('height', '15px')
           .style('cursor', 'pointer')
-          .on('click', function() {
+          .on('click', function () {
             tooltip_div.style('display', 'none');
             tooltip_div.empty();
             draw_uptime_one_time = true;
