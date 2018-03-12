@@ -30,7 +30,7 @@
     "d3-time-format": "^2.1.1"
   },
   "scripts": {
-    "dev": "WEBPACK_DEPLOYMENT='dev' yarn run webpack && WEBPACK_DEPLOYMENT='dev' yarn run webpack-dev-server --open",
+    "dev": "WEBPACK_DEPLOYMENT='dev' yarn run webpack && WEBPACK_DEPLOYMENT='dev' yarn run webpack-dev-server --output-public-path=/build/ --open",
     "dist": "WEBPACK_DEPLOYMENT='dist' yarn run webpack",
     "dist-compat": "WEBPACK_DEPLOYMENT='dist-compat' yarn run webpack",
     "lint": "eslint --fix js/OpEB-widgets.js",
