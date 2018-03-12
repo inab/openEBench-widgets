@@ -379,7 +379,7 @@ var DemoWithBadgeDrawer = {
       tooltip_div.style('display', 'block');
 
 
-      var description_text = '';uu
+      var description_text = '';
       var data;
       if (d.data.ticks) {
         data = d.data;
