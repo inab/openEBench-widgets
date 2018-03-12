@@ -482,16 +482,22 @@ var NewDemoDrawer = {
       })
       .on('mouseout', tooltipHideFunc);
 
-    var radius_lines_number = 0;
-    svg_g.selectAll('path')
-      .each(function(d) {
-        if (radius_lines_number < 6) {
-          radius_lines_number++;
+    if (total_metrics > 1) {
+      var angle;
+      // Fix angle problem with an odd number of metrics
+      if (total_metrics % 2 == 0) {
+        angle = 0.5 * Math.PI;
+      } else {
+        angle = 1.5 * Math.PI;
+      }
+
+      svg_g.selectAll('path')
+        .each(function (d) {
           svg_g.selectAll('.radius').data([{
-            'x1': (levelSize + 1.5) * Math.cos(d.x1 + Math.PI / 2),
-            'y1': (levelSize + 1.5) * Math.sin(d.x1 + Math.PI / 2),
-            'x2': (ext_radius) * Math.cos(d.x1 + Math.PI / 2),
-            'y2': (ext_radius) * Math.sin(d.x1 + Math.PI / 2)
+            'x1': (levelSize + 1.5) * Math.cos(d.x1 + angle),
+            'y1': (levelSize + 1.5) * Math.sin(d.x1 + angle),
+            'x2': (ext_radius) * Math.cos(d.x1 + angle),
+            'y2': (ext_radius) * Math.sin(d.x1 + angle)
           }])
             .enter().append('line')
             .attr('class', 'line')
