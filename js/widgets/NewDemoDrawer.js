@@ -354,10 +354,12 @@ var NewDemoDrawer = {
 
       var green_ticks_descriptions = '';
       var red_ticks_descriptions = '';
+      var green_ticks_total = 0;
       for (var iTick = 0, nTick = data.ticks.length; iTick < nTick; iTick++) {
         var tick = data.ticks[iTick];
         var description = tick.name;
         var isTicked = !!tick.ticked;
+        green_ticks_total += isTicked ? 1 : 0;
         var icon = (isTicked) ? online_tick : offline_tick;
         var full_description = '<br><img src="' + icon + '" height="15" width="15"> ' + description;
         if (isTicked) {
@@ -367,7 +369,22 @@ var NewDemoDrawer = {
         }
       }
       description_text = green_ticks_descriptions + red_ticks_descriptions;
-      tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
+      tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;"><div id="vertical_bar_tooltip" style="clear: left; float: left;"></div><div id="description_text" style="float: left;">' + description_text + '</div></div></div>');
+      var lineData = [ { 'x': 5, 'y': 10}, {'x': 5, 'y': 40}];
+      var lineFunction = d3_shape.line()
+        .x(function(d) { return d.x; })
+        .y(function(d) { return d.y; });
+      var tooltip_container = d3_selection.select(widgetElem).select('.tooltip').select('#vertical_bar_tooltip');
+      var line_container = tooltip_container.append('svg').attr('width', 10).attr('height', 65);
+      var line = line_container.append('line')
+        // .attr('d', lineFunction(lineData))
+        .attr('x1', 5)
+        .attr('y1', 5)
+        .attr('x2', 5)
+        .attr('y2', 60)
+        .attr('stroke', function () { return (green_ticks_total > 0 ? data.color : 'white');})
+        .attr('stroke-width', 5)
+        .style('stroke-linecap', 'round');
     };
 
     var tooltipHideFunc = function () {
