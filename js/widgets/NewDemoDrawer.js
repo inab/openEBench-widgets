@@ -355,6 +355,8 @@ var NewDemoDrawer = {
       var green_ticks_descriptions = '';
       var red_ticks_descriptions = '';
       var green_ticks_total = 0;
+      var total_ticks = data.ticks.length;
+      console.log(total_ticks)
       for (var iTick = 0, nTick = data.ticks.length; iTick < nTick; iTick++) {
         var tick = data.ticks[iTick];
         var description = tick.name;
@@ -375,16 +377,29 @@ var NewDemoDrawer = {
         .x(function(d) { return d.x; })
         .y(function(d) { return d.y; });
       var tooltip_container = d3_selection.select(widgetElem).select('.tooltip').select('#vertical_bar_tooltip');
-      var line_container = tooltip_container.append('svg').attr('width', 10).attr('height', 65);
-      var line = line_container.append('line')
-        // .attr('d', lineFunction(lineData))
-        .attr('x1', 5)
-        .attr('y1', 5)
-        .attr('x2', 5)
-        .attr('y2', 60)
-        .attr('stroke', function () { return (green_ticks_total > 0 ? data.color : 'white');})
-        .attr('stroke-width', 5)
-        .style('stroke-linecap', 'round');
+      var line_svg_container = tooltip_container.append('svg').attr('width', 10).attr('height', 65);
+      var color = d3_scale.scaleLinear()
+        .domain([0, total_ticks])
+        .range(['#FFFFFF', d.data.color]);
+      var svg_defs = line_svg_container.append('defs');
+      var linear_gradient = svg_defs.append('linearGradient').attr('id', 'linear-gradient');
+      // gradient direction
+      linear_gradient
+        .attr('x1', '0%')
+        .attr('y1', '0%')
+        .attr('x2', '0%')
+        .attr('y2', '100%');
+      // gradient colors
+      linear_gradient.append('stop')
+        .attr('offset', '0%')
+        .attr('stop-color', color(green_ticks_total > 0 ? green_ticks_total - 1 : 0));
+      linear_gradient.append('stop')
+        .attr('offset', '100%')
+        .attr('stop-color', color(green_ticks_total));
+      var rect = line_svg_container.append('rect')
+        .attr('width', 10)
+        .attr('height', 60)
+        .attr('fill', 'url(#linear-gradient)');
     };
 
     var tooltipHideFunc = function () {
@@ -429,7 +444,6 @@ var NewDemoDrawer = {
             .range(['#FFFFFF', d.data.color]);
           return color(ticks_counter);
         }
-        return d.data.color;
       })
       .on('mousemove', tooltipFunc)
       .on('click', function (d) {
@@ -630,30 +644,30 @@ var NewDemoDrawer = {
       })
       .attr('x', -levelSize * xy_pos)
       .attr('y', -levelSize * xy_pos)
-      .on('mousemove', tooltipUptimeFunc)
-      .on('click', function (d) {
+      // .on('mousemove', tooltipUptimeFunc)
+      // .on('click', function (d) {
 
-        draw_uptime_one_time = true;
+      //   draw_uptime_one_time = true;
 
-        d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+      //   d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
 
-        clicked = false;
-        tooltipUptimeFuncAux(d);
-        clicked = true;
+      //   clicked = false;
+      //   tooltipUptimeFuncAux(d);
+      //   clicked = true;
 
-        d3_selection.select(widgetElem).select('#close_icon').append('img')
-          .attr('src', close_button)
-          .attr('width', '15px')
-          .attr('height', '15px')
-          .style('cursor', 'pointer')
-          .on('click', function () {
-            tooltip_div.style('display', 'none');
-            tooltip_div.empty();
-            draw_uptime_one_time = true;
-            clicked = false;
-          });
-      })
-      .on('mouseout', tooltipUptimeHideFunc);
+      //   d3_selection.select(widgetElem).select('#close_icon').append('img')
+      //     .attr('src', close_button)
+      //     .attr('width', '15px')
+      //     .attr('height', '15px')
+      //     .style('cursor', 'pointer')
+      //     .on('click', function () {
+      //       tooltip_div.style('display', 'none');
+      //       tooltip_div.empty();
+      //       draw_uptime_one_time = true;
+      //       clicked = false;
+      //     });
+      // })
+      // .on('mouseout', tooltipUptimeHideFunc);
   },
   WIDGET_TYPE: 'new_demo'
 };
