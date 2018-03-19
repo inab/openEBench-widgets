@@ -103,6 +103,11 @@ var DemoWithBadgeDrawer = {
       another_tick.ticked = false;
       metric.ticks.push(another_tick);
     }
+    //metric.ticks[0].ticked = false;
+    // var tick = {};
+    // tick.name = 'test'
+    // tick.ticked = true;
+    // metric.ticks.push(tick);
     new_widgetData.metrics.push(metric);
 
     // Build
@@ -356,10 +361,13 @@ var DemoWithBadgeDrawer = {
 
       var green_ticks_descriptions = '';
       var red_ticks_descriptions = '';
+      var green_ticks_total = 0;
+      var total_ticks = data.ticks.length;
       for (var iTick = 0, nTick = data.ticks.length; iTick < nTick; iTick++) {
         var tick = data.ticks[iTick];
         var description = tick.name;
         var isTicked = !!tick.ticked;
+        green_ticks_total += isTicked ? 1 : 0;
         var icon = (isTicked) ? online_tick : offline_tick;
         var full_description = '<br><img src="' + icon + '" height="15" width="15"> ' + description;
         if (isTicked) {
@@ -369,7 +377,35 @@ var DemoWithBadgeDrawer = {
         }
       }
       description_text = green_ticks_descriptions + red_ticks_descriptions;
-      tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
+      tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;"><div id="vertical_bar_tooltip" style="clear: left; float: left;"></div><div id="description_text" style="float: left;">' + description_text + '</div></div></div>');
+      var tooltip_container = d3_selection.select(widgetElem).select('.tooltip').select('#vertical_bar_tooltip');
+      var line_svg_container = tooltip_container
+        .append('svg')
+        .attr('width', 10)
+        .attr('height', 60)
+        .style('border', '1px solid black')
+        .style('margin-right', '5px');
+      if (green_ticks_total == total_ticks) {
+        var rect = line_svg_container.append('rect')
+          .attr('width', 10)
+          .attr('height', 60)
+          .attr('fill', d.data.color);
+      } else if (green_ticks_total == 0) {
+        var rect = line_svg_container.append('rect')
+          .attr('width', 8)
+          .attr('height', 60)
+          .attr('fill', '#FFFFFF');
+      } else {
+        var rect = line_svg_container.append('rect')
+          .attr('width', 10)
+          .attr('height', 60 * (1- green_ticks_total/total_ticks))
+          .attr('fill', '#FFFFFF');
+        var rect = line_svg_container.append('rect')
+          .attr('width', 10)
+          .attr('height',  60 * (green_ticks_total/total_ticks))
+          .attr('y', 60 - 60 * (green_ticks_total/total_ticks))
+          .attr('fill', d.data.color);
+      }
     };
 
     var tooltipHideFunc = function () {
@@ -414,7 +450,6 @@ var DemoWithBadgeDrawer = {
             .range(['#FFFFFF', d.data.color]);
           return color(ticks_counter);
         }
-        return d.data.color;
       })
       .on('mousemove', tooltipFunc)
       .on('click', function (d) {
@@ -615,30 +650,30 @@ var DemoWithBadgeDrawer = {
       })
       .attr('x', -levelSize * xy_pos)
       .attr('y', -levelSize * xy_pos)
-      .on('mousemove', tooltipUptimeFunc)
-      .on('click', function (d) {
+      // .on('mousemove', tooltipUptimeFunc)
+      // .on('click', function (d) {
 
-        draw_uptime_one_time = true;
+      //   draw_uptime_one_time = true;
 
-        d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+      //   d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
 
-        clicked = false;
-        tooltipUptimeFuncAux(d);
-        clicked = true;
+      //   clicked = false;
+      //   tooltipUptimeFuncAux(d);
+      //   clicked = true;
 
-        d3_selection.select(widgetElem).select('#close_icon').append('img')
-          .attr('src', close_button)
-          .attr('width', '15px')
-          .attr('height', '15px')
-          .style('cursor', 'pointer')
-          .on('click', function () {
-            tooltip_div.style('display', 'none');
-            tooltip_div.empty();
-            draw_uptime_one_time = true;
-            clicked = false;
-          });
-      })
-      .on('mouseout', tooltipUptimeHideFunc);
+      //   d3_selection.select(widgetElem).select('#close_icon').append('img')
+      //     .attr('src', close_button)
+      //     .attr('width', '15px')
+      //     .attr('height', '15px')
+      //     .style('cursor', 'pointer')
+      //     .on('click', function () {
+      //       tooltip_div.style('display', 'none');
+      //       tooltip_div.empty();
+      //       draw_uptime_one_time = true;
+      //       clicked = false;
+      //     });
+      // })
+      // .on('mouseout', tooltipUptimeHideFunc);
 
     var tool_id = widgetElem.getAttribute('data-id');
     var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
