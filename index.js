@@ -258,5 +258,6 @@ box['evolution_VII_mockup'] = `
         <li>Added Scientific benchmarking badge not available</li>
         <li>Fixed radius position with odd number of metrics</li>
         <li>Added vertical bar inside tooltips</li>
+        <li>Added radial gradiant to the arcs</li>
       </ul>
       `;
