@@ -255,5 +255,8 @@ box['evolution_VII_mockup'] = `
         <li>Use real JSON url data</li>
         <li>Show extern radius with big sizes</li>
         <li>Only use tool id in data-id attribute</li>
+        <li>Added Scientific benchmarking badge not available</li>
+        <li>Fixed radius position with odd number of metrics</li>
+        <li>Added vertical bar inside tooltips</li>
       </ul>
       `;
