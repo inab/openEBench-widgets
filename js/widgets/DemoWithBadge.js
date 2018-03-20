@@ -417,7 +417,7 @@ var DemoWithBadgeDrawer = {
     };
 
     svg_g.selectAll('path')
-      .data(root.descendants())
+      .data(root.descendants().filter(function(d) { return d.data.metric != null; })) // remove widget root
       .enter()
       .append('path')
       .style('stroke', 'none')
@@ -436,20 +436,8 @@ var DemoWithBadgeDrawer = {
       })
       .style('fill', function (d) {
         //gradient here
-        if (d.data.ticks) {
-          var ticks_counter = 0;
-          var total_ticks = 0;
-
-          for (let tick of d.data.ticks) {
-            if (tick.ticked) ticks_counter++;
-            total_ticks++;
-          }
-
-          var color = d3_scale.scaleLinear()
-            .domain([0, total_ticks])
-            .range(['#FFFFFF', d.data.color]);
-          return color(ticks_counter);
-        }
+        var gradient_url = 'url(#'+ d.data.metric.toLowerCase().replace(' ', '_') + '-gradient)'
+        return gradient_url;
       })
       .on('mousemove', tooltipFunc)
       .on('click', function (d) {
@@ -485,6 +473,39 @@ var DemoWithBadgeDrawer = {
           });
       })
       .on('mouseout', tooltipHideFunc);
+
+    var radial_gradients = svg_g
+      .append('defs')
+      .selectAll('radialGradient')
+      .data(root.descendants().filter(function(d) { return d.data.metric != null; })) // remove widget root
+      .enter()
+      .append('radialGradient')
+      .attr('gradientUnits', 'userSpaceOnUse')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', '100%')
+      .attr('id', function(d) { return d.data.metric.toLowerCase().replace(' ', '_') + '-gradient';});
+    radial_gradients.append('stop')
+      .attr('offset', '0%')
+      .attr('stop-color', function(d) {
+        if (d.data.ticks) {
+          var ticks_counter = 0;
+          var total_ticks = 0;
+
+          for (let tick of d.data.ticks) {
+            if (tick.ticked) ticks_counter++;
+            total_ticks++;
+          }
+
+          var color = d3_scale.scaleLinear()
+            .domain([0, total_ticks])
+            .range(['#FFFFFF', d.data.color]);
+          return color(ticks_counter);
+        }
+      });
+    radial_gradients.append('stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#fff');
 
     if (total_metrics > 1) {
       var angle;
@@ -649,31 +670,31 @@ var DemoWithBadgeDrawer = {
         return icon;
       })
       .attr('x', -levelSize * xy_pos)
-      .attr('y', -levelSize * xy_pos)
-      // .on('mousemove', tooltipUptimeFunc)
-      // .on('click', function (d) {
+      .attr('y', -levelSize * xy_pos);
+    // .on('mousemove', tooltipUptimeFunc)
+    // .on('click', function (d) {
 
-      //   draw_uptime_one_time = true;
+    //   draw_uptime_one_time = true;
 
-      //   d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+    //   d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
 
-      //   clicked = false;
-      //   tooltipUptimeFuncAux(d);
-      //   clicked = true;
+    //   clicked = false;
+    //   tooltipUptimeFuncAux(d);
+    //   clicked = true;
 
-      //   d3_selection.select(widgetElem).select('#close_icon').append('img')
-      //     .attr('src', close_button)
-      //     .attr('width', '15px')
-      //     .attr('height', '15px')
-      //     .style('cursor', 'pointer')
-      //     .on('click', function () {
-      //       tooltip_div.style('display', 'none');
-      //       tooltip_div.empty();
-      //       draw_uptime_one_time = true;
-      //       clicked = false;
-      //     });
-      // })
-      // .on('mouseout', tooltipUptimeHideFunc);
+    //   d3_selection.select(widgetElem).select('#close_icon').append('img')
+    //     .attr('src', close_button)
+    //     .attr('width', '15px')
+    //     .attr('height', '15px')
+    //     .style('cursor', 'pointer')
+    //     .on('click', function () {
+    //       tooltip_div.style('display', 'none');
+    //       tooltip_div.empty();
+    //       draw_uptime_one_time = true;
+    //       clicked = false;
+    //     });
+    // })
+    // .on('mouseout', tooltipUptimeHideFunc);
 
     var tool_id = widgetElem.getAttribute('data-id');
     var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
