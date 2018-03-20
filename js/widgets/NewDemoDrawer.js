@@ -101,11 +101,10 @@ var NewDemoDrawer = {
       another_tick.ticked = false;
       metric.ticks.push(another_tick);
     }
-    //metric.ticks[0].ticked = false;
-    // var tick = {};
-    // tick.name = 'test'
-    // tick.ticked = true;
-    // metric.ticks.push(tick);
+    var tick = {};
+    tick.name = 'FSF';
+    tick.ticked = false;
+    metric.ticks.push(tick);
     new_widgetData.metrics.push(metric);
 
     // Build
@@ -293,6 +292,8 @@ var NewDemoDrawer = {
       .count();
     partition(root);
 
+    var filtered_root_descendants = root.descendants().filter(function(d) { return d.data.metric != null; }); // remove widget root
+
     var total_metrics = widgetData.metrics.length;
     var radius_separator = (total_metrics > 1) ? 0.005 : 0;
 
@@ -415,7 +416,7 @@ var NewDemoDrawer = {
     };
 
     svg_g.selectAll('path')
-      .data(root.descendants().filter(function(d) { return d.data.metric != null; })) // remove widget root
+      .data(filtered_root_descendants)
       .enter()
       .append('path')
       .style('stroke', 'none')
@@ -434,7 +435,7 @@ var NewDemoDrawer = {
       })
       .style('fill', function (d) {
         //gradient here
-        var gradient_url = 'url(#'+ d.data.metric.toLowerCase().replace(' ', '_') + '-gradient)'
+        var gradient_url = 'url(#'+ d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' + widgetElem.id + ')';
         return gradient_url;
       })
       .on('mousemove', tooltipFunc)
@@ -475,35 +476,33 @@ var NewDemoDrawer = {
     var radial_gradients = svg_g
       .append('defs')
       .selectAll('radialGradient')
-      .data(root.descendants().filter(function(d) { return d.data.metric != null; })) // remove widget root
+      .data(filtered_root_descendants)
       .enter()
       .append('radialGradient')
       .attr('gradientUnits', 'userSpaceOnUse')
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', '100%')
-      .attr('id', function(d) { return d.data.metric.toLowerCase().replace(' ', '_') + '-gradient';});
-    radial_gradients.append('stop')
-      .attr('offset', '0%')
-      .attr('stop-color', function(d) {
-        if (d.data.ticks) {
-          var ticks_counter = 0;
-          var total_ticks = 0;
+      .attr('id', function(d) { return d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' + widgetElem.id;})
+      .each(function (d, i, j) {
 
-          for (let tick of d.data.ticks) {
-            if (tick.ticked) ticks_counter++;
-            total_ticks++;
-          }
+        var gradient_arc = d3_selection.select(widgetElem).select('#'+j[i].id);
+        var total_ticks = d.data.ticks.length;
+        d.data.ticks.forEach(function (tick, i) {
+          // console.log(tick);
+          gradient_arc.append('stop')
+            .attr('offset', i * 100 / d.data.ticks.length + '%')
+            .attr('stop-opacity', 1)
+            .attr('stop-color', function (d){
 
-          var color = d3_scale.scaleLinear()
-            .domain([0, total_ticks])
-            .range(['#FFFFFF', d.data.color]);
-          return color(ticks_counter);
-        }
+              var color = d3_scale.scaleLinear()
+                .domain([0, total_ticks])
+                .range([d.data.color, '#FFFFFF']);
+
+              return tick.ticked ? color(i) : 'white';
+            });
+        });
       });
-    radial_gradients.append('stop')
-      .attr('offset', '100%')
-      .attr('stop-color', '#fff');
 
     if (total_metrics > 1) {
       var angle;
