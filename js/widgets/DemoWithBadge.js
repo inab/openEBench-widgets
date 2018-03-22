@@ -103,11 +103,11 @@ var DemoWithBadgeDrawer = {
       another_tick.ticked = false;
       metric.ticks.push(another_tick);
     }
-    //metric.ticks[0].ticked = false;
-    // var tick = {};
-    // tick.name = 'test'
-    // tick.ticked = true;
-    // metric.ticks.push(tick);
+    // metric.ticks[0].ticked = false;
+    var tick = {};
+    tick.name = 'test'
+    tick.ticked = false;
+    metric.ticks.push(tick);
     new_widgetData.metrics.push(metric);
 
     // Build
@@ -173,6 +173,15 @@ var DemoWithBadgeDrawer = {
       metric.ticks.push(tick);
 
     }
+
+    var tick = {};
+    tick.name = 'test'
+    tick.ticked = false;
+    metric.ticks.push(tick);
+    var tick = {};
+    tick.name = 'test'
+    tick.ticked = false;
+    metric.ticks.push(tick);
     new_widgetData.metrics.push(metric);
 
     // Documentation;
@@ -198,6 +207,11 @@ var DemoWithBadgeDrawer = {
       tick.description = false;
       metric.ticks.push(tick);
     }
+
+    var tick = {};
+    tick.name = 'test'
+    tick.ticked = false;
+    metric.ticks.push(tick);
     new_widgetData.metrics.push(metric);
 
     new_widgetData.enabled = widgetData.project.website.operational == 200;
@@ -221,6 +235,7 @@ var DemoWithBadgeDrawer = {
     widgetElem.appendChild(widgetRoot);
 
     var widgetSize = widgetElem.getAttribute('data-widget-size');
+    var widgetId = widgetElem.getAttribute('data-id');
     var width, height;
 
 
@@ -295,6 +310,7 @@ var DemoWithBadgeDrawer = {
       .count();
     partition(root);
 
+    var filtered_root_descendants = root.descendants().filter(function(d) { return d.data.metric != null; }); // remove widget root
     var total_metrics = widgetData.metrics.length;
     var radius_separator = (total_metrics > 1) ? 0.005 : 0;
 
@@ -417,7 +433,7 @@ var DemoWithBadgeDrawer = {
     };
 
     svg_g.selectAll('path')
-      .data(root.descendants().filter(function(d) { return d.data.metric != null; })) // remove widget root
+      .data(filtered_root_descendants) // remove widget root
       .enter()
       .append('path')
       .style('stroke', 'none')
@@ -436,7 +452,7 @@ var DemoWithBadgeDrawer = {
       })
       .style('fill', function (d) {
         //gradient here
-        var gradient_url = 'url(#'+ d.data.metric.toLowerCase().replace(' ', '_') + '-gradient)'
+        var gradient_url = 'url(#'+ d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' +  widgetId + ')';
         return gradient_url;
       })
       .on('mousemove', tooltipFunc)
@@ -477,35 +493,42 @@ var DemoWithBadgeDrawer = {
     var radial_gradients = svg_g
       .append('defs')
       .selectAll('radialGradient')
-      .data(root.descendants().filter(function(d) { return d.data.metric != null; })) // remove widget root
+      .data(filtered_root_descendants)
       .enter()
       .append('radialGradient')
       .attr('gradientUnits', 'userSpaceOnUse')
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', '100%')
-      .attr('id', function(d) { return d.data.metric.toLowerCase().replace(' ', '_') + '-gradient';});
+      .attr('id', function(d) { return d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' +  widgetId;});
     radial_gradients.append('stop')
-      .attr('offset', '0%')
+      .attr('offset', function(d) {
+        var ticks_counter = 0;
+        var total_ticks = 0;
+
+        for (let tick of d.data.ticks) {
+          if (tick.ticked) ticks_counter++;
+          total_ticks++;
+        }
+        return (ticks_counter * 50 / total_ticks) + '%';
+      })
       .attr('stop-color', function(d) {
         if (d.data.ticks) {
-          var ticks_counter = 0;
-          var total_ticks = 0;
-
-          for (let tick of d.data.ticks) {
-            if (tick.ticked) ticks_counter++;
-            total_ticks++;
-          }
-
-          var color = d3_scale.scaleLinear()
-            .domain([0, total_ticks])
-            .range(['#FFFFFF', d.data.color]);
-          return color(ticks_counter);
+           return d.data.color
         }
       });
     radial_gradients.append('stop')
-      .attr('offset', '100%')
-      .attr('stop-color', '#fff');
+      .attr('offset', function(d) {
+        var ticks_counter = 0;
+        var total_ticks = 0;
+
+        for (let tick of d.data.ticks) {
+          if (tick.ticked) ticks_counter++;
+          total_ticks++;
+        }
+        return ((ticks_counter * 50 / total_ticks) + 10) + '%';
+      })
+      .attr('stop-color', '#FFFFFF');
 
     if (total_metrics > 1) {
       var angle;
