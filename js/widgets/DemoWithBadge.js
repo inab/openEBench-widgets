@@ -547,7 +547,7 @@ var DemoWithBadgeDrawer = {
           if (tick.ticked) ticks_counter++;
           total_ticks++;
         }
-        return ((ticks_counter * 50 / total_ticks) + 10) + '%';
+        return ((ticks_counter * 50 / total_ticks) + 3) + '%';
       })
       .attr('stop-color', '#FFFFFF');
 
