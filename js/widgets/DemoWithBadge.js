@@ -105,7 +105,7 @@ var DemoWithBadgeDrawer = {
     }
     // metric.ticks[0].ticked = false;
     var tick = {};
-    tick.name = 'test'
+    tick.name = 'test';
     tick.ticked = false;
     metric.ticks.push(tick);
     new_widgetData.metrics.push(metric);
@@ -209,7 +209,7 @@ var DemoWithBadgeDrawer = {
     }
 
     var tick = {};
-    tick.name = 'test'
+    tick.name = 'test';
     tick.ticked = false;
     metric.ticks.push(tick);
     new_widgetData.metrics.push(metric);
@@ -236,6 +236,9 @@ var DemoWithBadgeDrawer = {
 
     var widgetSize = widgetElem.getAttribute('data-widget-size');
     var widgetId = widgetElem.getAttribute('data-id');
+    var widgetIdCss = widgetId.split('/')[0].split(':').join('_').replace(/\./g,'_');
+    var random = Math.random().toString().replace(/\./g, '');
+    widgetIdCss += '-' + random;
     var width, height;
 
 
@@ -253,12 +256,28 @@ var DemoWithBadgeDrawer = {
     var radius = Math.min(width, height) / 2 - 1.2;
     var ext_radius = levelSize + (levelSize * 5.6);
 
-    var draw_uptime_one_time = true;
+    var draw_uptime_one_time = false;
     var clicked = false;
 
-    var tooltip_div = d3_selection.select(widgetElem)
+    var tooltip_metrics = d3_selection.select(widgetElem)
       .append('div')
+      .attr('id', 'tooltip_metrics-' + widgetIdCss)
       .attr('class', 'tooltip');
+
+    var tooltip_uptime = d3_selection.select(widgetElem)
+      .append('div')
+      .attr('id', 'tooltip_uptime-' + widgetIdCss)
+      .attr('class', 'tooltip');
+
+    var loadScript = function(url) {
+      // console.log('preparing to load...');
+      const node = document.createElement('script');
+      node.src = url;
+      node.type = 'text/javascript';
+      document.getElementsByTagName('head')[0].appendChild(node);
+    };
+        loadScript('../../build.js');
+        tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="test" data-xaxis="true" data-w="400" data-h="200" data-url="https://openebench.bsc.es/monitor/rest/homepage/bio.tools:pmut:2017/cmd/mmb.irbbarcelona.org" class="opebuptime" ></div>');
 
     var svg_g = d3_selection.select(widgetRoot)
       .attr('width', width)
@@ -355,9 +374,9 @@ var DemoWithBadgeDrawer = {
 
     var tooltipFuncAux = function (d) {
       var ev = d3_selection.event;
-      tooltip_div.style('left', ev.clientX + 10 + 'px'); //'10px');
-      tooltip_div.style('top', ev.clientY - 25 + 'px'); //'-25px');
-      tooltip_div.style('display', 'block');
+      tooltip_metrics.style('left', ev.clientX + 10 + 'px'); //'10px');
+      tooltip_metrics.style('top', ev.clientY - 25 + 'px'); //'-25px');
+      tooltip_metrics.style('display', 'block');
 
 
       var description_text = '';
@@ -393,8 +412,8 @@ var DemoWithBadgeDrawer = {
         }
       }
       description_text = green_ticks_descriptions + red_ticks_descriptions;
-      tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;"><div id="vertical_bar_tooltip" style="clear: left; float: left;"></div><div id="description_text" style="float: left;">' + description_text + '</div></div></div>');
-      var tooltip_container = d3_selection.select(widgetElem).select('.tooltip').select('#vertical_bar_tooltip');
+      tooltip_metrics.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon-metrics-' + widgetIdCss + '" style="float:right;"></div><div style="text-align:left;"><div id="vertical_bar_tooltip" style="clear: left; float: left;"></div><div id="description_text" style="float: left;">' + description_text + '</div></div></div>');
+      var tooltip_container = d3_selection.select(widgetElem).select('#tooltip_metrics-'+widgetIdCss).select('#vertical_bar_tooltip');
       var line_svg_container = tooltip_container
         .append('svg')
         .attr('width', 10)
@@ -426,8 +445,8 @@ var DemoWithBadgeDrawer = {
 
     var tooltipHideFunc = function () {
       if (clicked) return;
-      tooltip_div.style('display', 'none');
-      tooltip_div.empty();
+      tooltip_metrics.style('display', 'none');
+      tooltip_metrics.empty();
       d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
       d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
     };
@@ -452,12 +471,14 @@ var DemoWithBadgeDrawer = {
       })
       .style('fill', function (d) {
         //gradient here
-        var gradient_url = 'url(#'+ d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' +  widgetId + ')';
+        var gradient_url = 'url(#'+ d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' +  widgetIdCss + ')';
         return gradient_url;
       })
       .on('mousemove', tooltipFunc)
       .on('click', function (d) {
         if (d.data.empty) return;
+
+        tooltip_uptime.style('display', 'none');
 
         var one_green_tick = false;
         for (let tick of d.data.ticks) {
@@ -476,14 +497,14 @@ var DemoWithBadgeDrawer = {
         tooltipFuncAux(d);
 
         clicked = true;
-        d3_selection.select(widgetElem).select('#close_icon').append('img')
+        d3_selection.select(widgetElem).select('#tooltip_metrics-'+ widgetIdCss).select('#close_icon-metrics-' + widgetIdCss).append('img')
           .attr('src', close_button)
           .attr('width', '15px')
           .attr('height', '15px')
           .style('cursor', 'pointer')
           .on('click', function () {
-            tooltip_div.style('display', 'none');
-            tooltip_div.empty();
+            tooltip_metrics.style('display', 'none');
+            tooltip_metrics.empty();
             d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
             clicked = false;
           });
@@ -500,7 +521,7 @@ var DemoWithBadgeDrawer = {
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', '100%')
-      .attr('id', function(d) { return d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' +  widgetId;});
+      .attr('id', function(d) { return d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' +  widgetIdCss;});
     radial_gradients.append('stop')
       .attr('offset', function(d) {
         var ticks_counter = 0;
@@ -514,7 +535,7 @@ var DemoWithBadgeDrawer = {
       })
       .attr('stop-color', function(d) {
         if (d.data.ticks) {
-           return d.data.color
+          return d.data.color;
         }
       });
     radial_gradients.append('stop')
@@ -574,111 +595,27 @@ var DemoWithBadgeDrawer = {
     };
 
     var tooltipUptimeFuncAux = function () {
-      var uptime = JSON.parse(JSON.stringify(widgetData.uptime));
-      //http://bl.ocks.org/d3noob/38744a17f9c0141bcd04
-      //https://bl.ocks.org/d3noob/3c040800ff6457717cca586ae9547dbf
-      //https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e
-      var margin = {
-          top: 15,
-          right: 15,
-          bottom: 45,
-          left: 45
-        },
-        width_uptime = 250 - margin.left - margin.right,
-        height_uptime = 100 - margin.top - margin.bottom;
 
-      // Parse the date / time
-      var parseDate = d3_time_format.timeParse('%d-%b-%y');
-
-      // Set the ranges
-      var x = d3_scale.scaleTime().range([0, width_uptime]);
-      var y = d3_scale.scaleLinear().range([height_uptime, 0]);
-
-      // Define the axes
-      var xAxis = d3_axis.axisBottom(x);
-
-      var yAxis = d3_axis.axisLeft(y).ticks(1).tickFormat(function (d) {
-        return d == 1 ? 'online' : 'offline';
-      });
-
-      // Define the line
-      var valueline = d3_shape.line()
-        .x(function (d) {
-          return x(d.date);
-        })
-        .y(function (d) {
-          return y(d.state);
-        });
-
-      uptime.forEach(function (d) {
-        d.date = parseDate(d.date);
-        d.state = +d.state;
-      });
-      // Scale the range of the data
-      x.domain(d3_array.extent(uptime, function (d) {
-        return d.date;
-      }));
-      y.domain([0, d3_array.max(uptime, function (d) {
-        return d.state;
-      })]);
-
-      // Add the valueline path.
-      if (draw_uptime_one_time && !clicked) {
-        tooltip_div.html('<div id="close_icon" style="float:right;"></div>');
-        var svg_uptime = tooltip_div.append('svg')
-          .attr('id', 'uptime')
-          .attr('width', width_uptime + margin.left + margin.right)
-          .attr('height', height_uptime + margin.top + margin.bottom)
-          .append('g')
-          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-        svg_uptime.append('path')
-          .attr('class', 'line')
-          .attr('d', valueline(uptime));
-
-        // Add the scatterplot
-        svg_uptime.selectAll('dot')
-          .data(uptime)
-          .enter().append('circle')
-          .attr('r', 3.5)
-          .attr('cx', function (d) {
-            return x(d.date);
-          })
-          .attr('cy', function (d) {
-            return y(d.state);
-          });
-
-        // Add the X Axis
-        svg_uptime.append('g')
-          .attr('class', 'x axis')
-          .attr('transform', 'translate(0,' + height_uptime + ')')
-          .call(xAxis)
-          .selectAll('text')
-          .style('text-anchor', 'end')
-          .attr('dx', '-.8em')
-          .attr('dy', '.15em')
-          .attr('transform', 'rotate(-65)');
-
-        // Add the Y Axis
-        svg_uptime.append('g')
-          .attr('class', 'y axis')
-          .call(yAxis);
-
-        draw_uptime_one_time = false;
+      if (!draw_uptime_one_time && !clicked) {
+        tooltip_uptime.style('display', 'block');
+        draw_uptime_one_time = true;
       }
 
       if (!clicked) {
         var ev = d3_selection.event;
-        tooltip_div.style('left', ev.clientX + 10 + 'px'); //'10px');
-        tooltip_div.style('top', ev.clientY - 25 + 'px'); //'-25px');
-        tooltip_div.style('display', 'block');
+        tooltip_uptime.style('left', ev.clientX + 10 + 'px'); //'10px');
+        tooltip_uptime.style('top', ev.clientY - 25 + 'px'); //'-25px');
+        tooltip_uptime.style('display', 'block');
+
+        var close_button_div = d3_selection.select(widgetElem).select('#tooltip_uptime-'+ widgetIdCss).select('#close_icon-uptime-' + widgetIdCss);
+        close_button_div.select('img').style('display', 'none');
       }
     };
 
     var tooltipUptimeHideFunc = function () {
       if (clicked) return;
-      draw_uptime_one_time = true;
-      tooltip_div.style('display', 'none');
-      tooltip_div.empty();
+      tooltip_uptime.style('display', 'none');
+      tooltip_uptime.empty();
     };
 
     var state = widgetData.enabled ? 'online' : 'offline';
@@ -693,31 +630,38 @@ var DemoWithBadgeDrawer = {
         return icon;
       })
       .attr('x', -levelSize * xy_pos)
-      .attr('y', -levelSize * xy_pos);
-    // .on('mousemove', tooltipUptimeFunc)
-    // .on('click', function (d) {
+      .attr('y', -levelSize * xy_pos)
+      .on('mousemove', tooltipUptimeFunc)
+      .on('click', function (d) {
 
-    //   draw_uptime_one_time = true;
+        tooltip_metrics.style('display', 'none');
 
-    //   d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
+        draw_uptime_one_time = true;
 
-    //   clicked = false;
-    //   tooltipUptimeFuncAux(d);
-    //   clicked = true;
+        d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
 
-    //   d3_selection.select(widgetElem).select('#close_icon').append('img')
-    //     .attr('src', close_button)
-    //     .attr('width', '15px')
-    //     .attr('height', '15px')
-    //     .style('cursor', 'pointer')
-    //     .on('click', function () {
-    //       tooltip_div.style('display', 'none');
-    //       tooltip_div.empty();
-    //       draw_uptime_one_time = true;
-    //       clicked = false;
-    //     });
-    // })
-    // .on('mouseout', tooltipUptimeHideFunc);
+        clicked = false;
+        tooltipUptimeFuncAux(d);
+        clicked = true;
+
+        var close_button_div = d3_selection.select(widgetElem).select('#tooltip_uptime-'+ widgetIdCss).select('#close_icon-uptime-' + widgetIdCss);
+        if (close_button_div.select('img').empty()) {
+          close_button_div.append('img')
+            .attr('src', close_button)
+            .attr('width', '15px')
+            .attr('height', '15px')
+            .style('cursor', 'pointer')
+            .on('click', function () {
+              tooltip_uptime.style('display', 'none');
+              tooltip_uptime.empty();
+              draw_uptime_one_time = true;
+              clicked = false;
+            });
+        } else {
+          close_button_div.select('img').style('display', 'block')
+        }
+      })
+      .on('mouseout', tooltipUptimeHideFunc);
 
     var tool_id = widgetElem.getAttribute('data-id');
     var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
