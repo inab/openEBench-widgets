@@ -412,35 +412,7 @@ var DemoWithBadgeDrawer = {
         }
       }
       description_text = green_ticks_descriptions + red_ticks_descriptions;
-      tooltip_metrics.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon-metrics-' + widgetIdCss + '" style="float:right;"></div><div style="text-align:left;"><div id="vertical_bar_tooltip" style="clear: left; float: left;"></div><div id="description_text" style="float: left;">' + description_text + '</div></div></div>');
-      var tooltip_container = d3_selection.select(widgetElem).select('#tooltip_metrics-'+widgetIdCss).select('#vertical_bar_tooltip');
-      var line_svg_container = tooltip_container
-        .append('svg')
-        .attr('width', 10)
-        .attr('height', 60)
-        .style('border', '1px solid black')
-        .style('margin-right', '5px');
-      if (green_ticks_total == total_ticks) {
-        var rect = line_svg_container.append('rect')
-          .attr('width', 10)
-          .attr('height', 60)
-          .attr('fill', d.data.color);
-      } else if (green_ticks_total == 0) {
-        var rect = line_svg_container.append('rect')
-          .attr('width', 8)
-          .attr('height', 60)
-          .attr('fill', '#FFFFFF');
-      } else {
-        var rect = line_svg_container.append('rect')
-          .attr('width', 10)
-          .attr('height', 60 * (1- green_ticks_total/total_ticks))
-          .attr('fill', '#FFFFFF');
-        var rect = line_svg_container.append('rect')
-          .attr('width', 10)
-          .attr('height',  60 * (green_ticks_total/total_ticks))
-          .attr('y', 60 - 60 * (green_ticks_total/total_ticks))
-          .attr('fill', d.data.color);
-      }
+      tooltip_metrics.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon-metrics-' + widgetIdCss + '" style="float:right;"></div><div id="description_text" style="text-align: left;">' + description_text + '</div></div>');
     };
 
     var tooltipHideFunc = function () {
