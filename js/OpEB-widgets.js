@@ -22,14 +22,14 @@ var xhrSuccessStatus = {
 
 var WIDGET_TYPES = {};
 
-RegisterWidget(WIDGET_TYPES, DemoDrawer)
-RegisterWidget(WIDGET_TYPES, NewDemoDrawer)
-RegisterWidget(WIDGET_TYPES, DemoWithBadgeDrawer)
-RegisterWidget(WIDGET_TYPES, DemoBadgeDrawer)
+RegisterWidget(WIDGET_TYPES, DemoDrawer);
+RegisterWidget(WIDGET_TYPES, NewDemoDrawer);
+RegisterWidget(WIDGET_TYPES, DemoWithBadgeDrawer);
+RegisterWidget(WIDGET_TYPES, DemoBadgeDrawer);
 
 // Register widgets to draw
 function RegisterWidget(WIDGET_TYPES, Drawer) {
-  WIDGET_TYPES[Drawer.WIDGET_TYPE] = Drawer.draw
+  WIDGET_TYPES[Drawer.WIDGET_TYPE] = Drawer.draw;
 }
 
 // This one should be used to draw something when the data could not be
@@ -40,8 +40,13 @@ var DEFAULT_WIDGET_TYPE = 'demo';
 
 var OpEB = {
 
-  apply: function() {
-    var widgetElems = document.getElementsByClassName('opeb');
+  apply: function(widgetElems=[]) {
+
+    // Travel all DOM tree if widgetElems is empty
+    if (!(Array.isArray(widgetElems) && widgetElems.length)) {
+      widgetElems = document.getElementsByClassName('opeb');
+    }
+
     for (var iw = 0, nw = widgetElems.length; iw < nw; iw++) {
       var widgetElem = widgetElems[iw];
       // Does the element have what it is needed?
@@ -79,12 +84,12 @@ var OpEB = {
   },
 
   drawError: function(widgetElem, status, statusText, responseText, parseException) {
-    console.log(status + ' ' + statusText + ' ' + responseText);
-    console.log(parseException);
+    console.warn(status + ' ' + statusText + ' ' + responseText);
+    console.warn(parseException);
   },
 
   composeQuery: function(opEBId) {
-    return "https://openebench.bsc.es/monitor/metrics/" + opEBId;
+    return 'https://openebench.bsc.es/monitor/metrics/' + opEBId;
   },
 
   fetchData: function(widgetElem) {
@@ -168,7 +173,7 @@ var OpEB = {
       var retval = null;
       if (type === 'abort') {
         retval = function() {
-          console.log('abort');
+          console.warn('abort');
           if (req) {
             callback = errorCallback = req.onload =
               req.onerror = req.onabort = req.onreadystatechange = null;
@@ -198,7 +203,7 @@ var OpEB = {
               }
             } catch (e) {
               // Only protect from the callback's collateral damage
-              console.log('Unhandled exception on a callback', e);
+              console.warn('Unhandled exception on a callback', e);
             }
 
 
@@ -238,7 +243,7 @@ var OpEB = {
                 );
               } catch (e) {
                 // Only protect from the callback's collateral damage
-                console.log('Unhandled exception on a callback', e);
+                console.warn('Unhandled exception on a callback', e);
               }
             }
 
@@ -326,4 +331,4 @@ if (window.attachEvent) {
 
 export {
   OpEB
- };
+};
