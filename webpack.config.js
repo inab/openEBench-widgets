@@ -8,10 +8,10 @@ var DEPLOYMENT = process.env.WEBPACK_DEPLOYMENT || 'dev'
 var common = {
   entry: './js/OpEB-widgets.js',
   resolve: {
-          modules: [path.resolve(__dirname, "widget_modules"), "node_modules"]
+    modules: [path.resolve(__dirname, "widget_modules"), "node_modules"]
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
@@ -58,8 +58,8 @@ if(DEPLOYMENT === 'dev') {
       inline: true
     },
     module: {
-      // loaders will get concatenated!
-      loaders: [
+      // rules will get concatenated!
+      rules: [
         {
           test: /\.css$/,
           use: [
@@ -83,7 +83,7 @@ if(DEPLOYMENT === 'dist') {
       path: __dirname + '/dist'
     },
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.css$/,
           use: [
@@ -114,7 +114,7 @@ if(DEPLOYMENT === 'dist-compat') {
       path: __dirname + '/dist'
     },
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.css$/,
           use: [
