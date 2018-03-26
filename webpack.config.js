@@ -75,6 +75,8 @@ if(DEPLOYMENT === 'dist') {
   module.exports = merge(common, {
     output: {
       filename: 'OpEB-widgets.js',
+      library: 'OpEB_widgets',
+      libraryTarget: "this",
       path: __dirname + '/dist'
     },
     module: {
