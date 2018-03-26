@@ -265,8 +265,9 @@ var NewDemoDrawer = {
       node.type = 'text/javascript';
       document.getElementsByTagName('head')[0].appendChild(node);
     };
-        loadScript('../../build.js');
-        tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="test" data-xaxis="true" data-w="400" data-h="200" data-url="https://openebench.bsc.es/monitor/rest/homepage/bio.tools:pmut:2017/cmd/mmb.irbbarcelona.org" class="opebuptime" ></div>');
+    loadScript('../../build.js');
+    var url = 'https://openebench.bsc.es/monitor/rest/homepage';
+    tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + url + '/' + widgetId + '" class="opebuptime" ></div>');
 
     var svg_g = d3_selection.select(widgetRoot)
       .attr('width', width)
@@ -619,7 +620,7 @@ var NewDemoDrawer = {
               clicked = false;
             });
         } else {
-          close_button_div.select('img').style('display', 'block')
+          close_button_div.select('img').style('display', 'block');
         }
       })
       .on('mouseout', tooltipUptimeHideFunc);
