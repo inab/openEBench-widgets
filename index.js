@@ -80,7 +80,7 @@ function doApply() {
   htmlcontainer.appendChild(document.createTextNode(htmlwidget));
   urlArea.append(htmlcontainer);
   urlArea.show()
-  OpEB_widgets.OpEB.apply();
+  OpEB_widgets.OpEB.apply([widget]);
   area.show()
   $('#widget_grid_url').show()
 };
