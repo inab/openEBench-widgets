@@ -264,7 +264,6 @@ var NewDemoDrawer = {
 
     var uptime_url = widgetData.name.replace("metrics/",'rest/homepage/')
 
-    console.log(uptime_url)
     tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + uptime_url + '" class="opebuptime" ></div>');
     loadChart();
 
