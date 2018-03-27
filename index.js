@@ -50,13 +50,13 @@ function doApply() {
 
   switch(widget_tool) {
     case 'pmut':
-      tool_url = "bio.tools:pmut:2017/cmd/mmb.irbbarcelona.org"
+      tool_url = "pmut"
       break;
     case 'trimal':
-      tool_url = "bio.tools:trimAl:1.4/cmd/trimal.cgenomics.org"
+      tool_url = "trimAl"
       break;
     case 'rxnorm':
-      tool_url = "bio.tools:rxnorm_api:1/soap/rxnav.nlm.nih.gov"
+      tool_url = "rxnorm_api"
       break;
     default:
       "no-tool"
@@ -259,5 +259,6 @@ box['evolution_VII_mockup'] = `
         <li>Fixed radius position with odd number of metrics</li>
         <li>Added vertical bar inside tooltips</li>
         <li>Added radial gradiant to the arcs</li>
+        <li>Tool name as data-id</li>
       </ul>
       `;
