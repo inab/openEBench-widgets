@@ -71,7 +71,7 @@ var DemoWithBadgeDrawer = {
     return statsNodeSet;
   },
 
-  parseJson: function (widgetData) {
+  parseJson: function (widgetData, debug_mode) {
     // console.log(widgetData);
     var new_widgetData = {};
     new_widgetData.metrics = [];
@@ -106,10 +106,12 @@ var DemoWithBadgeDrawer = {
       metric.ticks.push(another_tick);
     }
     // metric.ticks[0].ticked = false;
-    var tick = {};
-    tick.name = 'test';
-    tick.ticked = false;
-    metric.ticks.push(tick);
+    if (debug_mode) {
+      var tick = {};
+      tick.name = 'test';
+      tick.ticked = false;
+      metric.ticks.push(tick);
+    }
     new_widgetData.metrics.push(metric);
 
     // Build
@@ -201,10 +203,12 @@ var DemoWithBadgeDrawer = {
       metric.ticks.push(tick);
     }
 
-    var tick = {};
-    tick.name = 'test';
-    tick.ticked = false;
-    metric.ticks.push(tick);
+    if (debug_mode) {
+      var tick = {};
+      tick.name = 'test';
+      tick.ticked = false;
+      metric.ticks.push(tick);
+    }
     new_widgetData.metrics.push(metric);
 
     new_widgetData.enabled = widgetData.project.website.operational == 200;
@@ -216,23 +220,24 @@ var DemoWithBadgeDrawer = {
 
   draw: function (widgetElem, widgetData) {
 
-    widgetData = DemoWithBadgeDrawer.parseJson(widgetData);
-
-    for (let metric of widgetData.metrics) {
-      delete metric.submetrics;
-    }
-
     var widgetRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     widgetRoot.setAttribute('class', 'widget');
     widgetRoot.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     widgetElem.appendChild(widgetRoot);
 
     var widgetSize = widgetElem.getAttribute('data-widget-size');
+    var widgetDebug = widgetElem.getAttribute('data-widget-debug');
     var widgetId = widgetElem.getAttribute('data-id');
     var widgetIdCss = widgetId.split('/')[0].split(':').join('_').replace(/\./g,'_');
     var random = Math.random().toString().replace(/\./g, '');
     widgetIdCss += '-' + random;
     var width, height;
+
+    widgetData = DemoWithBadgeDrawer.parseJson(widgetData, widgetDebug);
+
+    for (let metric of widgetData.metrics) {
+      delete metric.submetrics;
+    }
 
 
     widgetSize = Number(widgetSize);
