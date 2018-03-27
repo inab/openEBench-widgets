@@ -89,7 +89,7 @@ var OpEB = {
   },
 
   composeQuery: function(opEBId) {
-    return 'https://openebench.bsc.es/monitor/metrics/' + opEBId;
+    return 'https://openebench.bsc.es/monitor/rest/widget/metrics/' + opEBId;
   },
 
   fetchData: function(widgetElem) {

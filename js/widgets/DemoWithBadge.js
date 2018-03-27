@@ -262,9 +262,10 @@ var DemoWithBadgeDrawer = {
       .attr('id', 'tooltip_uptime-' + widgetIdCss)
       .attr('class', 'tooltip');
 
-    var url = 'https://openebench.bsc.es/monitor/rest/homepage';
-    tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + url + '/' + widgetId + '" class="opebuptime" ></div>');
-    loadChart()
+    var uptime_url = widgetData.name.replace("metrics/",'rest/homepage/')
+
+    tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + uptime_url + '" class="opebuptime" ></div>');
+    loadChart();
 
     var svg_g = d3_selection.select(widgetRoot)
       .attr('width', width)
@@ -622,9 +623,8 @@ var DemoWithBadgeDrawer = {
       })
       .on('mouseout', tooltipUptimeHideFunc);
 
-    var tool_id = widgetElem.getAttribute('data-id');
+    var tool_name = widgetElem.getAttribute('data-id');
     var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
-    var tool_name = tool_id.match(/:(.+):/)[1];
 
     var available_scientific_benchmark = state == 'online';
     var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';

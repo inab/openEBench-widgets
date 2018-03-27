@@ -262,10 +262,11 @@ var NewDemoDrawer = {
       .attr('id', 'tooltip_uptime-' + widgetIdCss)
       .attr('class', 'tooltip');
 
-    var url = 'https://openebench.bsc.es/monitor/rest/homepage';
+    var uptime_url = widgetData.name.replace("metrics/",'rest/homepage/')
 
-    tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + url + '/' + widgetId + '" class="opebuptime" ></div>');
-    loadChart()
+    console.log(uptime_url)
+    tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + uptime_url + '" class="opebuptime" ></div>');
+    loadChart();
 
     var svg_g = d3_selection.select(widgetRoot)
       .attr('width', width)
