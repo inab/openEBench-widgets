@@ -7,6 +7,9 @@ var DEPLOYMENT = process.env.WEBPACK_DEPLOYMENT || 'dev'
 
 var common = {
   entry: './js/OpEB-widgets.js',
+  resolve: {
+          modules: [path.resolve(__dirname, "widget_modules"), "node_modules"]
+  },
   module: {
     loaders: [
       {

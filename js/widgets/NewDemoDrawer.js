@@ -14,6 +14,10 @@ import online_tick from '../../icons/online-tick.png';
 import offline_tick from '../../icons/offline-tick.png';
 import close_button from '../../icons/close-button.png';
 
+import { loadChart } from 'uptime-widget';
+
+
+// printMe()
 // All the widget drawing functions take as input an element and the
 // fetched data
 var NewDemoDrawer = {
@@ -258,16 +262,10 @@ var NewDemoDrawer = {
       .attr('id', 'tooltip_uptime-' + widgetIdCss)
       .attr('class', 'tooltip');
 
-    var loadScript = function(url) {
-      // console.log('preparing to load...');
-      const node = document.createElement('script');
-      node.src = url;
-      node.type = 'text/javascript';
-      document.getElementsByTagName('head')[0].appendChild(node);
-    };
-    loadScript('../../build.js');
     var url = 'https://openebench.bsc.es/monitor/rest/homepage';
+
     tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + url + '/' + widgetId + '" class="opebuptime" ></div>');
+    loadChart()
 
     var svg_g = d3_selection.select(widgetRoot)
       .attr('width', width)

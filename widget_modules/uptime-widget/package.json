@@ -1,0 +1,20 @@
+{
+  "name": "uptime-widget",
+  "version": "1.0.0",
+  "description": "Chart widget",
+  "main": "build/uptime.build.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vicky Sundesha <me.vicky@hotmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "c3": "^0.4.21",
+    "css-loader": "^0.28.11",
+    "d3": "^4.13.0",
+    "style-loader": "^0.20.2",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.10"
+  },
+  "dependencies": {}
+}
