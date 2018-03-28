@@ -3,16 +3,14 @@
 const d3_selection = require('d3-selection');
 const d3_hierarchy = require('d3-hierarchy');
 const d3_shape = require('d3-shape');
-const d3_time_format = require('d3-time-format');
-const d3_scale = require('d3-scale');
-const d3_axis = require('d3-axis');
-const d3_array = require('d3-array');
 
 import online_plug from '../../icons/online-plug.png';
 import offline_plug from '../../icons/offline-plug.png';
 import online_tick from '../../icons/online-tick.png';
 import offline_tick from '../../icons/offline-tick.png';
 import close_button from '../../icons/close-button.png';
+
+import { loadChart } from 'uptime-widget';
 
 // All the widget drawing functions take as input an element and the
 // fetched data
@@ -38,9 +36,11 @@ var DemoDrawer = {
   //],
   DEFAULT_LEVEL_SIZE: 15,
   DEFAULT_SIZE: 200,
-  DEFAULT_TYPE: 'demo',
+  DEFAULT_BADGE_WIDTH: 175,
+  DEFAULT_BADGE_HEIGHT: 20,
+  DEFAULT_TITLE_HEIGHT: 20,
   // Getting the max depth of the nested structure
-  getStatsNodeSet: function(widgetData) {
+  getStatsNodeSet: function (widgetData) {
     var levelNodeSet = [];
     for (var iNode = 0, nNode = widgetData.metrics.length; iNode < nNode; iNode++) {
       levelNodeSet.push([widgetData.metrics[iNode]]);
@@ -68,16 +68,178 @@ var DemoDrawer = {
     return statsNodeSet;
   },
 
+  parseJson: function (widgetData, debug_mode) {
+    var new_widgetData = {};
+    new_widgetData.metrics = [];
 
-  draw: function(widgetElem, widgetData) {
+    // License
+    if (widgetData.project.license) {
+      var metric = {};
+      metric.metric = 'License';
+      metric.color = '#ff895d';
+      metric.ticks = [];
+
+      for (let key in widgetData.project.license) {
+        var tick = {};
+        tick.name = key.replace('_', ' ');
+        tick.ticked = widgetData.project.license[key];
+        metric.ticks.push(tick);
+      }
+
+    } else {
+      var metric = {};
+      metric.metric = 'License';
+      metric.color = '#ff895d';
+      metric.ticks = [];
+      var tick = {};
+      tick.name = 'osi';
+      tick.ticked = false;
+      metric.ticks.push(tick);
+      var another_tick = {};
+      another_tick.name = 'open source';
+      another_tick.ticked = false;
+      metric.ticks.push(another_tick);
+    }
+    // metric.ticks[0].ticked = false;
+    if (debug_mode) {
+      var tick = {};
+      tick.name = 'test';
+      tick.ticked = false;
+      metric.ticks.push(tick);
+    }
+    new_widgetData.metrics.push(metric);
+
+    // Build
+    if (widgetData.project.build) {
+      var metric = {};
+      metric.metric = 'Buildability';
+      metric.color = '#d5eeff';
+      metric.ticks = [];
+
+      var tick = {};
+      for (let key in widgetData.project.build) {
+        tick.name = key.replace('_', ' ');
+        tick.ticked = widgetData.project.license[key];
+        metric.ticks.push(tick);
+      }
+
+      if (metric.ticks.length == 0) {
+        tick.name = 'Compiler';
+        tick.ticked = false;
+        metric.ticks.push(tick);
+        var another_tick = {};
+        another_tick.name = 'Automated';
+        another_tick.ticked = false;
+        metric.ticks.push(another_tick);
+      }
+    } else {
+      var metric = {};
+      var tick = {};
+      metric.metric = 'Buildability';
+      metric.color = '#d5eeff';
+      metric.ticks = [];
+      tick.name = 'Compiler';
+      tick.ticked = false;
+      metric.ticks.push(tick);
+      var another_tick = {};
+      another_tick.name = 'Automated';
+      another_tick.ticked = false;
+      metric.ticks.push(another_tick);
+    }
+    new_widgetData.metrics.push(metric);
+
+    // Support
+    if (widgetData.support) {
+      var metric = {};
+      metric.metric = 'Support';
+      metric.color = '#78bbe6';
+      metric.ticks = [];
+
+      var tick = {};
+      for (let key in widgetData.support) {
+        tick.name = key.replace('_', ' ');
+        tick.ticked = widgetData.support[key];
+        metric.ticks.push(tick);
+      }
+
+    } else {
+      var metric = {};
+      metric.metric = 'Support';
+      metric.color = '#78bbe6';
+      metric.ticks = [];
+      var tick = {};
+      tick.email = false;
+      metric.ticks.push(tick);
+
+    }
+    new_widgetData.metrics.push(metric);
+
+    // Documentation;
+    if (widgetData.project.summary) {
+      var metric = {};
+      metric.metric = 'Documentation';
+      metric.color = '#1b435d';
+      metric.ticks = [];
+
+      var tick = {};
+      for (let key in widgetData.project.summary) {
+        tick.name = key.replace('_', ' ');
+        tick.ticked = widgetData.project.summary[key];
+        metric.ticks.push(tick);
+      }
+
+    } else {
+      var metric = {};
+      metric.metric = 'Documentation';
+      metric.color = '#1b435d';
+      metric.ticks = [];
+      var tick = {};
+      tick.description = false;
+      metric.ticks.push(tick);
+    }
+
+    if (debug_mode) {
+      var tick = {};
+      tick.name = 'test';
+      tick.ticked = false;
+      metric.ticks.push(tick);
+    }
+    new_widgetData.metrics.push(metric);
+
+    new_widgetData.enabled = widgetData.project.website.operational == 200;
+    new_widgetData.name = widgetData['@id'];
+
+    //new_widgetData['uptime']
+    return new_widgetData;
+  },
+
+  draw: function (widgetElem, widgetData) {
+
     var widgetRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     widgetRoot.setAttribute('class', 'widget');
     widgetRoot.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     widgetElem.appendChild(widgetRoot);
 
     var widgetSize = widgetElem.getAttribute('data-widget-size');
-    var width, height;
+    var widgetDebug = widgetElem.getAttribute('data-widget-debug');
+    var widgetId = widgetElem.getAttribute('data-id');
+    var widgetSubTypes = widgetElem.getAttribute('data-widget-subtypes');
+    var widgetIdCss = widgetId.split('/')[0].split(':').join('_').replace(/\./g,'_');
+    var random = Math.random().toString().replace(/\./g, '');
+    widgetIdCss += '-' + random;
+    var SVGwidth, SVGheight, widgetWidth, widgetHeight;
 
+    widgetData = DemoDrawer.parseJson(widgetData, widgetDebug);
+
+    for (let metric of widgetData.metrics) {
+      delete metric.submetrics;
+    }
+
+    if (widgetSubTypes == null) {
+      widgetSubTypes = ['widget'];
+    } else {
+      widgetSubTypes = widgetSubTypes.split(' ');
+    }
 
     widgetSize = Number(widgetSize);
     if (widgetSize == null || widgetSize <= 0 || isNaN(widgetSize)) {
@@ -87,25 +249,64 @@ var DemoDrawer = {
       widgetSize = DemoDrawer.DEFAULT_SIZE;
     }
 
-    width = height = widgetSize;
+    SVGwidth = SVGheight = widgetWidth = widgetHeight = widgetSize;
 
-    var levelSize = width * 15 / 200;
-    var radius = Math.min(width, height) / 2 - 1.2;
+    if (widgetSubTypes.includes('title')) {
+      widgetWidth = widgetHeight = (widgetWidth - DemoDrawer.DEFAULT_TITLE_HEIGHT); // badge height
+    }
+
+    if (widgetSubTypes.includes('bottom_badge')) {
+      widgetWidth = widgetHeight = (widgetWidth - DemoDrawer.DEFAULT_BADGE_HEIGHT - 5); // badge height
+    }
+
+    var levelSize = widgetWidth * 15 / 200;
+    var radius = Math.min(widgetWidth, widgetHeight) / 2 - 1.2;
     var ext_radius = levelSize + (levelSize * 5.6);
 
-    var draw_uptime_one_time = true;
+    var draw_uptime_one_time = false;
     var clicked = false;
 
-    var tooltip_div = d3_selection.select(widgetElem)
+    var state = widgetData.enabled ? 'online' : 'offline';
+    if (widgetSubTypes.includes('badge') && widgetWidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
+      var svg_g = d3_selection.select(widgetRoot)
+        .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
+        .attr('height', DemoDrawer.DEFAULT_BADGE_HEIGHT)
+        .append('g')
+        .attr('transform', 'translate(' + 0 + ',' + 0 + ')');
+      DemoDrawer.draw_badge(svg_g, widgetElem, state, 0, 0);
+      return;
+    }
+
+    var tooltip_metrics = d3_selection.select(widgetElem)
       .append('div')
+      .attr('id', 'tooltip_metrics-' + widgetIdCss)
       .attr('class', 'tooltip');
 
-    var svg_g = d3_selection.select(widgetRoot)
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+    var tooltip_uptime = d3_selection.select(widgetElem)
+      .append('div')
+      .attr('id', 'tooltip_uptime-' + widgetIdCss)
+      .attr('class', 'tooltip');
 
+    var uptime_url = widgetData.name.replace('metrics/','rest/homepage/');
+
+    tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + uptime_url + '" class="opebuptime" ></div>');
+    loadChart();
+
+
+    var svg_g = d3_selection.select(widgetRoot)
+      .attr('width', SVGwidth)
+      .attr('height', SVGheight)
+      .append('g')
+      .attr('transform', function() {
+        if (widgetSubTypes.includes('title')) {
+          return 'translate(' + (widgetWidth + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ',' + (SVGheight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ')';
+        } else if (widgetSubTypes.includes('bottom_badge')) {
+          return 'translate(' + (widgetWidth + DemoDrawer.DEFAULT_BADGE_HEIGHT) / 2 + ',' + widgetHeight / 2 + ')';
+        }
+        return 'translate(' + widgetWidth / 2 + ',' + widgetHeight / 2 + ')';
+      });
+
+      
     svg_g.selectAll('.circle')
       .data([{
         'x_axis': 0,
@@ -114,23 +315,23 @@ var DemoDrawer = {
       }, {
         'x_axis': 0,
         'y_axis': 0,
-        'r_radius': (ext_radius)
+        'r_radius': ext_radius
       }])
       .enter().append('circle')
       .attr('class', 'circle')
-      .attr('cx', function(d) {
+      .attr('cx', function (d) {
         return d.x_axis;
       })
-      .attr('cy', function(d) {
+      .attr('cy', function (d) {
         return d.y_axis;
       })
-      .attr('r', function(d) {
+      .attr('r', function (d) {
         return d.r_radius;
       })
       .style('fill', 'none')
       .style('stroke', 'black')
       .style('stroke-opacity', 0.5)
-      .style('display', 'inline-block');
+      .style('display', 'block');
 
 
     // First, getting the max depth
@@ -142,36 +343,48 @@ var DemoDrawer = {
       description: 'OpenEBench widget',
       submetrics: widgetData.metrics
     },
-      function(d) {
-        return d.submetrics;
-      }
+    function (d) {
+      return d.submetrics;
+    }
     )
-    //.sum(function (d) { return d.size});
+      //.sum(function (d) { return d.size});
       .count();
     partition(root);
+
+    var filtered_root_descendants = root.descendants().filter(function(d) { return d.data.metric != null; }); // remove widget root
+    var total_metrics = widgetData.metrics.length;
+    var radius_separator = (total_metrics > 1) ? 0.005 : 0;
+
     var arc = d3_shape.arc()
-      .startAngle(function(d) {
-        return d.x0 + 0.005;
+      .startAngle(function (d) {
+        return d.x0 + radius_separator;
       })
-      .endAngle(function(d) {
-        return d.x1 - 0.005;
+      .endAngle(function (d) {
+        return d.x1 - radius_separator;
       })
-      .innerRadius(function(d) {
-        return d.y0;
+      .innerRadius(function () {
+        return levelSize + 1;
       })
-      .outerRadius(function(d) {
-        return d.y1;
+      .outerRadius(function () {
+        return ext_radius - 0.65;
       });
 
 
     var maxDepth = statsNodeSet.length;
 
-    var tooltipFunc = function(d) {
+    var tooltipFunc = function (d) {
       if (!clicked) {
-        if (!d.data.empty && (!d.parent.data.name || d.parent.data.name != 'widget')) {
+        var one_green_tick = false;
+        for (let tick of d.data.ticks) {
+          one_green_tick = one_green_tick || tick.ticked;
+          if (tick.ticked) break;
+        }
+
+
+        if (!d.parent.data.name || d.parent.data.name != 'widget') {
           d3_selection.select(this).style('opacity', 1);
         }
-        if (!d.data.empty) {
+        if (one_green_tick) {
           d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
           d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
           d3_selection.select(this).style('opacity', 1);
@@ -181,10 +394,11 @@ var DemoDrawer = {
       }
     };
 
-    var tooltipFuncAux = function(d) {
-      tooltip_div.style('left', d3_selection.event.pageX + 10 + 'px');
-      tooltip_div.style('top', d3_selection.event.pageY - 25 + 'px');
-      tooltip_div.style('display', 'inline-block');
+    var tooltipFuncAux = function (d) {
+      var ev = d3_selection.event;
+      tooltip_metrics.style('left', ev.clientX + 10 + 'px'); //'10px');
+      tooltip_metrics.style('top', ev.clientY - 25 + 'px'); //'-25px');
+      tooltip_metrics.style('display', 'block');
 
 
       var description_text = '';
@@ -201,48 +415,71 @@ var DemoDrawer = {
           }
         }
       }
+
+      var green_ticks_descriptions = '';
+      var red_ticks_descriptions = '';
+      var green_ticks_total = 0;
+      var total_ticks = data.ticks.length;
       for (var iTick = 0, nTick = data.ticks.length; iTick < nTick; iTick++) {
         var tick = data.ticks[iTick];
         var description = tick.name;
         var isTicked = !!tick.ticked;
+        green_ticks_total += isTicked ? 1 : 0;
         var icon = (isTicked) ? online_tick : offline_tick;
-        description_text += '<br><img src="' + icon + '" height="15" width="15"> ' + description;
+        var full_description = '<br><img src="' + icon + '" height="15" width="15"> ' + description;
+        if (isTicked) {
+          green_ticks_descriptions += full_description;
+        } else {
+          red_ticks_descriptions += full_description;
+        }
       }
-      tooltip_div.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon" style="float:right;"></div><div style="text-align:left;">' + description_text + '</div>');
+      description_text = green_ticks_descriptions + red_ticks_descriptions;
+      tooltip_metrics.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon-metrics-' + widgetIdCss + '" style="float:right;"></div><div id="description_text" style="text-align: left;">' + description_text + '</div></div>');
     };
 
-    var tooltipHideFunc = function() {
+    var tooltipHideFunc = function () {
       if (clicked) return;
-      tooltip_div.style('display', 'none');
-      tooltip_div.html('');
+      tooltip_metrics.style('display', 'none');
+      tooltip_metrics.empty();
       d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
       d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
     };
 
     svg_g.selectAll('path')
-      .data(root.descendants())
+      .data(filtered_root_descendants) // remove widget root
       .enter()
       .append('path')
       .style('stroke', 'none')
-      .attr('display', function(d) {
+      .attr('display', function (d) {
         return d.depth ? null : 'none';
       })
       .attr('d', arc)
       .style('stroke', 'none')
-    //.style('stroke', '#000000')
-    //.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
-      .classed('path_shown', function(d) {
+      //.style('stroke', '#000000')
+      //.style("fill", function (d) {return color((d.children ? d : d.parent).data.name); })
+      .classed('path_shown', function (d) {
         return !d.data.empty;
       })
-      .style('opacity', function(d) {
+      .style('opacity', function (d) {
         return d.data.empty ? 0 : 1;
       })
-      .style('fill', function(d) {
-        return d.data.color;
+      .style('fill', function (d) {
+        //gradient here
+        var gradient_url = 'url(#'+ d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' +  widgetIdCss + ')';
+        return gradient_url;
       })
       .on('mousemove', tooltipFunc)
-      .on('click', function(d) {
+      .on('click', function (d) {
         if (d.data.empty) return;
+
+        tooltip_uptime.style('display', 'none');
+
+        var one_green_tick = false;
+        for (let tick of d.data.ticks) {
+          one_green_tick = one_green_tick || tick.ticked;
+          if (tick.ticked) break;
+        }
+        if (!one_green_tick) return;
         d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
         d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
         d3_selection.select(this).style('opacity', 1);
@@ -254,179 +491,143 @@ var DemoDrawer = {
         tooltipFuncAux(d);
 
         clicked = true;
-        d3_selection.select(widgetElem).select('#close_icon').append('img')
+        d3_selection.select(widgetElem).select('#tooltip_metrics-'+ widgetIdCss).select('#close_icon-metrics-' + widgetIdCss).append('img')
           .attr('src', close_button)
-          .attr('width', '15')
-          .attr('height', '15')
+          .attr('width', '15px')
+          .attr('height', '15px')
           .style('cursor', 'pointer')
-          .on('click', function() {
-            tooltip_div.style('display', 'none');
-            tooltip_div.html('');
+          .on('click', function () {
+            tooltip_metrics.style('display', 'none');
+            tooltip_metrics.empty();
             d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 1);
             clicked = false;
           });
       })
       .on('mouseout', tooltipHideFunc);
 
-    var radius_lines_number = 0;
-    svg_g.selectAll('path')
-      .each(function(d) {
-        if (radius_lines_number < 6) {
-          radius_lines_number++;
+    var radial_gradients = svg_g
+      .append('defs')
+      .selectAll('radialGradient')
+      .data(filtered_root_descendants)
+      .enter()
+      .append('radialGradient')
+      .attr('gradientUnits', 'userSpaceOnUse')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', '100%')
+      .attr('id', function(d) { return d.data.metric.toLowerCase().replace(' ', '_') + '-gradient-' +  widgetIdCss;});
+    radial_gradients.append('stop')
+      .attr('offset', function(d) {
+        var ticks_counter = 0;
+        var total_ticks = 0;
+
+        for (let tick of d.data.ticks) {
+          if (tick.ticked) ticks_counter++;
+          total_ticks++;
+        }
+        return (ticks_counter * 50 / total_ticks) + '%';
+      })
+      .attr('stop-color', function(d) {
+        if (d.data.ticks) {
+          return d.data.color;
+        }
+      });
+    radial_gradients.append('stop')
+      .attr('offset', function(d) {
+        var ticks_counter = 0;
+        var total_ticks = 0;
+
+        for (let tick of d.data.ticks) {
+          if (tick.ticked) ticks_counter++;
+          total_ticks++;
+        }
+        return ((ticks_counter * 50 / total_ticks) + 3) + '%';
+      })
+      .attr('stop-color', '#FFFFFF');
+
+    if (total_metrics > 1) {
+      var angle;
+      // Fix angle problem with an odd number of metrics
+      if (total_metrics % 2 == 0) {
+        angle = 0.5 * Math.PI;
+      } else {
+        angle = 1.5 * Math.PI;
+      }
+
+      svg_g.selectAll('path')
+        .each(function (d) {
           svg_g.selectAll('.radius').data([{
-            'x1': (levelSize + 1.5) * Math.cos(d.x1 + Math.PI / 2),
-            'y1': (levelSize + 1.5) * Math.sin(d.x1 + Math.PI / 2),
-            'x2': (ext_radius) * Math.cos(d.x1 + Math.PI / 2),
-            'y2': (ext_radius) * Math.sin(d.x1 + Math.PI / 2)
+            'x1': (levelSize + 1.5) * Math.cos(d.x1 + angle),
+            'y1': (levelSize + 1.5) * Math.sin(d.x1 + angle),
+            'x2': (ext_radius) * Math.cos(d.x1 + angle),
+            'y2': (ext_radius) * Math.sin(d.x1 + angle)
           }])
             .enter().append('line')
             .attr('class', 'line')
-            .attr('x1', function(d) {
+            .attr('x1', function (d) {
               return d.x1;
             })
-            .attr('y1', function(d) {
+            .attr('y1', function (d) {
               return d.y1;
             })
-            .attr('x2', function(d) {
+            .attr('x2', function (d) {
               return d.x2;
             })
-            .attr('y2', function(d) {
+            .attr('y2', function (d) {
               return d.y2;
             })
             .style('stroke', 'black')
             .style('stroke-width', '1')
             .style('stroke-opacity', 0.5)
             .style('display', 'inline-block');
-        }
-      });
+        });
+    }
 
-    var tooltipUptimeFunc = function(d) {
+    var tooltipUptimeFunc = function (d) {
       if (clicked) return;
       tooltipUptimeFuncAux(d);
     };
 
-    var tooltipUptimeFuncAux = function() {
-      var uptime = JSON.parse(JSON.stringify(widgetData.uptime));
-      //http://bl.ocks.org/d3noob/38744a17f9c0141bcd04
-      //https://bl.ocks.org/d3noob/3c040800ff6457717cca586ae9547dbf
-      //https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e
-      var margin = {
-        top: 15,
-        right: 15,
-        bottom: 45,
-        left: 45
-      },
-        width_uptime = 250 - margin.left - margin.right,
-        height_uptime = 100 - margin.top - margin.bottom;
+    var tooltipUptimeFuncAux = function () {
 
-      // Parse the date / time
-      var parseDate = d3_time_format.timeParse('%d-%b-%y');
-
-      // Set the ranges
-      var x = d3_scale.scaleTime().range([0, width_uptime]);
-      var y = d3_scale.scaleLinear().range([height_uptime, 0]);
-
-      // Define the axes
-      var xAxis = d3_axis.axisBottom(x);
-
-      var yAxis = d3_axis.axisLeft(y).ticks(1).tickFormat(function(d) {
-        return d == 1 ? 'online' : 'offline';
-      });
-
-      // Define the line
-      var valueline = d3_shape.line()
-        .x(function(d) {
-          return x(d.date);
-        })
-        .y(function(d) {
-          return y(d.state);
-        });
-
-      uptime.forEach(function(d) {
-        d.date = parseDate(d.date);
-        d.state = +d.state;
-      });
-      // Scale the range of the data
-      x.domain(d3_array.extent(uptime, function(d) {
-        return d.date;
-      }));
-      y.domain([0, d3_array.max(uptime, function(d) {
-        return d.state;
-      })]);
-
-      // Add the valueline path.
-      if (draw_uptime_one_time && !clicked) {
-        tooltip_div.html('<div id="close_icon" style="float:right;"></div>');
-        var svg_uptime = tooltip_div.append('svg')
-          .attr('id', 'uptime')
-          .attr('width', width_uptime + margin.left + margin.right)
-          .attr('height', height_uptime + margin.top + margin.bottom)
-          .append('g')
-          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-        svg_uptime.append('path')
-          .attr('class', 'line')
-          .attr('d', valueline(uptime));
-
-        // Add the scatterplot
-        svg_uptime.selectAll('dot')
-          .data(uptime)
-          .enter().append('circle')
-          .attr('r', 3.5)
-          .attr('cx', function(d) {
-            return x(d.date);
-          })
-          .attr('cy', function(d) {
-            return y(d.state);
-          });
-
-        // Add the X Axis
-        svg_uptime.append('g')
-          .attr('class', 'x axis')
-          .attr('transform', 'translate(0,' + height_uptime + ')')
-          .call(xAxis)
-          .selectAll('text')
-          .style('text-anchor', 'end')
-          .attr('dx', '-.8em')
-          .attr('dy', '.15em')
-          .attr('transform', 'rotate(-65)');
-
-        // Add the Y Axis
-        svg_uptime.append('g')
-          .attr('class', 'y axis')
-          .call(yAxis);
-
-        draw_uptime_one_time = false;
+      if (!draw_uptime_one_time && !clicked) {
+        tooltip_uptime.style('display', 'block');
+        draw_uptime_one_time = true;
       }
 
       if (!clicked) {
-        tooltip_div.style('left', d3_selection.event.pageX + 10 + 'px');
-        tooltip_div.style('top', d3_selection.event.pageY - 25 + 'px');
-        tooltip_div.style('display', 'inline-block');
+        var ev = d3_selection.event;
+        tooltip_uptime.style('left', ev.clientX + 10 + 'px'); //'10px');
+        tooltip_uptime.style('top', ev.clientY - 25 + 'px'); //'-25px');
+        tooltip_uptime.style('display', 'block');
+
+        var close_button_div = d3_selection.select(widgetElem).select('#tooltip_uptime-'+ widgetIdCss).select('#close_icon-uptime-' + widgetIdCss);
+        close_button_div.select('img').style('display', 'none');
       }
     };
 
-    var tooltipUptimeHideFunc = function() {
+    var tooltipUptimeHideFunc = function () {
       if (clicked) return;
-      draw_uptime_one_time = true;
-      tooltip_div.style('display', 'none');
-      tooltip_div.html('');
+      tooltip_uptime.style('display', 'none');
+      tooltip_uptime.empty();
     };
 
-    var state = widgetData.enabled ? 'online' : 'offline';
     var xy_pos = widgetData.enabled ? 0.8 : 0.7;
     var width_height = widgetData.enabled ? '12%' : '10%';
     var icon;
     svg_g.append('image')
       .attr('width', width_height)
       .attr('height', width_height)
-      .attr('xlink:href', function() {
+      .attr('xlink:href', function () {
         icon = (state == 'online') ? online_plug : offline_plug;
         return icon;
       })
       .attr('x', -levelSize * xy_pos)
       .attr('y', -levelSize * xy_pos)
       .on('mousemove', tooltipUptimeFunc)
-      .on('click', function(d) {
+      .on('click', function (d) {
+
+        tooltip_metrics.style('display', 'none');
 
         draw_uptime_one_time = true;
 
@@ -436,20 +637,68 @@ var DemoDrawer = {
         tooltipUptimeFuncAux(d);
         clicked = true;
 
-        d3_selection.select(widgetElem).select('#close_icon').append('img')
-          .attr('src', close_button)
-          .attr('width', '15')
-          .attr('height', '15')
-          .style('cursor', 'pointer')
-          .on('click', function() {
-            tooltip_div.style('display', 'none');
-            tooltip_div.html('');
-            draw_uptime_one_time = true;
-            clicked = false;
-          });
+        var close_button_div = d3_selection.select(widgetElem).select('#tooltip_uptime-'+ widgetIdCss).select('#close_icon-uptime-' + widgetIdCss);
+        if (close_button_div.select('img').empty()) {
+          close_button_div.append('img')
+            .attr('src', close_button)
+            .attr('width', '15px')
+            .attr('height', '15px')
+            .style('cursor', 'pointer')
+            .on('click', function () {
+              tooltip_uptime.style('display', 'none');
+              tooltip_uptime.empty();
+              draw_uptime_one_time = true;
+              clicked = false;
+            });
+        } else {
+          close_button_div.select('img').style('display', 'block');
+        }
       })
       .on('mouseout', tooltipUptimeHideFunc);
+
+    if (widgetSubTypes.includes('title')) {
+      svg_g
+        .append('text')
+        .attr('x', widgetWidth/2)
+        .attr('y', -(widgetHeight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2)
+        .attr('font-family', 'sans-serif')
+        .attr('font-size', DemoDrawer.DEFAULT_TITLE_HEIGHT + 'px')
+        .text(widgetId)
+        .attr("fill", "red");
+    }
+
+    if (widgetSubTypes.includes('bottom_badge') && widgetWidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
+      DemoDrawer.draw_badge(svg_g, widgetElem, state, widgetWidth, widgetHeight);
+    }
   },
+
+  draw_badge: function (svg_g, widgetElem, state, widgetWidth, widgetHeight) {
+    var tool_name = widgetElem.getAttribute('data-id');
+    var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
+
+    var available_scientific_benchmark = state == 'online';
+    var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';
+
+    svg_g.append('image')
+      .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
+      .attr('height', 20)
+      .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-' + scientific_benchmark_status + '-' + (available_scientific_benchmark ? 'green' : 'red') + '.svg?link=' + tool_url + tool_name)
+      .attr('x', function() {
+        return widgetWidth == 0 ? 0 : (-(widgetWidth - (widgetWidth - DemoDrawer.DEFAULT_BADGE_WIDTH))/2);
+      })
+      .attr('y', function() {
+        return widgetHeight == 0 ? 0 : (widgetHeight/2 + 5);
+      })
+      .style('cursor', function () {
+        return available_scientific_benchmark ? 'pointer' : 'auto';
+      })
+      .on('click', function() {
+        if (available_scientific_benchmark) {
+          window.open(tool_url + tool_name);
+        }
+      });
+  },
+
   WIDGET_TYPE: 'demo'
 };
 

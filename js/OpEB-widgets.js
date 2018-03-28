@@ -3,9 +3,9 @@
 
 import style from '../styles/OpEB-widgets.css';
 
-import DemoDrawer from './widgets/DemoDrawer';
+import OldDemoDrawer from './widgets/OldDemoDrawer';
 import NewDemoDrawer from './widgets/NewDemoDrawer';
-import DemoWithBadgeDrawer from './widgets/DemoWithBadge';
+import DemoDrawer from './widgets/DemoDrawer';
 import DemoBadgeDrawer from './widgets/DemoBadge';
 
 // Copied from jQuery
@@ -22,9 +22,9 @@ var xhrSuccessStatus = {
 
 var WIDGET_TYPES = {};
 
-RegisterWidget(WIDGET_TYPES, DemoDrawer);
+RegisterWidget(WIDGET_TYPES, OldDemoDrawer);
 RegisterWidget(WIDGET_TYPES, NewDemoDrawer);
-RegisterWidget(WIDGET_TYPES, DemoWithBadgeDrawer);
+RegisterWidget(WIDGET_TYPES, DemoDrawer);
 RegisterWidget(WIDGET_TYPES, DemoBadgeDrawer);
 
 // Register widgets to draw

@@ -3,10 +3,6 @@
 const d3_selection = require('d3-selection');
 const d3_hierarchy = require('d3-hierarchy');
 const d3_shape = require('d3-shape');
-const d3_time_format = require('d3-time-format');
-const d3_scale = require('d3-scale');
-const d3_axis = require('d3-axis');
-const d3_array = require('d3-array');
 
 import online_plug from '../../icons/online-plug.png';
 import offline_plug from '../../icons/offline-plug.png';
@@ -70,13 +66,11 @@ var NewDemoDrawer = {
   },
 
   parseJson: function (widgetData, debug_mode) {
-    // console.log(widgetData);
     var new_widgetData = {};
     new_widgetData.metrics = [];
 
     // License
     if (widgetData.project.license) {
-      //console.log(widgetData.project.license)
       var metric = {};
       metric.metric = 'License';
       metric.color = '#ff895d';
