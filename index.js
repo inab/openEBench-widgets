@@ -10,7 +10,6 @@ $(document).ready(function() {
 
 
 $('.menu .item').tab();
-console.log($('.menu .item'));
 
 $('.ui#evolutions_sidebar')
   .on('click', '.item', function() {

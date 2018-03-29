@@ -54,9 +54,9 @@
           <i class="dropdown icon"></i>
           Types
           <div id="type_menu" class="menu">
-            <div id="new_demo" class="active item">Widget</div>
-            <div id="new_demo_with_badge" class="item">Widget & Badge </div>
-            <div id="demo_badge" class="item">Badge only </div>
+            <div id="widget" class="active item">Widget</div>
+            <div id="widget_with_badge" class="item">Widget & Badge </div>
+            <div id="badge" class="item">Badge only </div>
           </div>
         </div>
         <div id="tools" class="ui left poiting dropdown link item">
@@ -103,14 +103,19 @@
             <div class="ui inverted segment" id="widget_params_explanation">
               <div class="ui segment">
                 <div class="ui bulleted list">
-                  <div class="item"><b>data-id</b>: search your tool in <a href="https://dev-openebench.bsc.es/html/ws/#!/">OpenEBench</a> and use the last part of url of the found tool as data-id e.g https://dev-openebench.bsc.es/html/ws/#!/tool/<b>trimAl</b>
+                  <div class="item">
+                   <div><b>data-id</b>:</div> 
+                  <div class="list">
+                  <div class="item"><a href="https://dev-openebench.bsc.es/html/ws/#!/"><b>OpenEBench</b></a>: search your tool and use the last part of url of the found tool as data-id e.g https://dev-openebench.bsc.es/html/ws/#!/tool/<b>trimAl</b></div>
+                  <div class="item"><a href="https://bio.tools/"><b>bio.tools</b></a>: search your tool and use the last part of url of the found tool as data-id e.g https://bio.tools/<b>trimAl</b></div>
+                  </div>
                   </div>
                   <div class="item">
                   <div><b>data-widget-type</b>:</div>
                   <div class="list">
-                  <div class="item"><b>"new_demo"</b>: default widget</div>
-                  <div class="item"><b>"new_demo_with_badge"</b>: widget with the bottom badge</div>
-                  <div class="item"><b>"demo_badge"</b>: badge only</div>
+                  <div class="item"><b>"widget"</b>: default widget</div>
+                  <div class="item"><b>"widget_with_badge"</b>: widget with the bottom badge</div>
+                  <div class="item"><b>"badge"</b>: badge only</div>
                   </div>
                   </div>
                   <div class="item"><b>data-widget-size</b>: "200" (as minimum) is recommeded</div>
