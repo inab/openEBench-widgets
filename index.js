@@ -8,6 +8,10 @@ $(document).ready(function() {
   init_range();
 });
 
+
+$('.menu .item').tab();
+console.log($('.menu .item'));
+
 $('.ui#evolutions_sidebar')
   .on('click', '.item', function() {
     $(this).addClass('active').siblings().removeClass('active')
@@ -19,7 +23,7 @@ $('.ui#evolutions_sidebar')
     $('#widget_viewer').html('<object type="text/html" width="' + width +'" height="'+ height + '" data="' + path + '"></object>')
 
     $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  id.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box[id] + '</div>')
-  })
+  });
 
 $('.ui#widget_menu')
   .on('click', '.item', function() {
@@ -76,7 +80,7 @@ function doApply() {
   codeArea.empty();
   var htmlwidget = area.html();
   var htmlcontainer = document.createElement('div');
-  htmlcontainer.setAttribute('class','ui compact left segment');
+  htmlcontainer.setAttribute('class','ui compact segment');
   htmlcontainer.appendChild(document.createTextNode('<html>'));
   htmlcontainer.appendChild(document.createElement('br'));
   htmlcontainer.appendChild(document.createTextNode('<head>'));

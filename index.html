@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
-    <script
-    src="https://code.jquery.com/jquery-3.1.1.min.js"
-integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/semantic-ui-range@1.0.1/range.js"></script>
@@ -81,7 +80,7 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       </div>
     </div>
     <div class="thirteen wide column">
-      <div class="ui basic center aligned segment">
+      <div class="ui basic center aligned compact segment">
         <div id="widget_display" class="ui left aligned grid">
           <div class="four wide column">
             <div class id="widget_box"></div>
@@ -89,12 +88,35 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
           <div class="twelve wide column">
             <div class id="widget_viewer"></div>
           </div>
-          <div id="widget_grid_code" class="ui center aligned grid">
-            <div class="row">
-              <h4 class="ui header">Embedded Code</h4>
-            </div>
-            <div class="row">
-              <div class="ui inverted segment" id="widget_box_code"></div>
+
+          <div class="ui top attached tabular menu">
+            <div class="active item" data-tab="code">Embedded Code</div>
+            <div class="item" data-tab="parameters">Parameters</div>
+          </div>
+          <div class="ui bottom attached active tab segment" data-tab="code">
+            <h4 class="ui header">Embedded Code</h4>
+            <div class="ui inverted compact segment" id="widget_box_code"></div>
+          </div>
+
+          <div class="ui bottom attached tab segment" data-tab="parameters">
+            <h4 class="ui header">Explanation of widget data parameters</h4>
+            <div class="ui inverted segment" id="widget_params_explanation">
+              <div class="ui segment">
+                <div class="ui bulleted list">
+                  <div class="item"><b>data-id</b>: search your tool in <a href="https://dev-openebench.bsc.es/html/ws/#!/">OpenEBench</a> and use the last part of url of the found tool as data-id e.g https://dev-openebench.bsc.es/html/ws/#!/tool/<b>trimAl</b>
+                  </div>
+                  <div class="item">
+                  <div><b>data-widget-type</b>:</div>
+                  <div class="list">
+                  <div class="item"><b>"new_demo"</b>: default widget</div>
+                  <div class="item"><b>"new_demo_with_badge"</b>: widget with the bottom badge</div>
+                  <div class="item"><b>"demo_badge"</b>: badge only</div>
+                  </div>
+                  </div>
+                  <div class="item"><b>data-widget-size</b>: "200" (as minimum) is recommeded</div>
+                  <div class="item"><b>class="opeb"</b>: all widget containers have this class associated</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
