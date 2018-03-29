@@ -32,7 +32,7 @@ $('.ui#widget_menu')
     if (page == 'evolutions') {
       $('.item#evolution_VII_mockup').trigger('click')
       $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VII_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase() }) + '</h4>' + box['evolution_VII_mockup'] + '</div>').show()
-      $('#widget_grid_url').hide()
+      $('#widget_grid_code').hide()
     } else {
       doApply()
     }
@@ -71,18 +71,35 @@ function doApply() {
   widget.setAttribute("data-widget-size", widget_size);
   widget.setAttribute("class","opeb");
   area.append(widget).hide();
-  var urlArea = $('#widget_box_url');
-  urlArea.hide()
-  urlArea.empty();
+  var codeArea = $('#widget_box_code');
+  codeArea.hide()
+  codeArea.empty();
   var htmlwidget = area.html();
   var htmlcontainer = document.createElement('div');
-  htmlcontainer.setAttribute('class','ui compact segment');
+  htmlcontainer.setAttribute('class','ui compact left segment');
+  htmlcontainer.appendChild(document.createTextNode('<html>'));
+  htmlcontainer.appendChild(document.createElement('br'));
+  htmlcontainer.appendChild(document.createTextNode('<head>'));
+  htmlcontainer.appendChild(document.createElement('br'));
+  htmlcontainer.appendChild(document.createTextNode('<meta charset="UTF-8" />'));
+  htmlcontainer.appendChild(document.createElement('br'));
+  htmlcontainer.appendChild(document.createTextNode('<meta name="viewport" content="width=device-width" />'));
+  htmlcontainer.appendChild(document.createElement('br'));
+  htmlcontainer.appendChild(document.createTextNode('</head>'));
+  htmlcontainer.appendChild(document.createElement('br'));
+  htmlcontainer.appendChild(document.createTextNode('<body>'));
+  htmlcontainer.appendChild(document.createElement('br'));
   htmlcontainer.appendChild(document.createTextNode(htmlwidget));
-  urlArea.append(htmlcontainer);
-  urlArea.show()
+  htmlcontainer.appendChild(document.createElement('br'));
+  htmlcontainer.appendChild(document.createTextNode('<script type="text/javascript" src="https://rawgit.com/inab/openEBench-widgets/evolution_VII_mockup/dist/OpEB-widgets.js"></script>'));
+  htmlcontainer.appendChild(document.createElement('br'));
+  htmlcontainer.appendChild(document.createTextNode('</body>'));
+  htmlcontainer.appendChild(document.createElement('br'));
+  htmlcontainer.appendChild(document.createTextNode('</html>'));
+  codeArea.append(htmlcontainer);
   OpEB_widgets.OpEB.apply([widget]);
   area.show()
-  $('#widget_grid_url').show()
+  codeArea.show()
 };
 
 $('#doReset').on('click', function() {
