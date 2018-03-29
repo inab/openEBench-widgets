@@ -651,7 +651,7 @@ var DemoWithBadgeDrawer = {
         });
     }
   },
-  WIDGET_TYPE: 'new_demo_with_badge'
+  WIDGET_TYPE: 'widget_with_badge'
 };
 
 export default DemoWithBadgeDrawer;

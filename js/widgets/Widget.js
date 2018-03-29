@@ -18,7 +18,7 @@ import { loadChart } from 'uptime-widget';
 
 // All the widget drawing functions take as input an element and the
 // fetched data
-var NewDemoDrawer = {
+var WidgetDrawer = {
   // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
   // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
   // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
@@ -70,13 +70,11 @@ var NewDemoDrawer = {
   },
 
   parseJson: function (widgetData, debug_mode) {
-    // console.log(widgetData);
     var new_widgetData = {};
     new_widgetData.metrics = [];
 
     // License
     if (widgetData.project.license) {
-      //console.log(widgetData.project.license)
       var metric = {};
       metric.metric = 'License';
       metric.color = '#ff895d';
@@ -231,7 +229,7 @@ var NewDemoDrawer = {
     widgetIdCss += '-' + random;
     var width, height;
 
-    widgetData = NewDemoDrawer.parseJson(widgetData, widgetDebug);
+    widgetData = WidgetDrawer.parseJson(widgetData, widgetDebug);
 
     for (let metric of widgetData.metrics) {
       delete metric.submetrics;
@@ -241,9 +239,9 @@ var NewDemoDrawer = {
     widgetSize = Number(widgetSize);
     if (widgetSize == null || widgetSize <= 0 || isNaN(widgetSize)) {
       if (widgetSize != 0) {
-        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + NewDemoDrawer.DEFAULT_SIZE);
+        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + WidgetDrawer.DEFAULT_SIZE);
       }
-      widgetSize = NewDemoDrawer.DEFAULT_SIZE;
+      widgetSize = WidgetDrawer.DEFAULT_SIZE;
     }
 
     width = height = widgetSize;
@@ -304,7 +302,7 @@ var NewDemoDrawer = {
 
 
     // First, getting the max depth
-    var statsNodeSet = NewDemoDrawer.getStatsNodeSet(widgetData);
+    var statsNodeSet = WidgetDrawer.getStatsNodeSet(widgetData);
     var partition = d3_hierarchy.partition()
       .size([2 * Math.PI, radius]);
     var root = d3_hierarchy.hierarchy({
@@ -626,7 +624,7 @@ var NewDemoDrawer = {
       })
       .on('mouseout', tooltipUptimeHideFunc);
   },
-  WIDGET_TYPE: 'new_demo'
+  WIDGET_TYPE: 'widget'
 };
 
-export default NewDemoDrawer;
+export default WidgetDrawer;

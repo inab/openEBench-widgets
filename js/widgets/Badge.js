@@ -16,7 +16,7 @@ import close_button from '../../icons/close-button.png';
 
 // All the widget drawing functions take as input an element and the
 // fetched data
-var DemoBadgeDrawer = {
+var WidgetBadge = {
   DEFAULT_BADGE_WIDTH: 175,
   DEFAULT_BADGE_HEIGHT: 20,
 
@@ -26,8 +26,8 @@ var DemoBadgeDrawer = {
     widgetRoot.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     widgetElem.appendChild(widgetRoot);
 
-    var  width = DemoBadgeDrawer.DEFAULT_BADGE_WIDTH
-    var  height = DemoBadgeDrawer.DEFAULT_BADGE_HEIGHT
+    var  width = WidgetBadge.DEFAULT_BADGE_WIDTH
+    var  height = WidgetBadge.DEFAULT_BADGE_HEIGHT
 
     var svg_g = d3_selection.select(widgetRoot)
       .attr('width', width)
@@ -46,7 +46,7 @@ var DemoBadgeDrawer = {
           window.open('https://dev-openebench.bsc.es/html/')
         })
   },
-  WIDGET_TYPE: 'demo_badge'
+  WIDGET_TYPE: 'badge'
 };
 
-export default DemoBadgeDrawer;
+export default WidgetBadge;
