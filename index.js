@@ -303,7 +303,7 @@ box.evolution_VII_mockup = `
         <li>Added vertical bar inside tooltips</li>
         <li>Added radial gradiant to the arcs</li>
         <li>Tool name as data-id</li>
-        <li>Add tool name title</li>
-        <li>Refactor and reduce the code</li>
+        <li>Added tool name title</li>
+        <li>Refactorized and reduce the code</li>
       </ul>
       `;
