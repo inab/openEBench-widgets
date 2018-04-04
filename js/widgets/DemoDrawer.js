@@ -209,7 +209,6 @@ var DemoDrawer = {
     new_widgetData.enabled = widgetData.project.website.operational == 200;
     new_widgetData.name = widgetData['@id'];
 
-    //new_widgetData['uptime']
     return new_widgetData;
   },
 
@@ -298,12 +297,15 @@ var DemoDrawer = {
       .attr('height', SVGheight)
       .append('g')
       .attr('transform', function() {
-        if (widgetSubTypes.includes('title')) {
+        if (widgetSubTypes.includes('title') && widgetSubTypes.includes('bottom_badge')) {
+          return 'translate(' + (SVGwidth - 5) / 2 + ',' + ( SVGheight - 5 )/ 2 + ')';
+        } else if (widgetSubTypes.includes('title')) {
           return 'translate(' + (widgetWidth + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ',' + (SVGheight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ')';
         } else if (widgetSubTypes.includes('bottom_badge')) {
           return 'translate(' + (widgetWidth + DemoDrawer.DEFAULT_BADGE_HEIGHT) / 2 + ',' + widgetHeight / 2 + ')';
-        }
-        return 'translate(' + widgetWidth / 2 + ',' + widgetHeight / 2 + ')';
+        } else {
+          return 'translate(' + SVGwidth / 2 + ',' + SVGheight / 2 + ')';
+        }       
       });
 
       
@@ -664,10 +666,14 @@ var DemoDrawer = {
         .attr('font-family', 'sans-serif')
         .attr('font-size', DemoDrawer.DEFAULT_TITLE_HEIGHT + 'px')
         .text(widgetId)
-        .attr("fill", "red");
+        .attr('fill', 'red');
     }
 
     if (widgetSubTypes.includes('bottom_badge') && widgetWidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
+      console.log('bottom_badge')
+      console.log('widgetWidth', widgetWidth)
+      console.log('SVGwidth', SVGwidth)
+      console.log('DemoDrawer.DEFAULT_BADGE_WIDTH', DemoDrawer.DEFAULT_BADGE_WIDTH)
       DemoDrawer.draw_badge(svg_g, widgetElem, state, widgetWidth, widgetHeight);
     }
   },
@@ -679,6 +685,7 @@ var DemoDrawer = {
     var available_scientific_benchmark = state == 'online';
     var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';
 
+    console.log('bottom_badge!')
     svg_g.append('image')
       .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
       .attr('height', 20)
@@ -697,6 +704,7 @@ var DemoDrawer = {
           window.open(tool_url + tool_name);
         }
       });
+      console.log('done!')
   },
 
   WIDGET_TYPE: 'demo'
