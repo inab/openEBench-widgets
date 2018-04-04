@@ -14,7 +14,7 @@ import { loadChart } from 'uptime-widget';
 
 // All the widget drawing functions take as input an element and the
 // fetched data
-var NewDemoDrawer = {
+var DemoDrawer = {
   // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
   // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
   // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
@@ -36,6 +36,10 @@ var NewDemoDrawer = {
   //],
   DEFAULT_LEVEL_SIZE: 15,
   DEFAULT_SIZE: 200,
+  DEFAULT_BADGE_WIDTH: 175,
+  DEFAULT_BADGE_HEIGHT: 20,
+  DEFAULT_TITLE_HEIGHT: 20,
+  DEFAULT_TITLE_SIZE: 13,
   // Getting the max depth of the nested structure
   getStatsNodeSet: function (widgetData) {
     var levelNodeSet = [];
@@ -206,7 +210,6 @@ var NewDemoDrawer = {
     new_widgetData.enabled = widgetData.project.website.operational == 200;
     new_widgetData.name = widgetData['@id'];
 
-    //new_widgetData['uptime']
     return new_widgetData;
   },
 
@@ -220,34 +223,59 @@ var NewDemoDrawer = {
     var widgetSize = widgetElem.getAttribute('data-widget-size');
     var widgetDebug = widgetElem.getAttribute('data-widget-debug');
     var widgetId = widgetElem.getAttribute('data-id');
+    var widgetSubTypes = widgetElem.getAttribute('data-widget-subtypes');
     var widgetIdCss = widgetId.split('/')[0].split(':').join('_').replace(/\./g,'_');
     var random = Math.random().toString().replace(/\./g, '');
     widgetIdCss += '-' + random;
-    var width, height;
+    var SVGwidth, SVGheight, widgetWidth, widgetHeight;
 
-    widgetData = NewDemoDrawer.parseJson(widgetData, widgetDebug);
+    widgetData = DemoDrawer.parseJson(widgetData, widgetDebug);
 
     for (let metric of widgetData.metrics) {
       delete metric.submetrics;
     }
 
+    if (widgetSubTypes == null) {
+      widgetSubTypes = ['widget'];
+    } else {
+      widgetSubTypes = widgetSubTypes.split(' ');
+    }
 
     widgetSize = Number(widgetSize);
     if (widgetSize == null || widgetSize <= 0 || isNaN(widgetSize)) {
       if (widgetSize != 0) {
-        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + NewDemoDrawer.DEFAULT_SIZE);
+        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + DemoDrawer.DEFAULT_SIZE);
       }
-      widgetSize = NewDemoDrawer.DEFAULT_SIZE;
+      widgetSize = DemoDrawer.DEFAULT_SIZE;
     }
 
-    width = height = widgetSize;
+    SVGwidth = SVGheight = widgetWidth = widgetHeight = widgetSize;
 
-    var levelSize = width * 15 / 200;
-    var radius = Math.min(width, height) / 2 - 1.2;
+    if (widgetSubTypes.includes('title')) {
+      widgetWidth = widgetHeight = (widgetWidth - DemoDrawer.DEFAULT_TITLE_HEIGHT); // badge height
+    }
+
+    if (widgetSubTypes.includes('bottom_badge')) {
+      widgetWidth = widgetHeight = (widgetWidth - DemoDrawer.DEFAULT_BADGE_HEIGHT - 5); // badge height
+    }
+
+    var levelSize = widgetWidth * 15 / 200;
+    var radius = Math.min(widgetWidth, widgetHeight) / 2 - 1.2;
     var ext_radius = levelSize + (levelSize * 5.6);
 
     var draw_uptime_one_time = false;
     var clicked = false;
+
+    var state = widgetData.enabled ? 'online' : 'offline';
+    if (widgetSubTypes.includes('badge') && SVGwidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
+      var svg_g = d3_selection.select(widgetRoot)
+        .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
+        .attr('height', DemoDrawer.DEFAULT_BADGE_HEIGHT)
+        .append('g')
+        .attr('transform', 'translate(' + 0 + ',' + 0 + ')');
+      DemoDrawer.draw_badge(svg_g, widgetElem, state, 0, 0);
+      return;
+    }
 
     var tooltip_metrics = d3_selection.select(widgetElem)
       .append('div')
@@ -259,17 +287,29 @@ var NewDemoDrawer = {
       .attr('id', 'tooltip_uptime-' + widgetIdCss)
       .attr('class', 'tooltip');
 
-    var uptime_url = widgetData.name.replace("metrics/",'rest/homepage/')
+    var uptime_url = widgetData.name.replace('metrics/','rest/homepage/');
 
     tooltip_uptime.html('<div id="close_icon-uptime-'+ widgetIdCss +'" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + uptime_url + '" class="opebuptime" ></div>');
     loadChart();
 
-    var svg_g = d3_selection.select(widgetRoot)
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
+    var svg_g = d3_selection.select(widgetRoot)
+      .attr('width', SVGwidth)
+      .attr('height', SVGheight)
+      .append('g')
+      .attr('transform', function() {
+        if (widgetSubTypes.includes('title') && widgetSubTypes.includes('bottom_badge')) {
+          return 'translate(' + (SVGwidth - 5) / 2 + ',' + ( SVGheight - 5 )/ 2 + ')';
+        } else if (widgetSubTypes.includes('title')) {
+          return 'translate(' + (widgetWidth + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ',' + (SVGheight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ')';
+        } else if (widgetSubTypes.includes('bottom_badge')) {
+          return 'translate(' + (widgetWidth + DemoDrawer.DEFAULT_BADGE_HEIGHT) / 2 + ',' + widgetHeight / 2 + ')';
+        } else {
+          return 'translate(' + SVGwidth / 2 + ',' + SVGheight / 2 + ')';
+        }       
+      });
+
+      
     svg_g.selectAll('.circle')
       .data([{
         'x_axis': 0,
@@ -298,7 +338,7 @@ var NewDemoDrawer = {
 
 
     // First, getting the max depth
-    var statsNodeSet = NewDemoDrawer.getStatsNodeSet(widgetData);
+    var statsNodeSet = DemoDrawer.getStatsNodeSet(widgetData);
     var partition = d3_hierarchy.partition()
       .size([2 * Math.PI, radius]);
     var root = d3_hierarchy.hierarchy({
@@ -575,7 +615,6 @@ var NewDemoDrawer = {
       tooltip_uptime.empty();
     };
 
-    var state = widgetData.enabled ? 'online' : 'offline';
     var xy_pos = widgetData.enabled ? 0.8 : 0.7;
     var width_height = widgetData.enabled ? '12%' : '10%';
     var icon;
@@ -619,8 +658,56 @@ var NewDemoDrawer = {
         }
       })
       .on('mouseout', tooltipUptimeHideFunc);
+
+    if (widgetSubTypes.includes('title')) {
+      var title = svg_g
+        .append('text')
+        .attr('x',(-(SVGwidth - (SVGwidth - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2))
+        .attr('y', -(widgetHeight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2)
+        .attr('font-family', 'Verdana')
+        .attr('font-size', DemoDrawer.DEFAULT_TITLE_SIZE)
+        .attr('font-weight', 'bold')
+        .style('cursor', 'pointer')
+        .attr('fill', 'blue')
+        .on('click', function() { window.open('https://dev-openebench.bsc.es/html/ws/#!/tool/' + widgetId);})
+        .text(widgetId);
+      var title_width = title.node().getBoundingClientRect().width;
+      title.attr('x',(-(SVGwidth - (SVGwidth - title_width/2 - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2));
+    }
+
+    if (widgetSubTypes.includes('bottom_badge') && SVGwidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
+      DemoDrawer.draw_badge(svg_g, widgetElem, state, SVGwidth, widgetHeight);
+    }
   },
-  WIDGET_TYPE: 'new_demo'
+
+  draw_badge: function (svg_g, widgetElem, state, SVGwidth, widgetHeight) {
+    var tool_name = widgetElem.getAttribute('data-id');
+    var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
+
+    var available_scientific_benchmark = state == 'online';
+    var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';
+
+    svg_g.append('image')
+      .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
+      .attr('height', 20)
+      .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-' + scientific_benchmark_status + '-' + (available_scientific_benchmark ? 'green' : 'red') + '.svg?link=' + tool_url + tool_name)
+      .attr('x', function() {
+        return SVGwidth == 0 ? 0 : (-(SVGwidth - (SVGwidth - DemoDrawer.DEFAULT_BADGE_WIDTH))/2);
+      })
+      .attr('y', function() {
+        return widgetHeight == 0 ? 0 : (widgetHeight/2 + 5);
+      })
+      .style('cursor', function () {
+        return available_scientific_benchmark ? 'pointer' : 'auto';
+      })
+      .on('click', function() {
+        if (available_scientific_benchmark) {
+          window.open(tool_url + tool_name);
+        }
+      });
+  },
+
+  WIDGET_TYPE: 'widget'
 };
 
-export default NewDemoDrawer;
+export default DemoDrawer;

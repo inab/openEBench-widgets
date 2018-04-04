@@ -3,7 +3,7 @@
 
 import style from '../styles/OpEB-widgets.css';
 
-import DemoDrawer from './widgets/DemoDrawer';
+import DemoDrawer from './widgets/Widget';
 
 // Copied from jQuery
 var document = window.document;
