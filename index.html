@@ -92,48 +92,73 @@
           </div>
 
           <div id="widget_code_container">
-          <div class="ui top attached tabular menu">
-            <div class="active item" data-tab="code">Embedded Code</div>
-            <div class="item" data-tab="parameters">Parameters</div>
-          </div>
-          <div class="ui bottom attached active tab segment" data-tab="code">
-            <h4 class="ui header">Embedded Code</h4>
-            <div class="ui inverted compact segment" id="widget_box_code"></div>
-          </div>
+            <div class="ui top attached tabular menu">
+              <div class="active item" data-tab="code">Embedded Code</div>
+              <div class="item" data-tab="parameters">Parameters</div>
+            </div>
+            <div class="ui bottom attached active tab segment" data-tab="code">
+              <h4 class="ui header">Embedded Code</h4>
 
-          <div class="ui bottom attached tab segment" data-tab="parameters">
-            <h4 class="ui header">Explanation of widget data parameters</h4>
-            <div class="ui inverted segment" id="widget_params_explanation">
-              <div class="ui segment">
-                <div class="ui bulleted list">
-                  <div class="item">
-                   <div><b>data-id</b>:</div> 
-                  <div class="list">
-                  <div class="item"><a href="https://dev-openebench.bsc.es/html/ws/#!/"><b>OpenEBench</b></a>: search your tool and use the last part of url of the found tool as data-id e.g https://dev-openebench.bsc.es/html/ws/#!/tool/<b>trimAl</b></div>
-                  <div class="item"><a href="https://bio.tools/"><b>bio.tools</b></a>: search your tool and use the last part of url of the found tool as data-id e.g https://bio.tools/<b>trimAl</b></div>
+              <div class="ui bottom attached warning message">
+                Library url provided will be changed
+                <i class="warning icon"></i>
+              </div>
+              <div class="ui inverted compact segment" id="widget_box_code"></div>
+            </div>
+
+            <div class="ui bottom attached tab segment" data-tab="parameters">
+              <h4 class="ui header">Explanation of widget data parameters</h4>
+              <div class="ui inverted segment" id="widget_params_explanation">
+                <div class="ui segment">
+                  <div class="ui bulleted list">
+                    <div class="item">
+                      <div>
+                        <b>data-id</b>:</div>
+                      <div class="list">
+                        <div class="item">
+                          <a href="https://dev-openebench.bsc.es/html/ws/#!/">
+                            <b>OpenEBench</b>
+                          </a>: search your tool and use the last part of url of the found tool as data-id e.g https://dev-openebench.bsc.es/html/ws/#!/tool/
+                          <b>trimAl</b>
+                        </div>
+                        <div class="item">
+                          <a href="https://bio.tools/">
+                            <b>bio.tools</b>
+                          </a>: search your tool and use the last part of url of the found tool as data-id e.g https://bio.tools/
+                          <b>trimAl</b>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div>
+                        <b>data-widget-type</b>:</div>
+                      <div class="list">
+                        <div class="item">
+                          <b>"widget"</b>: default widget</div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div>
+                        <b>data-widget-subtypes</b> (add several according to your needs):</div>
+                      <div class="list">
+                        <div class="item">
+                          <b>"widget"</b>: widget container</div>
+                        <div class="item">
+                          <b>"title"</b>: tool name</div>
+                        <div class="item">
+                          <b>"bottom_badge"</b>: bottom badge</div>
+                        <div class="item">
+                          <b>"badge"</b>: badge only</div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <b>data-widget-size</b>: "200" (as minimum) is recommeded</div>
+                    <div class="item">
+                      <b>class="opeb"</b>: all widget containers have this class associated</div>
                   </div>
-                  </div>
-                  <div class="item">
-                  <div><b>data-widget-type</b>:</div>
-                  <div class="list">
-                  <div class="item"><b>"widget"</b>: default widget</div>
-                  </div>
-                  </div>
-                  <div class="item">
-                  <div><b>data-widget-subtypes</b> (add several according to your needs):</div>
-                  <div class="list">
-                  <div class="item"><b>"widget"</b>: widget container</div>
-                  <div class="item"><b>"title"</b>: tool name</div>
-                  <div class="item"><b>"bottom_badge"</b>: bottom badge</div>
-                  <div class="item"><b>"badge"</b>: badge only</div>
-                  </div>
-                  </div>
-                  <div class="item"><b>data-widget-size</b>: "200" (as minimum) is recommeded</div>
-                  <div class="item"><b>class="opeb"</b>: all widget containers have this class associated</div>
                 </div>
               </div>
             </div>
-        </div>
           </div>
         </div>
       </div>
