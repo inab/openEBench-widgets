@@ -267,7 +267,7 @@ var DemoDrawer = {
     var clicked = false;
 
     var state = widgetData.enabled ? 'online' : 'offline';
-    if (widgetSubTypes.includes('badge') && widgetWidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
+    if (widgetSubTypes.includes('badge') && SVGwidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
       var svg_g = d3_selection.select(widgetRoot)
         .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
         .attr('height', DemoDrawer.DEFAULT_BADGE_HEIGHT)
@@ -662,7 +662,7 @@ var DemoDrawer = {
     if (widgetSubTypes.includes('title')) {
       var title = svg_g
         .append('text')
-        .attr('x',(-(widgetWidth - (widgetWidth - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2))
+        .attr('x',(-(SVGwidth - (SVGwidth - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2))
         .attr('y', -(widgetHeight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2)
         .attr('font-family', 'Verdana')
         .attr('font-size', DemoDrawer.DEFAULT_TITLE_SIZE)
@@ -672,15 +672,15 @@ var DemoDrawer = {
         .on('click', function() { window.open('https://dev-openebench.bsc.es/html/ws/#!/tool/' + widgetId);})
         .text(widgetId);
       var title_width = title.node().getBoundingClientRect().width;
-      title.attr('x',(-(widgetWidth - (widgetWidth - title_width/2 - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2));
+      title.attr('x',(-(SVGwidth - (SVGwidth - title_width/2 - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2));
     }
 
-    if (widgetSubTypes.includes('bottom_badge') && widgetWidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
-      DemoDrawer.draw_badge(svg_g, widgetElem, state, widgetWidth, widgetHeight);
+    if (widgetSubTypes.includes('bottom_badge') && SVGwidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
+      DemoDrawer.draw_badge(svg_g, widgetElem, state, SVGwidth, widgetHeight);
     }
   },
 
-  draw_badge: function (svg_g, widgetElem, state, widgetWidth, widgetHeight) {
+  draw_badge: function (svg_g, widgetElem, state, SVGwidth, widgetHeight) {
     var tool_name = widgetElem.getAttribute('data-id');
     var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
 
@@ -692,7 +692,7 @@ var DemoDrawer = {
       .attr('height', 20)
       .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-' + scientific_benchmark_status + '-' + (available_scientific_benchmark ? 'green' : 'red') + '.svg?link=' + tool_url + tool_name)
       .attr('x', function() {
-        return widgetWidth == 0 ? 0 : (-(widgetWidth - (widgetWidth - DemoDrawer.DEFAULT_BADGE_WIDTH))/2);
+        return SVGwidth == 0 ? 0 : (-(SVGwidth - (SVGwidth - DemoDrawer.DEFAULT_BADGE_WIDTH))/2);
       })
       .attr('y', function() {
         return widgetHeight == 0 ? 0 : (widgetHeight/2 + 5);
