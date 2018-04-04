@@ -39,6 +39,7 @@ var DemoDrawer = {
   DEFAULT_BADGE_WIDTH: 175,
   DEFAULT_BADGE_HEIGHT: 20,
   DEFAULT_TITLE_HEIGHT: 20,
+  DEFAULT_TITLE_SIZE: 13,
   // Getting the max depth of the nested structure
   getStatsNodeSet: function (widgetData) {
     var levelNodeSet = [];
@@ -659,21 +660,22 @@ var DemoDrawer = {
       .on('mouseout', tooltipUptimeHideFunc);
 
     if (widgetSubTypes.includes('title')) {
-      svg_g
+      var title = svg_g
         .append('text')
-        .attr('x', widgetWidth/2)
+        .attr('x',(-(widgetWidth - (widgetWidth - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2))
         .attr('y', -(widgetHeight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2)
-        .attr('font-family', 'sans-serif')
-        .attr('font-size', DemoDrawer.DEFAULT_TITLE_HEIGHT + 'px')
-        .text(widgetId)
-        .attr('fill', 'red');
+        .attr('font-family', 'Verdana')
+        .attr('font-size', DemoDrawer.DEFAULT_TITLE_SIZE)
+        .attr('font-weight', 'bold')
+        .style('cursor', 'pointer')
+        .attr('fill', 'blue')
+        .on('click', function() { window.open('https://dev-openebench.bsc.es/html/ws/#!/tool/' + widgetId);})
+        .text(widgetId);
+      var title_width = title.node().getBoundingClientRect().width;
+      title.attr('x',(-(widgetWidth - (widgetWidth - title_width/2 - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2));
     }
 
     if (widgetSubTypes.includes('bottom_badge') && widgetWidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
-      console.log('bottom_badge')
-      console.log('widgetWidth', widgetWidth)
-      console.log('SVGwidth', SVGwidth)
-      console.log('DemoDrawer.DEFAULT_BADGE_WIDTH', DemoDrawer.DEFAULT_BADGE_WIDTH)
       DemoDrawer.draw_badge(svg_g, widgetElem, state, widgetWidth, widgetHeight);
     }
   },
@@ -685,7 +687,6 @@ var DemoDrawer = {
     var available_scientific_benchmark = state == 'online';
     var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';
 
-    console.log('bottom_badge!')
     svg_g.append('image')
       .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
       .attr('height', 20)
@@ -704,7 +705,6 @@ var DemoDrawer = {
           window.open(tool_url + tool_name);
         }
       });
-      console.log('done!')
   },
 
   WIDGET_TYPE: 'demo'

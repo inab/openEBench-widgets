@@ -4,12 +4,6 @@
 opeb {
 }
 
-.widget text {
-	font: 6px sans-serif;
-	text-anchor: middle;
-	fill: none;
-}
-
 .tooltip {
 	position: fixed;
 	display: none;
