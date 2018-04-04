@@ -14,7 +14,7 @@ import { loadChart } from 'uptime-widget';
 
 // All the widget drawing functions take as input an element and the
 // fetched data
-var DemoDrawer = {
+var WidgetDrawer = {
   // https://gka.github.io/palettes/#colors=DarkGreen,Lime|steps=6|bez=1|coL=1
   // greens '#006400','#007c00','#009500','#00ae00','#00c800','#00e300','#00ff00'
   // https://gka.github.io/palettes/#colors=DarkBlue,CornflowerBlue|steps=6|bez=1|coL=1
@@ -229,7 +229,7 @@ var DemoDrawer = {
     widgetIdCss += '-' + random;
     var SVGwidth, SVGheight, widgetWidth, widgetHeight;
 
-    widgetData = DemoDrawer.parseJson(widgetData, widgetDebug);
+    widgetData = WidgetDrawer.parseJson(widgetData, widgetDebug);
 
     for (let metric of widgetData.metrics) {
       delete metric.submetrics;
@@ -244,19 +244,19 @@ var DemoDrawer = {
     widgetSize = Number(widgetSize);
     if (widgetSize == null || widgetSize <= 0 || isNaN(widgetSize)) {
       if (widgetSize != 0) {
-        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + DemoDrawer.DEFAULT_SIZE);
+        console.warn('Wrong widget size: "' + widgetSize + '" provided, using default value ' + WidgetDrawer.DEFAULT_SIZE);
       }
-      widgetSize = DemoDrawer.DEFAULT_SIZE;
+      widgetSize = WidgetDrawer.DEFAULT_SIZE;
     }
 
     SVGwidth = SVGheight = widgetWidth = widgetHeight = widgetSize;
 
     if (widgetSubTypes.includes('title')) {
-      widgetWidth = widgetHeight = (widgetWidth - DemoDrawer.DEFAULT_TITLE_HEIGHT); // badge height
+      widgetWidth = widgetHeight = (widgetWidth - WidgetDrawer.DEFAULT_TITLE_HEIGHT); // badge height
     }
 
     if (widgetSubTypes.includes('bottom_badge')) {
-      widgetWidth = widgetHeight = (widgetWidth - DemoDrawer.DEFAULT_BADGE_HEIGHT - 5); // badge height
+      widgetWidth = widgetHeight = (widgetWidth - WidgetDrawer.DEFAULT_BADGE_HEIGHT - 5); // badge height
     }
 
     var levelSize = widgetWidth * 15 / 200;
@@ -267,13 +267,13 @@ var DemoDrawer = {
     var clicked = false;
 
     var state = widgetData.enabled ? 'online' : 'offline';
-    if (widgetSubTypes.includes('badge') && SVGwidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
+    if (widgetSubTypes.includes('badge') && SVGwidth >= WidgetDrawer.DEFAULT_BADGE_WIDTH) {
       var svg_g = d3_selection.select(widgetRoot)
-        .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
-        .attr('height', DemoDrawer.DEFAULT_BADGE_HEIGHT)
+        .attr('width', WidgetDrawer.DEFAULT_BADGE_WIDTH)
+        .attr('height', WidgetDrawer.DEFAULT_BADGE_HEIGHT)
         .append('g')
         .attr('transform', 'translate(' + 0 + ',' + 0 + ')');
-      DemoDrawer.draw_badge(svg_g, widgetElem, state, 0, 0);
+      WidgetDrawer.draw_badge(svg_g, widgetElem, state, 0, 0);
       return;
     }
 
@@ -301,9 +301,9 @@ var DemoDrawer = {
         if (widgetSubTypes.includes('title') && widgetSubTypes.includes('bottom_badge')) {
           return 'translate(' + (SVGwidth - 5) / 2 + ',' + ( SVGheight - 5 )/ 2 + ')';
         } else if (widgetSubTypes.includes('title')) {
-          return 'translate(' + (widgetWidth + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ',' + (SVGheight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ')';
+          return 'translate(' + (widgetWidth + WidgetDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ',' + (SVGheight + WidgetDrawer.DEFAULT_TITLE_HEIGHT) / 2 + ')';
         } else if (widgetSubTypes.includes('bottom_badge')) {
-          return 'translate(' + (widgetWidth + DemoDrawer.DEFAULT_BADGE_HEIGHT) / 2 + ',' + widgetHeight / 2 + ')';
+          return 'translate(' + (widgetWidth + WidgetDrawer.DEFAULT_BADGE_HEIGHT) / 2 + ',' + widgetHeight / 2 + ')';
         } else {
           return 'translate(' + SVGwidth / 2 + ',' + SVGheight / 2 + ')';
         }       
@@ -338,7 +338,7 @@ var DemoDrawer = {
 
 
     // First, getting the max depth
-    var statsNodeSet = DemoDrawer.getStatsNodeSet(widgetData);
+    var statsNodeSet = WidgetDrawer.getStatsNodeSet(widgetData);
     var partition = d3_hierarchy.partition()
       .size([2 * Math.PI, radius]);
     var root = d3_hierarchy.hierarchy({
@@ -662,21 +662,21 @@ var DemoDrawer = {
     if (widgetSubTypes.includes('title')) {
       var title = svg_g
         .append('text')
-        .attr('x',(-(SVGwidth - (SVGwidth - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2))
-        .attr('y', -(widgetHeight + DemoDrawer.DEFAULT_TITLE_HEIGHT) / 2)
+        .attr('x',(-(SVGwidth - (SVGwidth - WidgetDrawer.DEFAULT_TITLE_HEIGHT))/2))
+        .attr('y', -(widgetHeight + WidgetDrawer.DEFAULT_TITLE_HEIGHT) / 2)
         .attr('font-family', 'Verdana')
-        .attr('font-size', DemoDrawer.DEFAULT_TITLE_SIZE)
+        .attr('font-size', WidgetDrawer.DEFAULT_TITLE_SIZE)
         .attr('font-weight', 'bold')
         .style('cursor', 'pointer')
         .attr('fill', 'blue')
         .on('click', function() { window.open('https://dev-openebench.bsc.es/html/ws/#!/tool/' + widgetId);})
         .text(widgetId);
       var title_width = title.node().getBoundingClientRect().width;
-      title.attr('x',(-(SVGwidth - (SVGwidth - title_width/2 - DemoDrawer.DEFAULT_TITLE_HEIGHT))/2));
+      title.attr('x',(-(SVGwidth - (SVGwidth - title_width/2 - WidgetDrawer.DEFAULT_TITLE_HEIGHT))/2));
     }
 
-    if (widgetSubTypes.includes('bottom_badge') && SVGwidth >= DemoDrawer.DEFAULT_BADGE_WIDTH) {
-      DemoDrawer.draw_badge(svg_g, widgetElem, state, SVGwidth, widgetHeight);
+    if (widgetSubTypes.includes('bottom_badge') && SVGwidth >= WidgetDrawer.DEFAULT_BADGE_WIDTH) {
+      WidgetDrawer.draw_badge(svg_g, widgetElem, state, SVGwidth, widgetHeight);
     }
   },
 
@@ -688,11 +688,11 @@ var DemoDrawer = {
     var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';
 
     svg_g.append('image')
-      .attr('width', DemoDrawer.DEFAULT_BADGE_WIDTH)
+      .attr('width', WidgetDrawer.DEFAULT_BADGE_WIDTH)
       .attr('height', 20)
       .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-' + scientific_benchmark_status + '-' + (available_scientific_benchmark ? 'green' : 'red') + '.svg?link=' + tool_url + tool_name)
       .attr('x', function() {
-        return SVGwidth == 0 ? 0 : (-(SVGwidth - (SVGwidth - DemoDrawer.DEFAULT_BADGE_WIDTH))/2);
+        return SVGwidth == 0 ? 0 : (-(SVGwidth - (SVGwidth - WidgetDrawer.DEFAULT_BADGE_WIDTH))/2);
       })
       .attr('y', function() {
         return widgetHeight == 0 ? 0 : (widgetHeight/2 + 5);
@@ -710,4 +710,4 @@ var DemoDrawer = {
   WIDGET_TYPE: 'widget'
 };
 
-export default DemoDrawer;
+export default WidgetDrawer;
