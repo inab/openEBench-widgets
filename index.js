@@ -117,7 +117,7 @@ function doApply() {
   htmlcontainer.appendChild(document.createElement('br'));
   htmlcontainer.appendChild(document.createTextNode(htmlwidget));
   htmlcontainer.appendChild(document.createElement('br'));
-  htmlcontainer.appendChild(document.createTextNode('<script type="text/javascript" src="https://rawgit.com/inab/openEBench-widgets/evolution_VII_mockup/dist/OpEB-widgets.js"></script>'));
+  htmlcontainer.appendChild(document.createTextNode('<script type="text/javascript" src="https://cdn.rawgit.com/inab/openEBench-widgets/evolution_VII_mockup/dist/OpEB-widgets.js"></script>'));
   htmlcontainer.appendChild(document.createElement('br'));
   htmlcontainer.appendChild(document.createTextNode('</body>'));
   htmlcontainer.appendChild(document.createElement('br'));
