@@ -20,7 +20,7 @@ var common = {
           {
             loader: 'img-loader',
             options: {
-              enabled: DEPLOYMENT === 'dist',
+              enabled: (DEPLOYMENT === 'dist' || DEPLOYMENT === 'dist-compat'),
               gifsicle: {
                 interlaced: false
               },
@@ -92,7 +92,7 @@ if(DEPLOYMENT === 'dist') {
               options: { minimize: true }
             }
           ]
-        },
+        }
       ]
     },
     plugins: [
@@ -124,7 +124,7 @@ if(DEPLOYMENT === 'dist-compat') {
               options: { minimize: true }
             }
           ]
-        },
+        }
       ]
     },
     plugins: [
