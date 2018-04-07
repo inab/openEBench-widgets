@@ -49,6 +49,7 @@ var common = {
 
 if(DEPLOYMENT === 'dev') {
   module.exports = merge(common, {
+    mode: 'development',
     output: {
       filename: 'OpEB-widgets.js',
       path: __dirname + '/build'
@@ -76,6 +77,7 @@ if(DEPLOYMENT === 'dev') {
 
 if(DEPLOYMENT === 'dist') {
   module.exports = merge(common, {
+    mode: 'production',
     output: {
       filename: 'OpEB-widgets.js',
       library: 'OpEB_widgets',
@@ -101,13 +103,14 @@ if(DEPLOYMENT === 'dist') {
         uglifyOptions: {
           compress: { warnings: true },
         }
-      })
+      }),
     ]
   });
 }
 
 if(DEPLOYMENT === 'dist-compat') {
   module.exports = merge(common, {
+    mode: 'production',
     output: {
       filename: 'OpEB-widgets-compat.js',
       library: 'OpEB_widgets',
