@@ -1,17 +1,17 @@
-var webpack = require('webpack')
+var webpack = require('webpack');
 var path = require('path');
 var merge = require('webpack-merge');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-var DEPLOYMENT = process.env.WEBPACK_DEPLOYMENT || 'dev'
+var DEPLOYMENT = process.env.WEBPACK_DEPLOYMENT || 'dev';
 
 var common = {
   entry: './js/OpEB-widgets.js',
   resolve: {
-          modules: [path.resolve(__dirname, "widget_modules"), "node_modules"]
+    modules: [path.resolve(__dirname, "widget_modules"), "node_modules"]
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
@@ -20,7 +20,7 @@ var common = {
           {
             loader: 'img-loader',
             options: {
-              enabled: DEPLOYMENT === 'dist',
+              enabled: (DEPLOYMENT === 'dist' || DEPLOYMENT === 'dist-compat'),
               gifsicle: {
                 interlaced: false
               },
@@ -49,6 +49,7 @@ var common = {
 
 if(DEPLOYMENT === 'dev') {
   module.exports = merge(common, {
+    mode: 'development',
     output: {
       filename: 'OpEB-widgets.js',
       path: __dirname + '/build'
@@ -58,8 +59,8 @@ if(DEPLOYMENT === 'dev') {
       inline: true
     },
     module: {
-      // loaders will get concatenated!
-      loaders: [
+      // rules will get concatenated!
+      rules: [
         {
           test: /\.css$/,
           use: [
@@ -76,6 +77,7 @@ if(DEPLOYMENT === 'dev') {
 
 if(DEPLOYMENT === 'dist') {
   module.exports = merge(common, {
+    mode: 'production',
     output: {
       filename: 'OpEB-widgets.js',
       library: 'OpEB_widgets',
@@ -83,7 +85,7 @@ if(DEPLOYMENT === 'dist') {
       path: __dirname + '/dist'
     },
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.css$/,
           use: [
@@ -92,21 +94,23 @@ if(DEPLOYMENT === 'dist') {
               options: { minimize: true }
             }
           ]
-        },
+        }
       ]
     },
     plugins: [
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new UglifyJsPlugin({
         uglifyOptions: {
           compress: { warnings: true },
         }
-      })
+      }),
     ]
   });
 }
 
 if(DEPLOYMENT === 'dist-compat') {
   module.exports = merge(common, {
+    mode: 'production',
     output: {
       filename: 'OpEB-widgets-compat.js',
       library: 'OpEB_widgets',
@@ -114,7 +118,7 @@ if(DEPLOYMENT === 'dist-compat') {
       path: __dirname + '/dist'
     },
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.css$/,
           use: [
@@ -123,10 +127,11 @@ if(DEPLOYMENT === 'dist-compat') {
               options: { minimize: true }
             }
           ]
-        },
+        }
       ]
     },
     plugins: [
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new UglifyJsPlugin({
         uglifyOptions: {
           compress: { warnings: true },
