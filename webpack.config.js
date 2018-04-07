@@ -1,9 +1,9 @@
-var webpack = require('webpack')
+var webpack = require('webpack');
 var path = require('path');
 var merge = require('webpack-merge');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-var DEPLOYMENT = process.env.WEBPACK_DEPLOYMENT || 'dev'
+var DEPLOYMENT = process.env.WEBPACK_DEPLOYMENT || 'dev';
 
 var common = {
   entry: './js/OpEB-widgets.js',
@@ -96,6 +96,7 @@ if(DEPLOYMENT === 'dist') {
       ]
     },
     plugins: [
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new UglifyJsPlugin({
         uglifyOptions: {
           compress: { warnings: true },
@@ -127,6 +128,7 @@ if(DEPLOYMENT === 'dist-compat') {
       ]
     },
     plugins: [
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new UglifyJsPlugin({
         uglifyOptions: {
           compress: { warnings: true },
