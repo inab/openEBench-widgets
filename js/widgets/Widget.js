@@ -37,6 +37,8 @@ var WidgetDrawer = {
   DEFAULT_LEVEL_SIZE: 15,
   DEFAULT_SIZE: 200,
   DEFAULT_BADGE_WIDTH: 175,
+  DEFAULT_BADGE_WIDTH_AVAILABLE: 190,
+  DEFAULT_BADGE_WIDTH_NOT_AVAILABLE: 213,
   DEFAULT_BADGE_HEIGHT: 20,
   DEFAULT_TITLE_HEIGHT: 20,
   DEFAULT_TITLE_SIZE: 13,
@@ -231,6 +233,9 @@ var WidgetDrawer = {
 
     widgetData = WidgetDrawer.parseJson(widgetData, widgetDebug);
 
+    var state = widgetData.enabled ? 'online' : 'offline';
+    var badge_width = (widgetData.enabled ? WidgetDrawer.DEFAULT_BADGE_WIDTH_AVAILABLE : WidgetDrawer.DEFAULT_BADGE_WIDTH_NOT_AVAILABLE);
+
     for (let metric of widgetData.metrics) {
       delete metric.submetrics;
     }
@@ -266,14 +271,18 @@ var WidgetDrawer = {
     var draw_uptime_one_time = false;
     var clicked = false;
 
-    var state = widgetData.enabled ? 'online' : 'offline';
-    if (widgetSubTypes.includes('badge') && SVGwidth >= WidgetDrawer.DEFAULT_BADGE_WIDTH) {
+    if (widgetSubTypes.includes('badge')) {
+      if (SVGwidth < badge_width) {
+        console.warn('Wrong badge size: "' + widgetSize + '" provided, use ' + badge_width );
+        return;
+      }
       var svg_g = d3_selection.select(widgetRoot)
-        .attr('width', WidgetDrawer.DEFAULT_BADGE_WIDTH)
+        .attr('width', badge_width)
         .attr('height', WidgetDrawer.DEFAULT_BADGE_HEIGHT)
         .append('g')
         .attr('transform', 'translate(' + 0 + ',' + 0 + ')');
-      WidgetDrawer.draw_badge(svg_g, widgetElem, state, 0, 0);
+
+      WidgetDrawer.draw_new_badge(svg_g, widgetElem, widgetRoot, state, 0, 0, widgetIdCss, badge_width);
       return;
     }
 
@@ -675,35 +684,95 @@ var WidgetDrawer = {
       title.attr('x',(-(SVGwidth - (SVGwidth - title_width/2 - WidgetDrawer.DEFAULT_TITLE_HEIGHT))/2));
     }
 
-    if (widgetSubTypes.includes('bottom_badge') && SVGwidth >= WidgetDrawer.DEFAULT_BADGE_WIDTH) {
-      WidgetDrawer.draw_badge(svg_g, widgetElem, state, SVGwidth, widgetHeight);
+    if (widgetSubTypes.includes('bottom_badge')) {
+      if (SVGwidth < badge_width) {
+        console.warn('Wrong badge size: "' + widgetSize + '" provided, use ' + badge_width );
+      } else {
+        WidgetDrawer.draw_new_badge(svg_g, widgetElem, widgetRoot, state, SVGwidth, widgetHeight, widgetIdCss, badge_width);
+      }
     }
   },
 
-  draw_badge: function (svg_g, widgetElem, state, SVGwidth, widgetHeight) {
+  draw_new_badge: function (svg_g, widgetElem, widgetRoot, state, SVGwidth, widgetHeight, widgetIdCss, badge_width) {
     var tool_name = widgetElem.getAttribute('data-id');
     var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
 
     var available_scientific_benchmark = state == 'online';
-    var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';
 
-    svg_g.append('image')
-      .attr('width', WidgetDrawer.DEFAULT_BADGE_WIDTH)
-      .attr('height', 20)
-      .attr('xlink:href', 'https://img.shields.io/badge/Scientific%20Benchmark-' + scientific_benchmark_status + '-' + (available_scientific_benchmark ? 'green' : 'red') + '.svg?link=' + tool_url + tool_name)
-      .attr('x', function() {
-        return SVGwidth == 0 ? 0 : (-(SVGwidth - (SVGwidth - WidgetDrawer.DEFAULT_BADGE_WIDTH))/2);
-      })
-      .attr('y', function() {
-        return widgetHeight == 0 ? 0 : (widgetHeight/2 + 5);
-      })
-      .style('cursor', function () {
-        return available_scientific_benchmark ? 'pointer' : 'auto';
-      })
+    var defs = d3_selection.select(widgetRoot).append('defs');
+    var linear_gradient_available = defs
+      .append('linearGradient')
+      .attr('id', 'badge_gradient_available-' + widgetIdCss);
+    linear_gradient_available
+      .append('stop')
+      .attr('offset', '68%' )
+      .attr('stop-color', '#5d5d5d');
+    linear_gradient_available
+      .append('stop')
+      .attr('offset', '32%')
+      .attr('stop-color', '#9ac813');
+
+    var linear_gradient_not_available = defs
+      .append('linearGradient')
+      .attr('id', 'badge_gradient_not_available-' + widgetIdCss);
+    linear_gradient_not_available
+      .append('stop')
+      .attr('offset', '61%')
+      .attr('stop-color', '#5d5d5d');
+
+    linear_gradient_not_available
+      .append('stop')
+      .attr('offset', '39%')
+      .attr('stop-color', '#d6604a');
+
+    var badge_g = svg_g.append('g')
       .on('click', function() {
         if (available_scientific_benchmark) {
           window.open(tool_url + tool_name);
         }
+      })
+      .style('cursor', function () {
+        return available_scientific_benchmark ? 'pointer' : 'auto';
+      });
+
+    badge_g
+      .append('rect')
+      .attr('rx', '3')
+      .attr('ry', '3')
+      .attr('width', badge_width )
+      .attr('height', WidgetDrawer.DEFAULT_BADGE_HEIGHT)
+      .attr('fill', function(){return 'url(#badge_gradient_' + (available_scientific_benchmark ? 'available' : 'not_available') +'-'+ widgetIdCss + ')';})
+      .attr('x', function() {
+        return SVGwidth == 0 ? 0 : (-(SVGwidth - (SVGwidth - badge_width))/2);
+      })
+      .attr('y', function() {
+        return widgetHeight == 0 ? 0 : (widgetHeight/2 + 5);
+      });
+    // Append shadow first
+    badge_g
+      .append('text')
+      .attr('font-family', 'Verdana')
+      .attr('font-size', 12)
+      .attr('fill', 'black')
+      .text('Scientific Benchmark ' + (available_scientific_benchmark ? 'available' : 'not available'))
+      .attr('x', function() {
+        return SVGwidth == 0 ? 6 : (-(SVGwidth - (SVGwidth - badge_width))/2 + 6);
+      })
+      .attr('y', function() {
+        return widgetHeight == 0 ? 15 : (widgetHeight/2 + 5 + 15 );
+      });
+
+    badge_g
+      .append('text')
+      .attr('font-family', 'Verdana')
+      .attr('font-size', 12)
+      .attr('fill', 'white')
+      .text('Scientific Benchmark ' + (available_scientific_benchmark ? 'available' : 'not available'))
+      .attr('x', function() {
+        return SVGwidth == 0 ? 5 : (-(SVGwidth - (SVGwidth - badge_width))/2 + 5);
+      })
+      .attr('y', function() {
+        return widgetHeight == 0 ? 14 : (widgetHeight/2 + 5 + 14 );
       });
   },
 
