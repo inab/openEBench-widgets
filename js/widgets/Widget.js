@@ -267,13 +267,17 @@ var WidgetDrawer = {
     var clicked = false;
 
     var state = widgetData.enabled ? 'online' : 'offline';
+    console.log('test');
     if (widgetSubTypes.includes('badge') && SVGwidth >= WidgetDrawer.DEFAULT_BADGE_WIDTH) {
       var svg_g = d3_selection.select(widgetRoot)
         .attr('width', WidgetDrawer.DEFAULT_BADGE_WIDTH)
         .attr('height', WidgetDrawer.DEFAULT_BADGE_HEIGHT)
         .append('g')
         .attr('transform', 'translate(' + 0 + ',' + 0 + ')');
-      WidgetDrawer.draw_badge(svg_g, widgetElem, state, 0, 0);
+
+      // WidgetDrawer.draw_badge(svg_g, widgetElem, state, 0, 0);
+      console.log('new!');
+      WidgetDrawer.draw_new_badge(svg_g, widgetElem, widgetRoot, state, 0, 0, widgetIdCss);
       return;
     }
 
@@ -680,6 +684,51 @@ var WidgetDrawer = {
     }
   },
 
+  draw_new_badge: function (svg_g, widgetElem, widgetRoot, state, SVGwidth, widgetHeight, widgetIdCss) {
+    var tool_name = widgetElem.getAttribute('data-id');
+    var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
+
+    var available_scientific_benchmark = state == 'online';
+    var scientific_benchmark_status = available_scientific_benchmark ? 'available' : 'not available';
+
+    var badge_width = available_scientific_benchmark ? 190 : 212;
+
+    var linear_gradient = d3_selection.select(widgetRoot)
+      .append('defs')
+      .append('linearGradient')
+      // .attr('id', 'badge_gradient-' +  widgetIdCss)
+      .attr('id', 'badge_gradient');
+    linear_gradient
+      .append('stop')
+      .attr('offset', '61%')
+      .attr('stop-color', '#5d5d5d');
+    linear_gradient
+      .append('stop')
+      .attr('offset', '39%')
+      .attr('stop-color', '#d6604a');
+
+    svg_g
+      .append('rect')
+      .attr('x', '0')
+      .attr('y', '0')
+      .attr('width', badge_width)
+      .attr('height', 20)
+      .attr('fill', 'url(#badge_gradient)')
+      .attr('x', function() {
+        return SVGwidth == 0 ? 0 : (-(SVGwidth - (SVGwidth - badge_width))/2);
+      })
+      .attr('y', function() {
+        return widgetHeight == 0 ? 0 : (widgetHeight/2 + 5);
+      })
+      .style('cursor', function () {
+        return available_scientific_benchmark ? 'pointer' : 'auto';
+      })
+      .on('click', function() {
+        if (available_scientific_benchmark) {
+          window.open(tool_url + tool_name);
+        }
+      });
+  },
   draw_badge: function (svg_g, widgetElem, state, SVGwidth, widgetHeight) {
     var tool_name = widgetElem.getAttribute('data-id');
     var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
