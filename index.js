@@ -2,7 +2,7 @@ $('.ui.dropdown')
   .dropdown({
     on: 'hover'
   });
-const WIDGET_SIZE_DEFAULT = 200;
+const WIDGET_SIZE_DEFAULT = 225;
 var widget_size = WIDGET_SIZE_DEFAULT;
 $(document).ready(function() {
   init_range();
@@ -16,7 +16,7 @@ $('.ui#evolutions_sidebar')
     $(this).addClass('active').siblings().removeClass('active');
     var id = $(this).prop("id");
     path = id + "/index.html";
-    height = 430;
+    height = 450;
     width = 790;
 
     $('#widget_viewer').html('<object type="text/html" width="' + width +'" height="'+ height + '" data="' + path + '"></object>');
@@ -117,7 +117,7 @@ function doApply() {
   htmlcontainer.appendChild(document.createElement('br'));
   htmlcontainer.appendChild(document.createTextNode(htmlwidget));
   htmlcontainer.appendChild(document.createElement('br'));
-  htmlcontainer.appendChild(document.createTextNode('<script type="text/javascript" src="https://cdn.rawgit.com/inab/openEBench-widgets/evolution_VII_mockup/dist/OpEB-widgets.js"></script>'));
+  htmlcontainer.appendChild(document.createTextNode('<script type="text/javascript" src="https://dev-openebench.bsc.es/widget/dist/OpEB-widgets.js"></script>'));
   htmlcontainer.appendChild(document.createElement('br'));
   htmlcontainer.appendChild(document.createTextNode('</body>'));
   htmlcontainer.appendChild(document.createElement('br'));
@@ -300,8 +300,8 @@ box.evolution_VII_mockup = `
         <li>Only use tool id in data-id attribute</li>
         <li>Added Scientific benchmarking badge not available</li>
         <li>Fixed radius position with odd number of metrics</li>
-        <li>Added vertical bar inside tooltips</li>
         <li>Added radial gradiant to the arcs</li>
+        <li>New badge made from zero</li>
         <li>Tool name as data-id</li>
         <li>Added tool name title</li>
         <li>Refactorized and reduce the code</li>
