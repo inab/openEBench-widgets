@@ -4,7 +4,7 @@ $('.ui.dropdown')
   });
 const WIDGET_SIZE_DEFAULT = 225;
 var widget_size = WIDGET_SIZE_DEFAULT;
-$(document).ready(function() {
+$(document).ready(function () {
   init_range();
 });
 
@@ -12,29 +12,33 @@ $(document).ready(function() {
 $('.menu .item').tab();
 
 $('.ui#evolutions_sidebar')
-  .on('click', '.item', function() {
+  .on('click', '.item', function () {
     $(this).addClass('active').siblings().removeClass('active');
     var id = $(this).prop("id");
     path = id + "/index.html";
     height = 450;
     width = 790;
 
-    $('#widget_viewer').html('<object type="text/html" width="' + width +'" height="'+ height + '" data="' + path + '"></object>');
+    $('#widget_viewer').html('<object type="text/html" width="' + width + '" height="' + height + '" data="' + path + '"></object>');
 
-    $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  id.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase(); }) + '</h4>' + box[id] + '</div>');
+    $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' + id.replace(/_/g, ' ').replace(/\b\w/g, function (l) {
+      return l.toUpperCase();
+    }) + '</h4>' + box[id] + '</div>');
   });
 
 $('.ui#widget_menu')
-  .on('click', '.item', function() {
+  .on('click', '.item', function () {
     $(this)
       .addClass('active')
       .siblings('.item')
       .removeClass('active');
     var page = $(this).text().toLowerCase();
-    $('.ui#' +  page + '_sidebar').show().siblings('.my_sidebars').hide();
+    $('.ui#' + page + '_sidebar').show().siblings('.my_sidebars').hide();
     if (page == 'evolutions') {
       $('.item#evolution_VII_mockup').trigger('click');
-      $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' +  'evolution_VII_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase();}) + '</h4>' + box.evolution_VII_mockup + '</div>').show();
+      $('#widget_box').html('<div class="ui compact segment"><h4 class="ui header">' + 'evolution_VII_mockup'.replace(/_/g, ' ').replace(/\b\w/g, function (l) {
+        return l.toUpperCase();
+      }) + '</h4>' + box.evolution_VII_mockup + '</div>').show();
       $('#widget_code_container').hide();
     } else {
       doApply();
@@ -53,32 +57,32 @@ function doApply() {
   tool_url = "";
 
   var widget_subtypes = [];
-  switch(widget_type) {
+  switch (widget_type) {
     case 'widget':
-    widget_subtypes.push('widget');
-    break;
+      widget_subtypes.push('widget');
+      break;
     case 'widget_with_title':
-    widget_subtypes.push('title');
-    break;
+      widget_subtypes.push('title');
+      break;
     case 'widget_with_badge':
-    widget_subtypes.push('bottom_badge');
-    break;
+      widget_subtypes.push('bottom_badge');
+      break;
     case 'widget_with_title_and_badge':
-    widget_subtypes.push('widget');
-    widget_subtypes.push('title');
-    widget_subtypes.push('bottom_badge');
-    break;
+      widget_subtypes.push('widget');
+      widget_subtypes.push('title');
+      widget_subtypes.push('bottom_badge');
+      break;
     case 'badge':
-    widget_subtypes.push('badge');
-    break;
+      widget_subtypes.push('badge');
+      break;
   }
 
-  switch(widget_tool) {
+  switch (widget_tool) {
     case 'pmut':
       tool_url = "pmut";
       break;
     case 'trimal':
-      tool_url = "trimAl";
+      tool_url = "trimal";
       break;
     case 'rxnorm':
       tool_url = "rxnorm_api";
@@ -95,14 +99,14 @@ function doApply() {
   widget.setAttribute("data-widget-type", 'widget');
   widget.setAttribute("data-widget-subtypes", widget_subtypes.join(' '));
   widget.setAttribute("data-widget-size", widget_size);
-  widget.setAttribute("class","opeb");
+  widget.setAttribute("class", "opeb");
   area.append(widget).hide();
   var codeArea = $('#widget_box_code');
   codeArea.hide();
   codeArea.empty();
   var htmlwidget = area.html();
   var htmlcontainer = document.createElement('div');
-  htmlcontainer.setAttribute('class','ui compact segment');
+  htmlcontainer.setAttribute('class', 'ui compact segment');
   htmlcontainer.appendChild(document.createTextNode('<html>'));
   htmlcontainer.appendChild(document.createElement('br'));
   htmlcontainer.appendChild(document.createTextNode('<head>'));
@@ -128,32 +132,32 @@ function doApply() {
   codeArea.show();
 }
 
-$('#doReset').on('click', function() {
-    init_range();
-    $('#new_demo').addClass('active').siblings().removeClass('active');
-    $('#online').addClass('active').siblings().removeClass('active');
-    doApply();
+$('#doReset').on('click', function () {
+  init_range();
+  $('#new_demo').addClass('active').siblings().removeClass('active');
+  $('#online').addClass('active').siblings().removeClass('active');
+  doApply();
 });
 
 $('.menu#type_menu, .menu#tools_menu')
-  .on('click', '.item', function() {
-  doApply();
- });
+  .on('click', '.item', function () {
+    doApply();
+  });
 
 function init_range() {
-    $('#size_range').range({
-      min: 75,
-      max: 500,
-      start: WIDGET_SIZE_DEFAULT,
-      step: 10,
-      onChange: function(value, meta){
-        if(meta.triggeredByUser) {
-          $('#size_label').html('Size: ' + value + ' px');
-          widget_size = value;
-          doApply();
-        }
+  $('#size_range').range({
+    min: 75,
+    max: 500,
+    start: WIDGET_SIZE_DEFAULT,
+    step: 10,
+    onChange: function (value, meta) {
+      if (meta.triggeredByUser) {
+        $('#size_label').html('Size: ' + value + ' px');
+        widget_size = value;
+        doApply();
       }
-    });
+    }
+  });
 }
 var box = {};
 box.initial_mockup = `
