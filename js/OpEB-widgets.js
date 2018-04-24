@@ -1,4 +1,3 @@
-
 'use strict';
 
 import style from '../styles/OpEB-widgets.css';
@@ -34,7 +33,7 @@ var DEFAULT_WIDGET_TYPE = 'demo';
 
 var OpEB = {
 
-  apply: function(widgetElems=[]) {
+  apply: function(widgetElems = []) {
 
     // Travel all DOM tree if widgetElems is empty
     if (!(Array.isArray(widgetElems) && widgetElems.length)) {
