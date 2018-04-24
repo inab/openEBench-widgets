@@ -36,9 +36,8 @@ var WidgetDrawer = {
   //],
   DEFAULT_LEVEL_SIZE: 15,
   DEFAULT_SIZE: 200,
-  DEFAULT_BADGE_WIDTH: 175,
-  DEFAULT_BADGE_WIDTH_AVAILABLE: 190,
-  DEFAULT_BADGE_WIDTH_NOT_AVAILABLE: 213,
+  DEFAULT_BADGE_WIDTH_AVAILABLE: 180,
+  DEFAULT_BADGE_WIDTH_NOT_AVAILABLE: 200,
   DEFAULT_BADGE_HEIGHT: 20,
   DEFAULT_TITLE_HEIGHT: 20,
   DEFAULT_TITLE_SIZE: 13,
@@ -673,7 +672,7 @@ var WidgetDrawer = {
         .append('text')
         .attr('x',(-(SVGwidth - (SVGwidth - WidgetDrawer.DEFAULT_TITLE_HEIGHT))/2))
         .attr('y', -(widgetHeight + WidgetDrawer.DEFAULT_TITLE_HEIGHT) / 2)
-        .attr('font-family', 'Verdana')
+        .attr('font-family', 'Arial')
         .attr('font-size', WidgetDrawer.DEFAULT_TITLE_SIZE)
         .attr('font-weight', 'bold')
         .style('cursor', 'pointer')
@@ -751,12 +750,13 @@ var WidgetDrawer = {
     // Append shadow first
     badge_g
       .append('text')
-      .attr('font-family', 'Verdana')
+      .attr('font-family', 'Arial')
       .attr('font-size', 12)
       .attr('fill', 'black')
-      .text('Scientific Benchmark ' + (available_scientific_benchmark ? 'available' : 'not available'))
+      .attr('xml:space', 'preserve')
+      .text('Scientific Benchmark   ' + (available_scientific_benchmark ? 'available' : 'not available'))
       .attr('x', function() {
-        return SVGwidth == 0 ? 6 : (-(SVGwidth - (SVGwidth - badge_width))/2 + 6);
+        return SVGwidth == 0 ? 4.5 : (-(SVGwidth - (SVGwidth - badge_width)) / 2 + 4.5);
       })
       .attr('y', function() {
         return widgetHeight == 0 ? 15 : (widgetHeight/2 + 5 + 15 );
@@ -764,12 +764,13 @@ var WidgetDrawer = {
 
     badge_g
       .append('text')
-      .attr('font-family', 'Verdana')
+      .attr('font-family', 'Arial')
       .attr('font-size', 12)
       .attr('fill', 'white')
-      .text('Scientific Benchmark ' + (available_scientific_benchmark ? 'available' : 'not available'))
+      .attr('xml:space', 'preserve')
+      .text('Scientific Benchmark   ' + (available_scientific_benchmark ? 'available' : 'not available'))
       .attr('x', function() {
-        return SVGwidth == 0 ? 5 : (-(SVGwidth - (SVGwidth - badge_width))/2 + 5);
+        return SVGwidth == 0 ? 3.5 : (-(SVGwidth - (SVGwidth - badge_width)) / 2 + 3.5);
       })
       .attr('y', function() {
         return widgetHeight == 0 ? 14 : (widgetHeight/2 + 5 + 14 );
