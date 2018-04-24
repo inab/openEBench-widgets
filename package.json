@@ -35,7 +35,8 @@
     "d3-shape": "^1.2.0"
   },
   "scripts": {
-    "dev": "WEBPACK_DEPLOYMENT='dev' yarn run webpack && yarn run webpack-dev-server --output-public-path=/build/ --open",
+    "dev": "WEBPACK_DEPLOYMENT='dev' yarn run webpack && yarn run webpack-dev-server --output-public-path=/dev/ --open-page index-dev.html",
+    "dev-compat": "WEBPACK_DEPLOYMENT='dev-compat' yarn run webpack",
     "dist": "WEBPACK_DEPLOYMENT='dist' yarn run webpack",
     "dist-compat": "WEBPACK_DEPLOYMENT='dist-compat' yarn run webpack",
     "lint": "eslint --fix js/OpEB-widgets.js",
