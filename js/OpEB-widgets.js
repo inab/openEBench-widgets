@@ -322,6 +322,8 @@ if (window.attachEvent) {
 //window.OpEB = OpEB;
 //}
 
+export default OpEB;
+
 export {
   OpEB
 };
