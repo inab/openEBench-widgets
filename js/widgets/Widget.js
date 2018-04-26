@@ -300,6 +300,7 @@ var WidgetDrawer = {
     var uptime_url = widgetData.name.replace('metrics/', 'rest/homepage/');
 
     tooltip_uptime.html('<div id="close_icon-uptime-' + widgetIdCss + '" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + uptime_url + '" class="opebuptime" ></div>');
+    tooltip_uptime.style('opacity', 1);
     loadChart();
 
 
@@ -450,6 +451,7 @@ var WidgetDrawer = {
       }
       description_text = green_ticks_descriptions + red_ticks_descriptions;
       tooltip_metrics.html('<div style="text-align:center; margin:0;padding:0;"><b style="padding-right:10px">' + (data.metric) + '</b><div id="close_icon-metrics-' + widgetIdCss + '" style="float:right;"></div><div id="description_text" style="text-align: left;">' + description_text + '</div></div>');
+      tooltip_metrics.style('opacity', 1);
     };
 
     var tooltipHideFunc = function() {
