@@ -172,7 +172,8 @@ var WidgetDrawer = {
       metric.color = '#78bbe6';
       metric.ticks = [];
       var tick = {};
-      tick.email = false;
+      tick.name = 'email';
+      tick.ticked = false;
       metric.ticks.push(tick);
 
     }
@@ -198,7 +199,8 @@ var WidgetDrawer = {
       metric.color = '#1b435d';
       metric.ticks = [];
       var tick = {};
-      tick.description = false;
+      tick.name = 'description';
+      tick.ticked = false;
       metric.ticks.push(tick);
     }
 
