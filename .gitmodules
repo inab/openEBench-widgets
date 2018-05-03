@@ -1,0 +1,4 @@
+[submodule "widget_modules/uptime-widget"]
+	path = widget_modules/uptime-widget
+	url = https://github.com/vsundesha/Widget-Template
+	branch = uptime
