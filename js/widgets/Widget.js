@@ -498,10 +498,12 @@ var WidgetDrawer = {
           one_green_tick = one_green_tick || tick.ticked;
           if (tick.ticked) break;
         }
-        if (!one_green_tick) return;
-        d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
-        d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
-        d3_selection.select(this).style('opacity', 1);
+
+        if (one_green_tick) {
+          d3_selection.select(widgetRoot).selectAll('path').style('opacity', 0);
+          d3_selection.select(widgetRoot).selectAll('.path_shown').style('opacity', 0.3);
+          d3_selection.select(this).style('opacity', 1);
+        }
 
         if (!d.parent.data.name || d.parent.data.name != 'widget') {
           d3_selection.select(this).style('opacity', 1);
