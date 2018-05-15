@@ -43,6 +43,7 @@ var WidgetDrawer = {
   DEFAULT_BADGE_HEIGHT: 20,
   DEFAULT_TITLE_HEIGHT: 20,
   DEFAULT_TITLE_SIZE: 13,
+  DEFAULT_TOOLTIP_POSITION: 'left',
   // Getting the max depth of the nested structure
   getStatsNodeSet: function(widgetData) {
     var levelNodeSet = [];
@@ -229,6 +230,7 @@ var WidgetDrawer = {
     var widgetDebug = widgetElem.getAttribute('data-widget-debug');
     var widgetId = widgetElem.getAttribute('data-id');
     var widgetSubTypes = widgetElem.getAttribute('data-widget-subtypes');
+    var widgetTooltipPosition = widgetElem.getAttribute('data-widget-tooltip-position');
     var widgetIdCss = widgetId.split('/')[0].split(':').join('_').replace(/\./g, '_');
     var random = Math.random().toString().replace(/\./g, '');
     widgetIdCss += '-' + random;
@@ -258,6 +260,13 @@ var WidgetDrawer = {
     }
 
     SVGwidth = SVGheight = widgetWidth = widgetHeight = widgetSize;
+    console.log('widgetTooltipPosition', widgetTooltipPosition);
+    if (widgetTooltipPosition != 'left' && widgetTooltipPosition != 'right') {
+      if (widgetTooltipPosition != null) {
+        console.warn('Wrong widget tooltip position: "' + widgetTooltipPosition + '" provided, using default value ' + WidgetDrawer.DEFAULT_TOOLTIP_POSITION);
+      }
+      widgetTooltipPosition = WidgetDrawer.DEFAULT_TOOLTIP_POSITION;
+    }
 
     if (widgetSubTypes.includes('title')) {
       widgetWidth = widgetHeight = (widgetWidth - WidgetDrawer.DEFAULT_TITLE_HEIGHT); // badge height
@@ -414,7 +423,7 @@ var WidgetDrawer = {
 
     var tooltipFuncAux = function(d) {
       var ev = d3_selection.event;
-      tooltip_metrics.style('left', ev.clientX + 10 + 'px'); //'10px');
+      tooltip_metrics.style('left', ev.clientX + (widgetTooltipPosition == 'left' ? 10 : -157) + 'px');
       tooltip_metrics.style('top', ev.clientY - 25 + 'px'); //'-25px');
       tooltip_metrics.style('display', 'block');
 
@@ -620,7 +629,7 @@ var WidgetDrawer = {
 
       if (!clicked) {
         var ev = d3_selection.event;
-        tooltip_uptime.style('left', ev.clientX + 10 + 'px'); //'10px');
+        tooltip_metrics.style('left', ev.clientX + (widgetTooltipPosition == 'left' ? 10 : -440) + 'px');
         tooltip_uptime.style('top', ev.clientY - 25 + 'px'); //'-25px');
         tooltip_uptime.style('display', 'block');
 
