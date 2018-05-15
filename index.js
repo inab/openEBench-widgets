@@ -54,6 +54,7 @@ function doApply() {
     $('#tools, #size, #size_range').removeClass('disabled');
   }
   var widget_tool = $('#tools_menu > .active ').prop('id');
+  var widget_tooltip = $('#tooltip_menu > .active ').prop('id').split('_')[1];
   tool_url = "";
 
   var widget_subtypes = [];
@@ -99,6 +100,7 @@ function doApply() {
   widget.setAttribute("data-widget-type", 'widget');
   widget.setAttribute("data-widget-subtypes", widget_subtypes.join(' '));
   widget.setAttribute("data-widget-size", widget_size);
+  widget.setAttribute("data-widget-tooltip-position", widget_tooltip);
   widget.setAttribute("class", "opeb");
   area.append(widget).hide();
   var codeArea = $('#widget_box_code');
@@ -139,7 +141,7 @@ $('#doReset').on('click', function () {
   doApply();
 });
 
-$('.menu#type_menu, .menu#tools_menu')
+$('.menu#type_menu, .menu#tools_menu, .menu#tooltip_menu')
   .on('click', '.item', function () {
     doApply();
   });
