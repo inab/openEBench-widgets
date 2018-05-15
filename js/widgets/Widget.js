@@ -309,7 +309,7 @@ var WidgetDrawer = {
 
     var uptime_url = widgetData.name.replace('https://openebench.bsc.es/monitor/metrics/', '');
 
-    tooltip_uptime.html('<div id="close_icon-uptime-' + widgetIdCss + '" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-url="' + uptime_url + '" class="opebuptime" ></div>');
+    tooltip_uptime.html('<div id="close_icon-uptime-' + widgetIdCss + '" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-limit=5 data-url="' + uptime_url + '" class="opebuptime" ></div>');
     tooltip_uptime.style('opacity', 1);
     loadChart();
 
