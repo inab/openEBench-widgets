@@ -43,7 +43,7 @@ var WidgetDrawer = {
   DEFAULT_BADGE_HEIGHT: 20,
   DEFAULT_TITLE_HEIGHT: 20,
   DEFAULT_TITLE_SIZE: 13,
-  DEFAULT_TOOLTIP_POSITION: 'left',
+  DEFAULT_TOOLTIP_POSITION: 'right',
   // Getting the max depth of the nested structure
   getStatsNodeSet: function(widgetData) {
     var levelNodeSet = [];
@@ -260,7 +260,6 @@ var WidgetDrawer = {
     }
 
     SVGwidth = SVGheight = widgetWidth = widgetHeight = widgetSize;
-    console.log('widgetTooltipPosition', widgetTooltipPosition);
     if (widgetTooltipPosition != 'left' && widgetTooltipPosition != 'right') {
       if (widgetTooltipPosition != null) {
         console.warn('Wrong widget tooltip position: "' + widgetTooltipPosition + '" provided, using default value ' + WidgetDrawer.DEFAULT_TOOLTIP_POSITION);
@@ -423,9 +422,9 @@ var WidgetDrawer = {
 
     var tooltipFuncAux = function(d) {
       var ev = d3_selection.event;
-      tooltip_metrics.style('left', ev.clientX + (widgetTooltipPosition == 'left' ? 10 : -157) + 'px');
-      tooltip_metrics.style('top', ev.clientY - 25 + 'px'); //'-25px');
       tooltip_metrics.style('display', 'block');
+      tooltip_metrics.style('left', ev.clientX + (widgetTooltipPosition == 'right' ? 10 : -tooltip_metrics.node().getBoundingClientRect().width - 5) + 'px');
+      tooltip_metrics.style('top', ev.clientY - 25 + 'px'); //'-25px');
 
 
       var description_text = '';
@@ -629,7 +628,7 @@ var WidgetDrawer = {
 
       if (!clicked) {
         var ev = d3_selection.event;
-        tooltip_metrics.style('left', ev.clientX + (widgetTooltipPosition == 'left' ? 10 : -440) + 'px');
+        tooltip_uptime.style('left', ev.clientX + (widgetTooltipPosition == 'right' ? 10 : -430) + 'px');
         tooltip_uptime.style('top', ev.clientY - 25 + 'px'); //'-25px');
         tooltip_uptime.style('display', 'block');
 
