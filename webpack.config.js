@@ -53,6 +53,8 @@ if (DEPLOYMENT === 'dev') {
     mode: 'development',
     output: {
       filename: 'OpEB-widgets.js',
+      library: 'OpEB_widgets',
+      libraryTarget: "this",
       path: __dirname + '/dev'
     },
     devtool: 'eval-source-map',
