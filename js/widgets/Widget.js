@@ -44,6 +44,7 @@ var WidgetDrawer = {
   DEFAULT_TITLE_HEIGHT: 20,
   DEFAULT_TITLE_SIZE: 13,
   DEFAULT_TOOLTIP_POSITION: 'right',
+  DEFAULT_SIZE_INNER_RADIUS: 5,
   // Getting the max depth of the nested structure
   getStatsNodeSet: function(widgetData) {
     var levelNodeSet = [];
@@ -275,7 +276,7 @@ var WidgetDrawer = {
       widgetWidth = widgetHeight = (widgetWidth - WidgetDrawer.DEFAULT_BADGE_HEIGHT - 5); // badge height
     }
 
-    var levelSize = widgetWidth * 15 / 200;
+    var levelSize = widgetWidth * WidgetDrawer.DEFAULT_LEVEL_SIZE / WidgetDrawer.DEFAULT_SIZE;
     var radius = Math.min(widgetWidth, widgetHeight) / 2 - 1.2;
     var ext_radius = levelSize + (levelSize * 5.6);
 
@@ -335,7 +336,7 @@ var WidgetDrawer = {
       .data([{
         'x_axis': 0,
         'y_axis': 0,
-        'r_radius': (levelSize + 1)
+        'r_radius': (levelSize + WidgetDrawer.DEFAULT_SIZE_INNER_RADIUS)
       }, {
         'x_axis': 0,
         'y_axis': 0,
@@ -389,7 +390,7 @@ var WidgetDrawer = {
         return d.x1 - radius_separator;
       })
       .innerRadius(function() {
-        return levelSize + 1;
+        return levelSize + WidgetDrawer.DEFAULT_SIZE_INNER_RADIUS;
       })
       .outerRadius(function() {
         return ext_radius - 0.65;
@@ -588,8 +589,8 @@ var WidgetDrawer = {
       svg_g.selectAll('path')
         .each(function(d) {
           svg_g.selectAll('.radius').data([{
-              'x1': (levelSize + 1.5) * Math.cos(d.x1 + angle),
-              'y1': (levelSize + 1.5) * Math.sin(d.x1 + angle),
+              'x1': (levelSize + WidgetDrawer.DEFAULT_SIZE_INNER_RADIUS) * Math.cos(d.x1 + angle),
+              'y1': (levelSize + WidgetDrawer.DEFAULT_SIZE_INNER_RADIUS) * Math.sin(d.x1 + angle),
               'x2': (ext_radius) * Math.cos(d.x1 + angle),
               'y2': (ext_radius) * Math.sin(d.x1 + angle)
             }])
@@ -643,8 +644,13 @@ var WidgetDrawer = {
       tooltip_uptime.empty();
     };
 
-    var xy_pos = widgetData.enabled ? 0.8 : 0.7;
-    var width_height = widgetData.enabled ? '12%' : '10%';
+    var xy_pos = widgetData.enabled ? 1 : 0.8;
+    var bigger_size = 1;
+    if (widgetSize < 150) {
+      bigger_size = 1.7;
+      xy_pos = widgetData.enabled ? 1.5 : 1.2;
+    }
+    var width_height = (widgetData.enabled ? 15 : 12) * bigger_size + '%';
     var icon;
     svg_g.append('image')
       .attr('width', width_height)
