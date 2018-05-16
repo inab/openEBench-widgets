@@ -308,6 +308,7 @@ box.evolution_VII_mockup = `
         <li>Fixed radius position with odd number of metrics</li>
         <li>Added radial gradiant to the arcs</li>
         <li>New badge made from zero</li>
+        <li>Tooltips can be shown to the left of the cursor</li>
         <li>Tool name as data-id</li>
         <li>Added tool name title</li>
         <li>Refactorized and reduce the code</li>
