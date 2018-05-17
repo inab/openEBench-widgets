@@ -9,6 +9,7 @@ import offline_plug from '../../icons/offline-plug.png';
 import online_tick from '../../icons/online-tick.png';
 import offline_tick from '../../icons/offline-tick.png';
 import close_button from '../../icons/close-button.png';
+import help_button from '../../icons/help-button.png';
 
 import {
   loadChart
@@ -310,7 +311,16 @@ var WidgetDrawer = {
 
     var uptime_url = widgetData.name.replace('https://openebench.bsc.es/monitor/metrics/', '');
 
-    tooltip_uptime.html('<div id="close_icon-uptime-' + widgetIdCss + '" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-limit=5 data-url="' + uptime_url + '" class="opebuptime" ></div>');
+    tooltip_uptime.html('<div id="help_icon-metrics-' + widgetIdCss + '" style="float:left;"></div><div id="close_icon-uptime-' + widgetIdCss + '" style="float: right"></div></br><div data-id="' + widgetIdCss + '" data-xaxis="true" data-w="400" data-h="200" data-limit=5 data-url="' + uptime_url + '" class="opebuptime" ></div>');
+    var help_button_div = d3_selection.select(widgetElem).select('#tooltip_uptime-' + widgetIdCss).select('#help_icon-metrics-' + widgetIdCss);
+    help_button_div.append('img')
+      .attr('src', help_button)
+      .attr('width', '20px')
+      .attr('height', '20px')
+      .style('cursor', 'pointer')
+      .on('click', function() {
+        window.open('https://dev-openebench.bsc.es/html/ws/#!/tool/' + widgetId);
+      });
     tooltip_uptime.style('opacity', 1);
     loadChart();
 
