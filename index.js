@@ -148,7 +148,7 @@ $('.menu#type_menu, .menu#tools_menu, .menu#tooltip_menu')
 
 function init_range() {
   $('#size_range').range({
-    min: 75,
+    min: 50,
     max: 500,
     start: WIDGET_SIZE_DEFAULT,
     step: 10,
