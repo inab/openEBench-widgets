@@ -463,7 +463,7 @@ var WidgetDrawer = {
         var isTicked = !!tick.ticked;
         green_ticks_total += isTicked ? 1 : 0;
         var icon = (isTicked) ? online_tick : offline_tick;
-        var full_description = '<br><img src="' + icon + '" height="15" width="15"> ' + description;
+        var full_description = '<br><img src="' + icon + '" height="12" width="12"> ' + description;
         if (isTicked) {
           green_ticks_descriptions += full_description;
         } else {

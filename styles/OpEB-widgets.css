@@ -1,8 +1,7 @@
 @charset "UTF-8";
-
 /* This is only a placeholder, so the style does exist */
-opeb {
-}
+
+opeb {}
 
 .tooltip {
 	position: fixed;
@@ -10,13 +9,18 @@ opeb {
 	width: auto;
 	height: auto;
 	background: none repeat scroll 0 0 white;
-	border: 3px solid black;
+	border: 1px solid gray;
 	padding: 10px;
-	border-radius: 8px 8px 8px 8px;
-	box-shadow: -3px 3px 15px #888888;
 	color: black;
 	font: 12px sans-serif;
 	z-index: 9999;
+	border-collapse: collapse;
+	border-spacing: 0;
+	background-color: #fff;
+	empty-cells: show;
+	-webkit-box-shadow: 7px 7px 12px -9px #777777;
+	-moz-box-shadow: 7px 7px 12px -9px #777777;
+	box-shadow: 7px 7px 12px -9px #777777;
 }
 
 #uptime path {
