@@ -64,3 +64,20 @@ Only [d3.js](https://d3js.org/) is used to draw all iterations
   - All files packaged in one js
 
 _No screenshot, only internal changes_
+
+### Evolution VI
+-  Use real JSON url data
+-  Show extern radius with big sizes
+-  Only use tool id in data-id attribute
+-  Added Scientific benchmarking badge not available
+-  Fixed radius position with odd number of metrics
+-  Added radial gradiant to the arcs
+-  New badge made from zero
+-  Tooltips can be shown to the left of the cursor
+-  Tool name as data-id
+-  Added tool name title
+-  Refactorized and reduce the code
+
+![Evolution VI](mockup_pictures/evolution-vi-1.png)
+![Evolution VI](mockup_pictures/evolution-vi-2.png)
+
