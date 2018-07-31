@@ -46,6 +46,7 @@ var WidgetDrawer = {
   DEFAULT_TITLE_SIZE: 13,
   DEFAULT_TOOLTIP_POSITION: 'right',
   DEFAULT_SIZE_INNER_RADIUS: 5,
+  DEFAULT_TOOL_URL: 'https://openebench.bsc.es/html/#!/tool/',
   // Getting the max depth of the nested structure
   getStatsNodeSet: function(widgetData) {
     var levelNodeSet = [];
@@ -319,7 +320,7 @@ var WidgetDrawer = {
       .attr('height', '20px')
       .style('cursor', 'pointer')
       .on('click', function() {
-        window.open('https://dev-openebench.bsc.es/html/ws/#!/tool/' + widgetId);
+        window.open(WidgetDrawer.DEFAULT_TOOL_URL + widgetId);
       });
     tooltip_uptime.style('opacity', 1);
     loadChart();
@@ -714,7 +715,7 @@ var WidgetDrawer = {
         .style('cursor', 'pointer')
         .attr('fill', 'blue')
         .on('click', function() {
-          window.open('https://dev-openebench.bsc.es/html/ws/#!/tool/' + widgetId);
+          window.open(WidgetDrawer.DEFAULT_TOOL_URL + widgetId);
         })
         .text(widgetId);
       var title_width = title.node().getBoundingClientRect().width;
@@ -732,7 +733,7 @@ var WidgetDrawer = {
 
   draw_new_badge: function(svg_g, widgetElem, widgetRoot, state, SVGwidth, widgetHeight, widgetIdCss, badge_width) {
     var tool_name = widgetElem.getAttribute('data-id');
-    var tool_url = 'https://dev-openebench.bsc.es/html/ws/#!/tool/';
+    var tool_url = WidgetDrawer.DEFAULT_TOOL_URL;
 
     var available_scientific_benchmark = state == 'online';
 
